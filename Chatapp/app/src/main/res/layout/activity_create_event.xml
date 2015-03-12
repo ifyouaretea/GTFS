@@ -5,7 +5,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.haductien.chatapp.createEvent"
-    android:id="@+id/event">
+    android:id="@+id/event"
+    android:transitionGroup="false">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -116,5 +117,14 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/scrollView"
+        android:layout_marginEnd="63dp"
+        android:layout_marginTop="103dp"></LinearLayout>
 
 </RelativeLayout>
