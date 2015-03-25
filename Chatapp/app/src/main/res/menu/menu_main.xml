@@ -6,7 +6,8 @@
     <item android:id="@+id/action_search"
         android:icon="@drawable/ic_action_search"
         android:title="Search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="android.widget.SearchView" />
     <item android:id="@+id/action_chat"
         android:icon="@drawable/ic_action_chat"
         android:title="New Chat"

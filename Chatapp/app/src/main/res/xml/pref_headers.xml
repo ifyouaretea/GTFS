@@ -12,6 +12,16 @@
 
     <header
         android:fragment="com.example.haductien.chatapp.SettingsActivity$DataSyncPreferenceFragment"
+        android:title="@string/pref_header_data_sync" /><header
+        android:fragment="com.example.haductien.chatapp.SettingsActivity$GeneralPreferenceFragment"
+        android:title="@string/pref_header_general" /><header
+        android:fragment="com.example.haductien.chatapp.SettingsActivity$NotificationPreferenceFragment"
+        android:title="@string/pref_header_notifications" /><header
+        android:fragment="com.example.haductien.chatapp.SettingsActivity$DataSyncPreferenceFragment"
         android:title="@string/pref_header_data_sync" />
+
+    <header
+        android:fragment="com.example.haductien.chatapp.SettingsActivity$MessagingPreferenceFragment"
+        android:title="@string/pref_header_messaging" />
 
 </preference-headers>
