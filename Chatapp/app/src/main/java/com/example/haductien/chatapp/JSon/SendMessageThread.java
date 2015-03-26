@@ -5,7 +5,6 @@ package com.example.haductien.chatapp.JSon;
  */
 
 
-import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
 import java.io.IOException;
@@ -29,13 +28,13 @@ public class SendMessageThread extends Thread{
                 server.setSoTimeout(10000); //attempts to send to server every 10 seconds
 
                 JsonWriter serverOut = new JsonWriter(server.getOutputStream());
-                JsonReader serverIn = new JsonReader(server.getInputStream());
+                //JsonReader serverIn = new JsonReader(server.getInputStream());
 
                 serverOut.write(message);
                 serverOut.flush();
 
                 serverOut.close();
-                serverIn.close();
+                //serverIn.close();
                 server.close();
                 break;
             }

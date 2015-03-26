@@ -4,7 +4,6 @@ package com.example.haductien.chatapp.JSon;
  * Created by Francisco Furtado on 24/03/2015.
  */
 
-
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 import com.example.haductien.chatapp.JSon.MessageBundle.messageType;
@@ -42,13 +41,15 @@ public class ReceiveListenerThread extends Thread{
 
                 switch(message.getType()){
                     //TODO: implement handlers for the different message types
-                    case CLIENT_RECEIVED:
-                        break;
                     case EDIT_NOTE:
                         break;
-                    case FETCH_NOTE:
+                    case GET_NOTE:
                         break;
-                    case INVITE:
+                    case DELETE_NOTE:
+                        break;
+                    case CLIENT_RECEIVED:
+                        break;
+                    case INVITATION:
                         break;
                     case NEW_MESSAGE:
                         break;
@@ -56,9 +57,14 @@ public class ReceiveListenerThread extends Thread{
                         break;
                     case TYPING:
                         break;
+                    case ACCEPT_INVITATION:
+                        break;
+                    case AUTH:
+                        break;
+                    case CREATE_ROOM:
+                        break;
                     default:
                         break;
-
                 }
 
             }catch (IOException e){
