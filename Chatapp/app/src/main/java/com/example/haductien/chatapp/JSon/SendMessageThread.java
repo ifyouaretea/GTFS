@@ -1,4 +1,4 @@
-package com.example.haductien.chatapp;
+package com.example.haductien.chatapp.JSon;
 
 /**
  * Created by Francisco Furtado on 24/03/2015.

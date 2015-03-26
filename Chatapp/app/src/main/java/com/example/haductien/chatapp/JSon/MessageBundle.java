@@ -1,4 +1,4 @@
-package com.example.haductien.chatapp;
+package com.example.haductien.chatapp.JSon;
 
 /**
  * Created by Francisco Furtado on 24/03/2015.
@@ -8,8 +8,10 @@ public class MessageBundle {
 
     //Predefined message types
     public static enum messageType{
-        TEXT, TYPING, INVITE, CLIENT_RECEIVED, NEW_MESSAGE,
-        FETCH_NOTE, EDIT_NOTE;
+        TEXT, TYPING, INVITATION, ACCEPT_INVITATION,
+        CLIENT_RECEIVED, NEW_MESSAGE,
+        GET_NOTE, EDIT_NOTE, DELETE_NOTE,
+        AUTH, CREATE_ROOM, LEAVE;
     }
 
     private String fromID;

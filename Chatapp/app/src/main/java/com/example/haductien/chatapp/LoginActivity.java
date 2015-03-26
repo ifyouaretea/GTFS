@@ -1,20 +1,25 @@
 package com.example.haductien.chatapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.digits.sdk.android.DigitsAuthButton;
 import com.digits.sdk.android.AuthCallback;
+import com.digits.sdk.android.DigitsAuthButton;
 import com.digits.sdk.android.DigitsException;
 import com.digits.sdk.android.DigitsSession;
 
 public class LoginActivity extends Activity {
     public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
+    public static final String MyPREFERENCES = "MyPrefs";
+    public static final String name = "nameKey";
+    SharedPreferences shared;
     private EditText hpNum;
     private DigitsAuthButton digitsButton;
     private Button login;
@@ -48,6 +53,9 @@ public class LoginActivity extends Activity {
             @Override
             public void success(DigitsSession digitsSession, String phoneNumber) {
                 hpNum.setText(phoneNumber);
+                SharedPreferences.Editor editor = shared.edit();
+                editor.putString(name,phoneNumber);
+                editor.commit();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra(EXTRA_MESSAGE, phoneNumber);
                 startActivity(intent);
@@ -60,5 +68,12 @@ public class LoginActivity extends Activity {
         });
     }
 
-
+    public void onResume(){
+        shared = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        if(shared.contains(name)){
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+        super.onResume();
+    }
 }
