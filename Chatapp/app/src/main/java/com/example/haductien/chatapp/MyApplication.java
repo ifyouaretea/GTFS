@@ -9,7 +9,6 @@ import android.preference.PreferenceManager;
 import android.util.Patterns;
 
 import com.digits.sdk.android.Digits;
-import com.example.haductien.chatapp.GCM.Constants;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 
@@ -22,28 +21,35 @@ import io.fabric.sdk.android.Fabric;
  */
 
 public class MyApplication extends Application {
+
+    private static MyApplication singleton;
+    private static SharedPreferences prefs;
+
+    private static String number = "def";
     public static final String PROFILE_ID = "profile_id";
 
     public static final String FROM = "chatId";
     public static final String REG_ID = "regId";
     public static final String MSG = "msg";
     public static final String TO = "chatId2";
-
-    private static MyApplication singleton;
-    public static String[] email_arr;
-    private static SharedPreferences prefs;
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+    private MyApplication(){
+
+    }
+    // Returns the application instance
+    public static MyApplication getInstance() {
+        if(singleton ==null)
+            singleton = new MyApplication();
+        return singleton;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        List<String> emailList = getEmailList();
-        email_arr = emailList.toArray(new String[emailList.size()]);
         // twitter
         TwitterAuthConfig authConfig =
                 new TwitterAuthConfig("lgj3wZm2PTAYugiOWZddMS1Rv", "JwWBe8KKddQdd451UE7SXpqsVdPSPdFnfjYHTJnVTgKXHGfxer");
@@ -78,6 +84,13 @@ public class MyApplication extends Application {
         prefs.edit().putString("chat_id", chatId).commit();
     }
 
+    public static String getNumber() {
+        return prefs.getString("number", "");
+    }
+    public static void setNumber(String number) {
+        prefs.edit().putString("number", number).commit();
+    }
+
     public static String getCurrentChat() {
         return prefs.getString("current_chat", null);
     }
@@ -85,13 +98,8 @@ public class MyApplication extends Application {
         prefs.edit().putString("current_chat", chatId).commit();
     }
 
-    public static String getPreferredEmail() {
-        return prefs.getString("chat_email_id", email_arr.length==0 ? "" : email_arr[0]);
-    }
-
-    public static String getDisplayName() {
-        String email = getPreferredEmail();
-        return prefs.getString("display_name", email.substring(0, email.indexOf('@')));
+    public static boolean contains(String key){
+        return prefs.contains(key);
     }
 
     public static boolean isNotify() {
@@ -100,14 +108,6 @@ public class MyApplication extends Application {
 
     public static String getRingtone() {
         return prefs.getString("notifications_new_message_ringtone", android.provider.Settings.System.DEFAULT_NOTIFICATION_URI.toString());
-    }
-
-    public static String getServerUrl() {
-        return prefs.getString("server_url_pref", Constants.SERVER_URL);
-    }
-
-    public static String getSenderId() {
-        return prefs.getString("sender_id_pref", Constants.SENDER_ID);
     }
 }
 
