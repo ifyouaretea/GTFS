@@ -12,7 +12,7 @@ import com.cedarsoftware.util.io.JsonWriter;
 //TODO: put into receiveThread class
 /**
  * Listens continuously for a connection from the server.
- * @throws IOException
+ * @throws java.io.IOException
  */
 public class ReceiveListenerThread extends Thread{
 	public static final String hostname = "128.199.73.51";
