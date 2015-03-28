@@ -1,5 +1,6 @@
 package com.gfts.testchat;
 
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,14 +14,21 @@ import android.widget.TextView;
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import serverUtils.*;
+
 
 public class SendActivity extends ActionBarActivity {
+
+    //TODO: Replace debugging values
+    private final String hostname = "localhost"; //= "128.199.73.51";
+    private final int sendPort = 8091;
+    private final int receivePort = 8090;
+    private final String ownID = "12345";
 
     private EditText mMessageBody;
     private TextView mMessageDisplay;
@@ -37,38 +45,41 @@ public class SendActivity extends ActionBarActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                final MessageBundle messageBundle = new MessageBundle(ownID, mMessageBody.getText().toString(), MessageBundle.messageType.TEXT);
+
+
                 Thread networkThread = new Thread() {
                     @Override
                     public void run(){
-
-                        final String hostname = "localhost"; //= "128.199.73.51";
-                        final int hostport = 8091;
-                        final String ownID = "12345";
-                        Log.d("Success!!!!!", "Thread created");
-
-                        ServerSocket server = null;
                         try {
-                            server = new ServerSocket(hostport);
-                            Socket client = new Socket(hostname, hostport);
+                            ServerSocket sendServer = new ServerSocket(sendPort);
+                            ServerSocket receiveServer = new ServerSocket(receivePort);
 
-                            Socket serverSideClient = server.accept();
+                            new SendMessageTask().execute(messageBundle);
+                            Socket sendClient = sendServer.accept();
 
-                            JsonWriter jOut = new JsonWriter(client.getOutputStream());
-                            JsonReader jIn = new JsonReader(serverSideClient.getInputStream());
+                            new ReceiveListenerTask(mMessageDisplay).execute();
+                            Socket receiveClient = receiveServer.accept();
 
+                            JsonWriter jOut = new JsonWriter(receiveClient.getOutputStream());
+                            JsonReader jIn = new JsonReader(sendClient.getInputStream());
 
-                            jOut.write(new MessageBundle(ownID, mMessageBody.getText().toString(), MessageBundle.messageType.TEXT));
+                            MessageBundle msg = (MessageBundle) jIn.readObject();
+                            jOut.write(msg);
                             jOut.flush();
 
-                            mMessage = ((MessageBundle) jIn.readObject()).getMessage();
-                            Log.d("Success!!!!!", mMessage);
-                            server.close();
-                            client.close();
-                            serverSideClient.close();
+                            Log.d("Success!!!!!", "yay");
+                            Log.d("Great success", msg.getMessage());
+                            sendClient.close();
+                            sendServer.close();
+                            receiveClient.close();
+                            receiveServer.close();
 
                         } catch (IOException e) {
                             Log.d("FAILURE", e.getMessage());
                         }
+
                     }
                     };
                     networkThread.start();
@@ -77,7 +88,6 @@ public class SendActivity extends ActionBarActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                mMessageDisplay.setText(mMessage);
                 };
         });
     }
