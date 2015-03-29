@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- Search, should appear as action button -->
+    <item android:id="@+id/action_search"
+        android:icon="@drawable/ic_action_search"
+        android:title="Search"
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="android.widget.SearchView" />
+    <item android:id="@+id/action_chat"
+        android:icon="@drawable/ic_action_newchat"
+        android:title="New Chat"
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/action_group"
+        android:icon="@drawable/ic_action_group"
+        android:title="New Group"
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/action_contacts"
+        android:icon="@drawable/ic_action_contacts"
+        android:title="Contacts"
+        app:showAsAction="ifRoom"/>
+    <item android:id="@+id/action_profile"
+        android:icon="@drawable/ic_action_profile"
+        android:title="Profile"
+        app:showAsAction="ifRoom"/>
+    <!-- Settings, should always be in the overflow -->
+    <item android:id="@+id/action_settings"
+        android:icon="@drawable/ic_action_settings"
+        android:title="Settings"
+        app:showAsAction="never" />
+</menu>

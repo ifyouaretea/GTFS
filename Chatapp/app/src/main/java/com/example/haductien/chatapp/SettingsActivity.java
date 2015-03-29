@@ -8,7 +8,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -57,13 +56,7 @@ public class SettingsActivity extends PreferenceActivity {
         if (!isSimplePreferences(this)) {
             return;
         }
-        ListPreference exampleList = (ListPreference) findPreference("chat_email_id");
-        exampleList.setEntries(MyApplication.email_arr);
-        exampleList.setEntryValues(MyApplication.email_arr);
-        exampleList.setValue(MyApplication.getPreferredEmail());
 
-        EditTextPreference exampleText = (EditTextPreference) findPreference("display_name");
-        exampleText.setText(MyApplication.getDisplayName());
         // In the simplified UI, fragments are not used at all and we instead
         // use the older PreferenceActivity APIs.
 
@@ -76,13 +69,11 @@ public class SettingsActivity extends PreferenceActivity {
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_notification);
 
-        // Add 'messaging' preferences, and a corresponding header.
+        // Add 'data and sync' preferences, and a corresponding header.
         fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.pref_header_messaging);
+        fakeHeader.setTitle(R.string.pref_header_data_sync);
         getPreferenceScreen().addPreference(fakeHeader);
-        addPreferencesFromResource(R.xml.pref_messaging);
-
-
+        addPreferencesFromResource(R.xml.pref_data_sync);
 
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated
@@ -218,14 +209,6 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
 
-            ListPreference exampleList = (ListPreference) findPreference("chat_email_id");
-            exampleList.setEntries(MyApplication.email_arr);
-            exampleList.setEntryValues(MyApplication.email_arr);
-            exampleList.setValue(MyApplication.getPreferredEmail());
-
-            EditTextPreference exampleText = (EditTextPreference) findPreference("display_name");
-            exampleText.setText(MyApplication.getDisplayName());
-
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
@@ -270,14 +253,6 @@ public class SettingsActivity extends PreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
-        }
-    }
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class MessagingPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_messaging);
         }
     }
 }

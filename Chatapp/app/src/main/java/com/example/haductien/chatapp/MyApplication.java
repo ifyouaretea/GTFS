@@ -1,21 +1,10 @@
 package com.example.haductien.chatapp;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
-import android.util.Patterns;
 
-import com.digits.sdk.android.Digits;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterCore;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.fabric.sdk.android.Fabric;
 /**
  * Created by Francisco Furtado on 04/03/2015.
  */
@@ -24,8 +13,10 @@ public class MyApplication extends Application {
 
     private static MyApplication singleton;
     private static SharedPreferences prefs;
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+//    private static final String TWITTER_KEY = "lgj3wZm2PTAYugiOWZddMS1Rv";
+//    private static final String TWITTER_SECRET = "JwWBe8KKddQdd451UE7SXpqsVdPSPdFnfjYHTJnVTgKXHGfxer";
 
-    private static String number = "def";
     public static final String PROFILE_ID = "profile_id";
 
     public static final String FROM = "chatId";
@@ -37,11 +28,12 @@ public class MyApplication extends Application {
         super.onConfigurationChanged(newConfig);
     }
     private MyApplication(){
-
+//        ReceiveListenerThread listener = new ReceiveListenerThread();
+//        listener.start();
     }
     // Returns the application instance
     public static MyApplication getInstance() {
-        if(singleton ==null)
+        if(singleton == null)
             singleton = new MyApplication();
         return singleton;
     }
@@ -51,9 +43,8 @@ public class MyApplication extends Application {
         super.onCreate();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // twitter
-        TwitterAuthConfig authConfig =
-                new TwitterAuthConfig("lgj3wZm2PTAYugiOWZddMS1Rv", "JwWBe8KKddQdd451UE7SXpqsVdPSPdFnfjYHTJnVTgKXHGfxer");
-        Fabric.with(this, new TwitterCore(authConfig), new Digits());
+//        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+//        Fabric.with(this, new Twitter(authConfig));
     }
 
     @Override
@@ -66,36 +57,25 @@ public class MyApplication extends Application {
         super.onTerminate();
     }
 
-    private List<String> getEmailList() {
-        List<String> lst = new ArrayList<String>();
-        Account[] accounts = AccountManager.get(this).getAccounts();
-        for (Account account : accounts) {
-            if (Patterns.EMAIL_ADDRESS.matcher(account.name).matches()) {
-                lst.add(account.name);
-            }
-        }
-        return lst;
-    }
-
     public static String getChatId() {
         return prefs.getString("chat_id", "");
     }
     public static void setChatId(String chatId) {
-        prefs.edit().putString("chat_id", chatId).commit();
+        prefs.edit().putString("chat_id", chatId).apply();
     }
 
     public static String getNumber() {
         return prefs.getString("number", "");
     }
     public static void setNumber(String number) {
-        prefs.edit().putString("number", number).commit();
+        prefs.edit().putString("number", number).apply();
     }
 
     public static String getCurrentChat() {
         return prefs.getString("current_chat", null);
     }
     public static void setCurrentChat(String chatId) {
-        prefs.edit().putString("current_chat", chatId).commit();
+        prefs.edit().putString("current_chat", chatId).apply();
     }
 
     public static boolean contains(String key){

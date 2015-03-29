@@ -10,50 +10,53 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 
-public class MainActivity  extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private SimpleCursorAdapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        adapter = new SimpleCursorAdapter(this,
-                R.layout.main_list_item,
-                null,
-                new String[]{DataProvider.COL_NAME, DataProvider.COL_COUNT},
-                new int[]{R.id.text1, R.id.text2},
-                0);
-        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
-
-            @Override
-            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-                switch(view.getId()) {
-                    case R.id.text2:
-                        int count = cursor.getInt(columnIndex);
-                        if (count > 0) {
-                            ((TextView)view).setText(String.format("%d new message%s", count, count==1 ? "" : "s"));
-                        }
-                        return true;
-                }
-                return false;
-            }
-        });
-        setListAdapter(adapter);
-
-        getActionBar().setDisplayShowHomeEnabled(true);
-        getActionBar().setLogo(R.mipmap.ic_launcher);
-        getActionBar().setDisplayUseLogoEnabled(true);
+//        adapter = new SimpleCursorAdapter(this,
+//                R.layout.main_list_item,
+//                null,
+//                new String[]{DataProvider.COL_NAME, DataProvider.COL_COUNT},
+//                new int[]{R.id.text1, R.id.text2},
+//                0);
+//        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+//
+//            @Override
+//            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+//                switch(view.getId()) {
+//                    case R.id.text2:
+//                        int count = cursor.getInt(columnIndex);
+//                        if (count > 0) {
+//                            ((TextView)view).setText(String.format("%d new message%s", count, count==1 ? "" : "s"));
+//                        }
+//                        return true;
+//                }
+//                return false;
+//            }
+//        });
+//        setListAdapter(adapter);
+        try {
+            getActionBar().setDisplayShowHomeEnabled(true);
+            getActionBar().setLogo(R.mipmap.ic_launcher);
+            getActionBar().setDisplayUseLogoEnabled(true);
+        }catch(Exception e){
+            Log.d("error", "error");
+        }
         setContentView(R.layout.activity_main);
+
     }
 
     @Override
