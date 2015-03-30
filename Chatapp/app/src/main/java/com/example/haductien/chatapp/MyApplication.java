@@ -5,13 +5,19 @@ import android.accounts.AccountManager;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Patterns;
 
 import com.digits.sdk.android.Digits;
 import com.example.haductien.chatapp.GCM.Constants;
+import com.example.haductien.chatapp.serverUtils.MessageBundle;
+import com.example.haductien.chatapp.serverUtils.ReceiveListenerTask;
+import com.example.haductien.chatapp.serverUtils.SendMessageTask;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
+
+import org.apache.http.auth.AUTH;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +30,17 @@ import io.fabric.sdk.android.Fabric;
 public class MyApplication extends Application {
     public static final String PROFILE_ID = "profile_id";
 
-    public static final String FROM = "chatId";
+    public static final String FROM = "82238071";
     public static final String REG_ID = "regId";
     public static final String MSG = "msg";
     public static final String TO = "chatId2";
+    public static final String SESSION_TOKEN = "asdfadsf";
+
 
     private static MyApplication singleton;
     public static String[] email_arr;
     private static SharedPreferences prefs;
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -108,6 +117,20 @@ public class MyApplication extends Application {
 
     public static String getSenderId() {
         return prefs.getString("sender_id_pref", Constants.SENDER_ID);
+    }
+
+    /**
+     * Starts a SendMessageTask to send a text message
+     */
+
+    public static void sendTextMessage(String text){
+        MessageBundle outMessage = new MessageBundle(FROM, text, MessageBundle.messageType.TEXT);
+        MessageBundle authMessage = new MessageBundle(FROM, text, MessageBundle.messageType.AUTH);
+        SendMessageTask sender = new SendMessageTask();
+        ReceiveListenerTask receiver = new ReceiveListenerTask();
+        sender.execute(authMessage);
+        receiver.execute();
+
     }
 }
 

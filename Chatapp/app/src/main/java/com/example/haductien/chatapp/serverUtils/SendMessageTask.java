@@ -1,4 +1,4 @@
-package serverUtils;
+package com.example.haductien.chatapp.serverUtils;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -6,7 +6,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.Socket;
 
-import serverUtils.MessageBundle.messageType;
+import com.example.haductien.chatapp.serverUtils.MessageBundle.messageType;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;

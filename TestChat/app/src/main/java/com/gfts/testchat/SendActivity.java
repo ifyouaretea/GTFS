@@ -18,6 +18,7 @@ import com.cedarsoftware.util.io.JsonWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Map;
 
 import serverUtils.*;
 
@@ -25,9 +26,7 @@ import serverUtils.*;
 public class SendActivity extends ActionBarActivity {
 
     //TODO: Replace debugging values
-    private final String hostname = "localhost"; //= "128.199.73.51";
-    private final int sendPort = 8091;
-    private final int receivePort = 8090;
+
     private final String ownID = "12345";
 
     private EditText mMessageBody;
@@ -46,49 +45,15 @@ public class SendActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                final MessageBundle messageBundle = new MessageBundle(ownID, mMessageBody.getText().toString(), MessageBundle.messageType.TEXT);
+        NetworkThread networkThread = new NetworkThread();
 
-
-                Thread networkThread = new Thread() {
-                    @Override
-                    public void run(){
-                        try {
-                            ServerSocket sendServer = new ServerSocket(sendPort);
-                            ServerSocket receiveServer = new ServerSocket(receivePort);
-
-                            new SendMessageTask().execute(messageBundle);
-                            Socket sendClient = sendServer.accept();
-
-                            new ReceiveListenerTask(mMessageDisplay).execute();
-                            Socket receiveClient = receiveServer.accept();
-
-                            JsonWriter jOut = new JsonWriter(receiveClient.getOutputStream());
-                            JsonReader jIn = new JsonReader(sendClient.getInputStream());
-
-                            MessageBundle msg = (MessageBundle) jIn.readObject();
-                            jOut.write(msg);
-                            jOut.flush();
-
-                            Log.d("Success!!!!!", "yay");
-                            Log.d("Great success", msg.getMessage());
-                            sendClient.close();
-                            sendServer.close();
-                            receiveClient.close();
-                            receiveServer.close();
-
-                        } catch (IOException e) {
-                            Log.d("FAILURE", e.getMessage());
-                        }
-
-                    }
-                    };
-                    networkThread.start();
-                try {
-                    networkThread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                };
+        networkThread.start();
+        try {
+            networkThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        };
         });
     }
 

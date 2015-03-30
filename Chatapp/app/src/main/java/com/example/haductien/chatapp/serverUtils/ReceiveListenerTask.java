@@ -1,4 +1,4 @@
-package serverUtils;
+package com.example.haductien.chatapp.serverUtils;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -10,37 +10,30 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import serverUtils.MessageBundle.messageType;
+import com.example.haductien.chatapp.serverUtils.MessageBundle.messageType;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
-import com.gfts.testchat.SendActivity;
 
-//TODO: put into receiveThread class
 /**
  * Listens continuously for a connection from the server.
  *
  */
 public class ReceiveListenerTask extends AsyncTask<Void, Void, String>{
-//	public static final String hostname = "128.199.73.51";
-
-    public static final String hostname = "localhost";
-    public static final int hostport = 8090;
+	public static final String hostname = "128.199.73.51";
+    public static final int hostport = 8091;
 
     private TextView mTextView;
 //	public static final String ownID;
 //
 //	public static MessageBundle RECEIVED = new MessageBundle(ownID, "", messageType.CLIENT_RECEIVED);
 
-    public ReceiveListenerTask(TextView mTextView){
-        this.mTextView = mTextView;
-    }
 	protected String doInBackground(Void... params){
 		while(true){
 			try{
 				Socket serverConnection = new Socket(hostname, hostport);
                 serverConnection.setSoTimeout(10000);
-                Log.d("Receive client", "Successful");
+                Log.d("Receive", "Successful");
 				JsonReader serverIn = new JsonReader(serverConnection.getInputStream());
 				MessageBundle message = (MessageBundle) serverIn.readObject();
 				
@@ -54,24 +47,9 @@ public class ReceiveListenerTask extends AsyncTask<Void, Void, String>{
 				
 				switch(message.getType()){
 				//TODO: implement handlers for the different message types
-				case CLIENT_RECEIVED:
-					break;
-				case EDIT_NOTE:
-					break;
-				case FETCH_NOTE:
-					break;
-				case INVITE:
-					break;
-				case NEW_MESSAGE:
-                    break;
-				case TEXT:
-                    Log.d("Received message", message.getMessage());
-                    return message.getMessage();
-				case TYPING:
-					break;
-				default:
-					break;
-					
+                    default:
+                        Log.d("Received message", message.getMessage());
+                        return message.getMessage();
 				}
 
 			}catch (IOException e){
