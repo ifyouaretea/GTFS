@@ -45,15 +45,10 @@ public class SendActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-        NetworkThread networkThread = new NetworkThread();
+                NetworkThread networkThread = new NetworkThread(mMessage);
 
-        networkThread.start();
-        try {
-            networkThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        };
+                networkThread.start();
+            }
         });
     }
 

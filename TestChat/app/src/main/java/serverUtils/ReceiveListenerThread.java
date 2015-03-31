@@ -23,31 +23,23 @@ import java.util.Map;
  */
 public class ReceiveListenerThread extends Thread{
 
-    public final Socket mSocket;
-//	public static MessageBundle RECEIVED = new MessageBundle(ownID, "", messageType.CLIENT_RECEIVED);
+    public final InputStream mInputStream;
 
-    public ReceiveListenerThread(Socket socket){
-        this.mSocket = socket;
+    public ReceiveListenerThread(InputStream inputStream){
+        mInputStream = inputStream;
     }
 	public void run(){
-        try {
-            Log.d("Receive connection", "Successful");
+        while(true) {
+            try {
+                Log.d("Receiver", "Successful");
+                JsonReader jIn = new JsonReader(mInputStream, true);
 
-            JsonReader jIn = new JsonReader(mSocket.getInputStream(), true);
-
-            StringBuilder buffer = new StringBuilder();
-            InputStream serverStream = mSocket.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(serverStream));
-
-            byte[] byteBuffer = new byte[10000];
-
-            serverStream.read(byteBuffer);
-            Log.d("ByteBuffer", Arrays.toString(byteBuffer));
-
-//            Map map = (Map) jIn.readObject();
-//            Log.d("JSON in", map.toString());
-        }catch (IOException e){
-            e.printStackTrace();
+                Map map = (Map) jIn.readObject();
+                Log.d("JSON in", map.toString());
+                break;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 	}
 }

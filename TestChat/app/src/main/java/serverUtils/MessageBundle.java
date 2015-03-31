@@ -1,5 +1,8 @@
 package serverUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MessageBundle {
 	
 	//Predefined message types
@@ -9,32 +12,48 @@ public class MessageBundle {
 		FETCH_NOTE, EDIT_NOTE;
 	}
 
-    private String fromID;
-	private String message;
-	private messageType type;
-	
-	public MessageBundle(String fromID, String message, messageType type) {
+    private Map<String, String> messageMap;
+
+    public static final String SESSION_TOKEN= "session_token";
+    public static final String FROM_PHONE_NUMBER = "from_phone_number";
+    public static final String TYPE = "type";
+    public static final String USERNAME = "username";
+    public static final String CHATROOMID = "chatroom_id";
+    public static final String MESSAGE = "message";
+    public static final String NOTEID = "noteID";
+    public static final String TO_PHONE_NUMBER = "to_phone_number";
+    public static final String STATUS = "status";
+    public static final String VALID_STATUS = "1";
+
+	public MessageBundle(String fromNumber, String sessionToken, messageType type) {
 		super();
-		this.fromID = fromID;
-		this.message = message;
-		this.type = type;
+		messageMap = new HashMap<>();
+        messageMap.put(FROM_PHONE_NUMBER, fromNumber);
+        messageMap.put(SESSION_TOKEN, sessionToken);
+        messageMap.put(TYPE, type.toString());
 	}
 
+    public String putUsername(String username){
+        return messageMap.put(USERNAME, username);
+    }
 
+    public String putChatroomID(String chatRoomID){
+        return messageMap.put(CHATROOMID, chatRoomID);
+    }
 
-	public String toString(){
-		return String.format("ID: %s\nMessage:%s", fromID, message);
-	}
+    public String putMessage(String message){
+        return messageMap.put(MESSAGE, message);
+    }
 
-	public String getFromID() {
-		return fromID;
-	}
+    public String putNoteID(String noteID){
+        return messageMap.put(NOTEID, noteID);
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public String putToPhoneNumber(String toPhoneNumber){
+        return messageMap.put(TO_PHONE_NUMBER, toPhoneNumber);
+    }
 
-	public messageType getType() {
-		return type;
-	}
+    public Map getMessage(){
+        return this.messageMap;
+    }
 }
