@@ -1,29 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:id="@+id/main"
+    android:label="Chats">
 
-    <ImageView
-        android:id="@+id/avatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/list"
+        android:layout_gravity="center_horizontal"
+        android:background="#ffffffff"
         android:layout_alignParentLeft="true"
-        android:src="@drawable/ic_action_profile" />
-
-    <TextView
-        android:id="@+id/text1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/avatar"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/text2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text1"
-        android:layout_toRightOf="@+id/avatar"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_marginTop="0dp" />
 
 </RelativeLayout>

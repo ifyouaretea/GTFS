@@ -1,62 +1,64 @@
 package cse.sutd.gtfs;
 
-import android.app.ActionBar;
-import android.app.ListActivity;
-import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
+
+import com.digits.sdk.android.Digits;
+
+import java.util.ArrayList;
+
+import cse.sutd.gtfs.Adapters.ChatAdapters;
 
 
-public class MainActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-    private SimpleCursorAdapter adapter;
+public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-//        adapter = new SimpleCursorAdapter(this,
-//                R.layout.main_list_item,
-//                null,
-//                new String[]{DataProvider.COL_NAME, DataProvider.COL_COUNT},
-//                new int[]{R.id.text1, R.id.text2},
-//                0);
-        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+        super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+        getSupportActionBar().setTitle("Chats");
+        setContentView(R.layout.activity_main);
+        final ListView listview = (ListView) findViewById(R.id.list);
+        String[] values = new String[] { "Nikhil", "Sharma", "HaoQin", "KangSheng", "Glen", "SiawYoung", "Fran"};
+
+        final ArrayList<String> list = new ArrayList<String>();
+        for (int i = 0; i < values.length; ++i) {
+            list.add(values[i]);
+        }
+        final ChatAdapters adapter = new ChatAdapters(this, list);
+        listview.setAdapter(adapter);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-                switch (view.getId()) {
-                    case R.id.text2:
-                        int count = cursor.getInt(columnIndex);
-                        if (count > 0) {
-                            ((TextView) view).setText(String.format("%d new message%s", count, count == 1 ? "" : "s"));
-                        }
-                        return true;
-                }
-                return false;
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                final String item = (String) parent.getItemAtPosition(position);
+                view.animate().setDuration(2000).alpha(0)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                list.remove(item);
+                                adapter.notifyDataSetChanged();
+                                view.setAlpha(1);
+                            }
+                        });
             }
+
         });
-        setListAdapter(adapter);
-
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setLogo(R.mipmap.ic_launcher);
-        actionBar.setDisplayUseLogoEnabled(true);
-        getLoaderManager().initLoader(0, null, this);
-
-        Log.d("error", "error");
-
-        setContentView(R.layout.activity_main);
     }
 
 
@@ -76,7 +78,6 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 
             @Override
             public boolean onQueryTextChange(String query){
-//                loadData(query);
                 return true;
             }
         });
@@ -104,29 +105,13 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
                 Intent intent=new Intent(this,SettingsActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.action_logout:
+                Digits.getSessionManager().clearActiveSession();
+                MainActivity.this.finish();
+                System.exit(0);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-//        CursorLoader loader=new CursorLoader(this,
-//                DataProvider.CONTENT_URI_PROFILE,
-//                new String[]{DataProvider.COL_ID,DataProvider.COL_NAME,DataProvider.COL_COUNT},
-//                null,
-//                null,
-//                DataProvider.COL_ID+" DESC");
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        adapter.swapCursor(null);
     }
 }

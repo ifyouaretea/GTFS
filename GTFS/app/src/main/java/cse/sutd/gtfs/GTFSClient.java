@@ -6,9 +6,14 @@ package cse.sutd.gtfs;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.util.Log;
 
-import com.twitter.sdk.android.Twitter;
+import com.digits.sdk.android.Digits;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+
+import java.io.File;
 
 import cse.sutd.gtfs.Utils.MessageBundle;
 import cse.sutd.gtfs.Utils.ReceiveListenerTask;
@@ -24,15 +29,33 @@ public class GTFSClient extends Application{
     private GTFSClient instance;
     private SendMessageTask sender;
     private ReceiveListenerTask listener;
-
+    private boolean isAuthenticated;
     private String PROFILE_ID;
+
+    public GTFSClient() {
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
     @Override
     public void onCreate(){
         super.onCreate();
         // Initialize the singletons so their instances are bound to the application process.
         initSingletons();
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
+        final TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new TwitterCore(authConfig), new Digits());
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
     }
 
     protected void initSingletons(){
@@ -59,11 +82,47 @@ public class GTFSClient extends Application{
         this.PROFILE_ID = ID;
     }
 
+    public boolean getLoggedIn() {
+        return isAuthenticated;
+    }
+
+    public void setLoggedIn(boolean log) {
+        this.isAuthenticated = log;
+    }
+
     public void sendMessage(MessageBundle[] msg){
 
     }
 
     public void authenticate(MessageBundle[] msg){
 
+    }
+
+    public void clearAppData() {
+        File cache = getCacheDir();
+        File appDir = new File(cache.getParent());
+        if (appDir.exists()) {
+            String[] children = appDir.list();
+            for (String s : children) {
+                if (!s.equals("lib")) {
+                    deleteDir(new File(appDir, s));
+                    Log.i("TAG", "**************** File /data/data/APP_PACKAGE/" + s + " DELETED *******************");
+                }
+            }
+        }
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        return dir.delete();
     }
 }

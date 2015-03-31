@@ -27,5 +27,9 @@
         android:icon="@drawable/ic_action_settings"
         android:title="Settings"
         app:showAsAction="never" />
+    <item android:id="@+id/action_logout"
+        android:icon="@drawable/ic_action_profile"
+        android:title="Logout"
+        app:showAsAction="never"/>
 </menu>
 <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/src/main/res/menu/menu_main.xml -->

@@ -2,8 +2,6 @@ package cse.sutd.gtfs;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.LoaderManager;
-import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -13,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import cse.sutd.gtfs.dummy.DummyContent;
 
@@ -26,7 +23,7 @@ import cse.sutd.gtfs.dummy.DummyContent;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class MessagesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MessagesFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private SimpleCursorAdapter adapter;
@@ -75,7 +72,6 @@ public class MessagesFragment extends Fragment implements LoaderManager.LoaderCa
                 return false;
             }
         });
-        setListAdapter(adapter);
     }
 
     @Override
@@ -109,7 +105,6 @@ public class MessagesFragment extends Fragment implements LoaderManager.LoaderCa
 
         Bundle args = new Bundle();
 //        args.putString(DataProvider.COL_EMAIL, mListener.getProfileEmail());
-        getLoaderManager().initLoader(0, args, this);
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -126,21 +121,6 @@ public class MessagesFragment extends Fragment implements LoaderManager.LoaderCa
      * to supply the text it should use.
      */
     public void setEmptyText(CharSequence emptyText) {
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 
     /**
