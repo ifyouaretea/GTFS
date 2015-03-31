@@ -5,25 +5,27 @@ package cse.sutd.gtfs;
  */
 
 import android.app.Application;
+import android.content.SharedPreferences;
 
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import cse.sutd.gtfs.Utils.MessageBundle;
-import cse.sutd.gtfs.Utils.ReceiveListenerThread;
+import cse.sutd.gtfs.Utils.ReceiveListenerTask;
 import cse.sutd.gtfs.Utils.SendMessageTask;
 import io.fabric.sdk.android.Fabric;
 
 public class GTFSClient extends Application{
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private static final String TWITTER_KEY = "6Rs5gyo7xHoEYYkls0ajWP9PO";
-    private static final String TWITTER_SECRET = "8nvcBPCoqhkt1Lvzjv6Pb5GmBB4uBmreV3KSgVxfcgCJrMQT8E";
-    private static GTFSClient instance;
-    private static SendMessageTask sender;
-    private static ReceiveListenerThread listener;
+    private final String TWITTER_KEY = "6Rs5gyo7xHoEYYkls0ajWP9PO";
+    private final String TWITTER_SECRET = "8nvcBPCoqhkt1Lvzjv6Pb5GmBB4uBmreV3KSgVxfcgCJrMQT8E";
+    private static SharedPreferences prefs;
+    private GTFSClient instance;
+    private SendMessageTask sender;
+    private ReceiveListenerTask listener;
 
-    private String ownID;
+    private String PROFILE_ID;
     @Override
     public void onCreate(){
         super.onCreate();
@@ -41,7 +43,7 @@ public class GTFSClient extends Application{
         }
     }
 
-    public static GTFSClient getInstance(){
+    public GTFSClient getInstance(){
         // Initialize the instance of MySingleton
         if (instance == null)
             instance = new GTFSClient();            // Create the instance
@@ -50,11 +52,11 @@ public class GTFSClient extends Application{
     }
 
     public String getID() {
-        return ownID;
+        return PROFILE_ID;
     }
 
     public void setID(String ID) {
-        this.ownID = ID;
+        this.PROFILE_ID = ID;
     }
 
     public void sendMessage(MessageBundle[] msg){
