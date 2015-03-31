@@ -1,5 +1,6 @@
 package com.gfts.testchat;
 
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,14 +14,20 @@ import android.widget.TextView;
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Map;
+
+import serverUtils.*;
 
 
 public class SendActivity extends ActionBarActivity {
+
+    //TODO: Replace debugging values
+
+    private final String ownID = "12345";
 
     private EditText mMessageBody;
     private TextView mMessageDisplay;
@@ -37,48 +44,16 @@ public class SendActivity extends ActionBarActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread networkThread = new Thread() {
-                    @Override
-                    public void run(){
 
-                        final String hostname = "localhost"; //= "128.199.73.51";
-                        final int hostport = 8091;
-                        final String ownID = "12345";
-                        Log.d("Success!!!!!", "Thread created");
+        NetworkThread networkThread = new NetworkThread();
 
-                        ServerSocket server = null;
-                        try {
-                            server = new ServerSocket(hostport);
-                            Socket client = new Socket(hostname, hostport);
-
-                            Socket serverSideClient = server.accept();
-
-                            JsonWriter jOut = new JsonWriter(client.getOutputStream());
-                            JsonReader jIn = new JsonReader(serverSideClient.getInputStream());
-
-
-                            jOut.write(new MessageBundle(ownID, mMessageBody.getText().toString(), MessageBundle.messageType.TEXT));
-                            jOut.flush();
-
-                            mMessage = ((MessageBundle) jIn.readObject()).getMessage();
-                            Log.d("Success!!!!!", mMessage);
-                            server.close();
-                            client.close();
-                            serverSideClient.close();
-
-                        } catch (IOException e) {
-                            Log.d("FAILURE", e.getMessage());
-                        }
-                    }
-                    };
-                    networkThread.start();
-                try {
-                    networkThread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                mMessageDisplay.setText(mMessage);
-                };
+        networkThread.start();
+        try {
+            networkThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        };
         });
     }
 
