@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cedarsoftware.util.io.JsonIoException;
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
@@ -18,6 +19,7 @@ import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Semaphore;
 
 /**
  * Created by tes on 30/03/2015.
@@ -26,59 +28,55 @@ public class NetworkThread extends Thread{
     private final String hostname = "128.199.73.51";
     private final int hostport = 8091;
 
-    private String outMessage;
     private MessageBundle authMessage = null;
     private Socket client;
+    private boolean authenticated = false;
 
-    private BlockingQueue<Map> messageQueue = new ArrayBlockingQueue<Map>(1000);
+    private BlockingQueue<Map> inMessageQueue = new ArrayBlockingQueue<Map>(1000);
+    private BlockingQueue<Map> outMessageQueue = new ArrayBlockingQueue<Map>(1000);
+    private Semaphore availableMessages = new Semaphore(0);
 
-    public NetworkThread(String outMessage){
-        this.outMessage = outMessage;
-    }
     @Override
     public void run() {
-        //while (true){
+        while (true) {
             try {
                 client = new Socket(hostname, hostport);
+                client.setSoTimeout(1000);
                 Log.d("Socket creation", "Successful");
 
-                final MessageBundle authBundle = new MessageBundle("82238071", "asdsd",
-                        MessageBundle.messageType.AUTH);
-                authBundle.putUsername("sy");
+                //loop until authenticated
+                while (!authenticate()) {
+                    sleep(1000);
+                }
 
-                final MessageBundle textBundle = new MessageBundle("82238071", "asdsd",
-                        MessageBundle.messageType.TEXT);
+                Log.d("AUTH", "Successful");
 
-                textBundle.putMessage("HI BRAH");
-                textBundle.putToPhoneNumber("82238071");
-                textBundle.putChatroomID("12345");
-
-                addMessageToQueue(authBundle.getMessage());
-                send();
-
-                Map receivedMessage = receive();
-
-                if (String.valueOf(receivedMessage.get(MessageBundle.STATUS)).equals(MessageBundle.VALID_STATUS)) {
-                    Log.d("AUTH", "Successful");
-                    addMessageToQueue(textBundle.getMessage());
-                    send();
-                    receivedMessage = receive();
-                    if(receivedMessage.get(MessageBundle.MESSAGE) != null){
+                boolean sleep = false;
+                while (true) {
+                    sleep = false;
+                    if (inMessageQueue.size() > 0){
+                        send();
+                        sleep = true;
                     }
-                    //break;
-                }else{
-                    Log.d("AUTH", "fail");
+                    Map received = receive();
+                    if (received != null) {
+                        Log.d("Received", received.toString());
+                        sleep = true;
+                    }
+                    if(sleep)
+                        sleep(1000);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        //}
+        }
     }
 
     private boolean send(){
-        Object message = messageQueue.poll();
+        Object message = inMessageQueue.poll();
         if (message == null)
             return false;
+        Log.d("Message sent out", message.toString());
         try {
             JsonWriter serverOut = new JsonWriter(client.getOutputStream());
             serverOut.write(message);
@@ -90,22 +88,51 @@ public class NetworkThread extends Thread{
         return true;
     }
 
+    //TODO: fix all calls to receive() to refer to outMessageQueue
     private Map receive(){
         try {
             JsonReader jIn = new JsonReader(client.getInputStream(), true);
-            Map mapInput = (Map) jIn.readObject();
-            outMessage = mapInput.toString();
-            Log.d("JSON in", outMessage);
-            return mapInput;
+            Map receivedMap = (Map) jIn.readObject();
+
+            outMessageQueue.offer(receivedMap);
+            Log.d("Semaphore", "Releasing semaphore");
+            availableMessages.release();
+            return receivedMap;
         }catch (Exception e){
-                e.printStackTrace();
-                outMessage = e.getMessage();
-            return null;
+            e.printStackTrace();
         }
+        return null;
     }
 
 
     public boolean addMessageToQueue(Map message){
-        return messageQueue.offer(message);
+        return inMessageQueue.offer(message);
+    }
+
+    public Map getMessage(){
+        try {
+            Log.d("Semaphore", "Acquiring semaphore");
+            availableMessages.acquire();
+            Log.d("Semaphore", "Acquired");
+        }catch (InterruptedException e){}
+        return outMessageQueue.poll();
+    }
+    private boolean authenticate(){
+        final MessageBundle authBundle = new MessageBundle("82238071", "asdsd",
+                MessageBundle.messageType.AUTH);
+        authBundle.putUsername("sy");
+        addMessageToQueue(authBundle.getMessage());
+        send();
+
+        Map receivedMessage = receive();
+        outMessageQueue.poll();
+        if (String.valueOf(receivedMessage.get(MessageBundle.STATUS)).
+                equals(MessageBundle.VALID_STATUS)) {
+            this.authenticated = true;
+            return true;
+        }else{
+            this.authenticated = false;
+        }
+        return false;
     }
 }

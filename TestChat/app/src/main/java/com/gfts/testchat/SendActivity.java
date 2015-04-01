@@ -31,7 +31,6 @@ public class SendActivity extends ActionBarActivity {
 
     private EditText mMessageBody;
     private TextView mMessageDisplay;
-    private String mMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +39,29 @@ public class SendActivity extends ActionBarActivity {
         mMessageBody = (EditText) findViewById(R.id.editBody);
         mMessageDisplay = (TextView) findViewById(R.id.receivedMessage);
 
+        final NetworkThread networkThread = new NetworkThread();
+        networkThread.start();
+
         Button sendButton = (Button) findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            final MessageBundle textBundle = new MessageBundle("82238071", "asdsd",
+                    MessageBundle.messageType.TEXT);
 
-                NetworkThread networkThread = new NetworkThread(mMessage);
+                textBundle.putMessage("HI BRAH");
+                textBundle.putToPhoneNumber("82238071");
+                textBundle.putChatroomID("12345");
+                networkThread.addMessageToQueue(textBundle.getMessage());
 
-                networkThread.start();
+                Map received = null;
+
+                while(received == null){
+                    received = networkThread.getMessage();
+                }
+
+                Log.d("Main thread received", received.toString());
+                mMessageDisplay.setText(received.toString());
             }
         });
     }
