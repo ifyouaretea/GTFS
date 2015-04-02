@@ -1,5 +1,6 @@
 package serverUtils;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ public class MessageBundle {
     public static final String MESSAGE = "message";
     public static final String NOTEID = "noteID";
     public static final String TO_PHONE_NUMBER = "to_phone_number";
+    public static final String TIMESTAMP= "timestamp";
     public static final String STATUS = "status";
     public static final String VALID_STATUS = "1";
 
@@ -31,6 +33,7 @@ public class MessageBundle {
         messageMap.put(FROM_PHONE_NUMBER, fromNumber);
         messageMap.put(SESSION_TOKEN, sessionToken);
         messageMap.put(TYPE, type.toString());
+        putTimestamp();
 	}
 
     public String putUsername(String username){
@@ -41,6 +44,15 @@ public class MessageBundle {
         return messageMap.put(CHATROOMID, chatRoomID);
     }
 
+    public String putTimestamp(){
+        Calendar c = Calendar.getInstance();
+        StringBuilder sb = new StringBuilder();
+        sb.append(c.get(Calendar.HOUR_OF_DAY) + ":");
+        sb.append(c.get(Calendar.MINUTE) + ":");
+        sb.append(c.get(Calendar.SECOND));
+
+        return messageMap.put(TIMESTAMP, sb.toString());
+    }
     public String putMessage(String message){
         return messageMap.put(MESSAGE, message);
     }
