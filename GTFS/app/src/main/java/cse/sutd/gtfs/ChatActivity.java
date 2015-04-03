@@ -1,9 +1,9 @@
 package cse.sutd.gtfs;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-public class ChatActivity extends Activity implements MessagesFragment.OnFragmentInteractionListener {
+public class ChatActivity extends ActionBarActivity{
 
     private EditText msgEdit;
     private Button sendBtn;
@@ -88,10 +88,6 @@ public class ChatActivity extends Activity implements MessagesFragment.OnFragmen
         super.onDestroy();
     }
 
-    @Override
-    public void onFragmentInteraction(String id) {
-
-    }
 
     private void send(final String txt) {
         new AsyncTask<Void, Void, String>() {

@@ -5,7 +5,6 @@ package cse.sutd.gtfs;
  */
 
 import android.app.Application;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.util.Log;
 
@@ -16,8 +15,6 @@ import com.twitter.sdk.android.core.TwitterCore;
 import java.io.File;
 
 import cse.sutd.gtfs.Utils.MessageBundle;
-import cse.sutd.gtfs.Utils.ReceiveListenerTask;
-import cse.sutd.gtfs.Utils.SendMessageTask;
 import io.fabric.sdk.android.Fabric;
 
 public class GTFSClient extends Application{
@@ -25,11 +22,12 @@ public class GTFSClient extends Application{
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private final String TWITTER_KEY = "6Rs5gyo7xHoEYYkls0ajWP9PO";
     private final String TWITTER_SECRET = "8nvcBPCoqhkt1Lvzjv6Pb5GmBB4uBmreV3KSgVxfcgCJrMQT8E";
-    private static SharedPreferences prefs;
+    public static final String PREFS_NAME = "MyPrefsFile";
     private GTFSClient instance;
-    private SendMessageTask sender;
-    private ReceiveListenerTask listener;
+//    private SendMessageTask sender;
+//    private ReceiveListenerTask listener;
     private boolean isAuthenticated;
+
     private String PROFILE_ID;
 
     public GTFSClient() {
