@@ -22,7 +22,7 @@ public class ChatAdapters extends ArrayAdapter<String> {
     private final ArrayList<String> values;
 
     public ChatAdapters(Context context, ArrayList<String> values) {
-        super(context, R.layout.chatrow, values);
+        super(context, R.layout.main_list_item, values);
         this.context = context;
         this.values = values;
     }
@@ -31,13 +31,13 @@ public class ChatAdapters extends ArrayAdapter<String> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.chatrow, parent, false);
-        TextView textView = (TextView) rowView.findViewById(R.id.firstLine);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
-        textView.setText(values.get(position));
-        // change the icon for Windows and iPhone
+        View rowView = inflater.inflate(R.layout.main_list_item, parent, false);
+        TextView chatName = (TextView) rowView.findViewById(R.id.firstLine);
+        TextView latestmsg = (TextView) rowView.findViewById(R.id.secondLine);
+        ImageView avatar = (ImageView) rowView.findViewById(R.id.avatar);
+        chatName.setText(values.get(position));
         String s = values.get(position);
-        imageView.setImageResource(R.drawable.ic_action_profile);
+        avatar.setImageResource(R.drawable.ic_action_dark_profile);
 
         return rowView;
     }

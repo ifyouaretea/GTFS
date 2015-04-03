@@ -2,6 +2,7 @@ package cse.sutd.gtfs;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -14,9 +15,10 @@ import com.digits.sdk.android.DigitsSession;
 import java.util.UUID;
 
 public class LoginActivity extends Activity {
-    public static final String PREFS_NAME = "MyPrefsFile";
+
     private GTFSClient client;
     private UUID sessionID;
+
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
 //    private final String TWITTER_KEY = "6Rs5gyo7xHoEYYkls0ajWP9PO";
 //    private final String TWITTER_SECRET = "8nvcBPCoqhkt1Lvzjv6Pb5GmBB4uBmreV3KSgVxfcgCJrMQT8E";
@@ -25,13 +27,17 @@ public class LoginActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         client = (GTFSClient)getApplicationContext();
         sessionID = UUID.randomUUID();
-        if (client.getID()!=null){
+        SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
+        String userID = prefs.getString("userid", null);
+        if (userID != null) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("SessionID", sessionID);
             Log.d("TAG", sessionID.toString());
             startActivity(intent);
+            LoginActivity.this.finish();
         }else
             login();
     }
@@ -46,6 +52,9 @@ public class LoginActivity extends Activity {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 String userid = String.valueOf(session.getId());
                 client.setID(userid);
+                SharedPreferences.Editor editor = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE).edit();
+                editor.putString("userid", userid);
+                editor.commit();
                 intent.putExtra("userid", userid);
                 intent.putExtra("SessionID", sessionID);
                 Log.d("TAG", userid);
@@ -53,7 +62,6 @@ public class LoginActivity extends Activity {
                 startActivity(intent);
                 LoginActivity.this.finish();
             }
-
             @Override
             public void failure(DigitsException exception) {
                 Toast.makeText(getApplicationContext(), "Invalid Number", Toast.LENGTH_LONG).show();
