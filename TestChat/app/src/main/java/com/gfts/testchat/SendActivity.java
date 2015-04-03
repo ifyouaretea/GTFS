@@ -52,6 +52,7 @@ public class SendActivity extends ActionBarActivity {
                 textBundle.putMessage("HI BRAH");
                 textBundle.putToPhoneNumber("82238071");
                 textBundle.putChatroomID("12345");
+
                 networkThread.addMessageToQueue(textBundle.getMessage());
 
                 Map received = null;
