@@ -15,9 +15,8 @@ import com.twitter.sdk.android.core.TwitterCore;
 
 import java.io.File;
 
-import cse.sutd.gtfs.Utils.MessageBundle;
-import cse.sutd.gtfs.Utils.ReceiveListenerTask;
-import cse.sutd.gtfs.Utils.SendMessageTask;
+import cse.sutd.gtfs.serverUtils.MessageBundle;
+import cse.sutd.gtfs.serverUtils.NetworkThread;
 import io.fabric.sdk.android.Fabric;
 
 public class GTFSClient extends Application{
@@ -27,8 +26,7 @@ public class GTFSClient extends Application{
     private final String TWITTER_SECRET = "8nvcBPCoqhkt1Lvzjv6Pb5GmBB4uBmreV3KSgVxfcgCJrMQT8E";
     private static SharedPreferences prefs;
     private GTFSClient instance;
-    private SendMessageTask sender;
-    private ReceiveListenerTask listener;
+    private NetworkThread networkThread;
     private boolean isAuthenticated;
     private String PROFILE_ID;
 
@@ -46,6 +44,7 @@ public class GTFSClient extends Application{
         initSingletons();
         final TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new TwitterCore(authConfig), new Digits());
+        networkThread = new NetworkThread();
     }
 
     @Override

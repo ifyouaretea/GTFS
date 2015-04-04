@@ -26,4 +26,4 @@
         android:layout_toRightOf="@+id/avatar"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-</RelativeLayout><!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/src/main/res/layout/main_list_item.xml -->
+</RelativeLayout><!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/src/main/res/layout/main_list_item.xml -->

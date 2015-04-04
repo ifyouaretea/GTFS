@@ -29,9 +29,10 @@ public class MessageDbAdapter {
     private static final String FROM_PHONE_NUMBER = "from_phone_number";
     private static final String BODY= "body";
     private static final String CHATNAME = "chatName";
-
+    private static final String LAST_MESSAGE = "lastMessage";
     private static final String TAG = "MessageDbAdapter";
 
+    private static MessageDbAdapter instance;
     private static class DatabaseHelper extends SQLiteOpenHelper {
         private static final String DATABASE_CREATE_MESSAGES =
                 "create table messages (_id integer primary key autoincrement, "
@@ -39,8 +40,8 @@ public class MessageDbAdapter {
                         "from_phone_number text not null, timestamp text not null);";
 
         private static final String DATABASE_CREATE_CHATS =
-                "create table chats (_id integer primary key, "
-                + "chatName text not null);";
+                "create table chats (_id text primary key, "
+                + "chatName text not null, lastMessage integer not null);";
 
         private static final String DATABASE_NAME = "data";
 
@@ -65,7 +66,12 @@ public class MessageDbAdapter {
         }
     }
 
-    public MessageDbAdapter(Context context){mContext = context;}
+    public static MessageDbAdapter getInstance(Context context){
+        if(instance == null)
+            instance = new MessageDbAdapter(context.getApplicationContext());
+        return instance;
+    }
+    private MessageDbAdapter(Context context){mContext = context;}
 
     public MessageDbAdapter open() throws SQLException{
         mDbHelper = new DatabaseHelper(mContext);
@@ -82,6 +88,7 @@ public class MessageDbAdapter {
      * 2 if the chat been inserted has not existed previously
      */
     public int storeMessage(Map message){
+
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
         String timestamp = (String) message.get(MessageBundle.TIMESTAMP);
         String from_phone_number = (String) message.get(MessageBundle.FROM_PHONE_NUMBER);
@@ -105,15 +112,17 @@ public class MessageDbAdapter {
         //new group chats must be handled by the invitation callback function
         //createGroupChat() and should be called appropriately when the message type
         //is evaluated
+        ContentValues chatValues= new ContentValues();
         if(!chatExists){
-            ContentValues chatValues= new ContentValues();
             chatValues.put(ROWID, chatID);
             chatValues.put(CHATNAME, from_phone_number);
-            mDb.insert(CHATS, null, chatValues);
         }
 
+        chatValues.put(LAST_MESSAGE, System.currentTimeMillis());
+        mDb.insert(CHATS, null, chatValues);
+
         ContentValues messageValues = new ContentValues();
-        messageValues.put(CHATID, Integer.parseInt((String) message.get(chatID)));
+        messageValues.put(CHATID, (String)message.get(chatID));
         messageValues.put(TIMESTAMP, (String) message.get(MessageBundle.TIMESTAMP));
         messageValues.put(BODY, (String) message.get(MessageBundle.MESSAGE));
         messageValues.put(FROM_PHONE_NUMBER, (String) message.get(MessageBundle.FROM_PHONE_NUMBER));
@@ -140,8 +149,8 @@ public class MessageDbAdapter {
         String chatName = (String) message.get(CHATNAME);
 
         ContentValues chatValues = new ContentValues();
-        chatValues.put(ROWID, Integer.parseInt((String) message.get(chatID)));
-        chatValues.put(CHATNAME, Integer.parseInt((String) message.get(chatName)));
+        chatValues.put(ROWID, (String) message.get(chatID));
+        chatValues.put(CHATNAME, (String) message.get(chatName));
 
         return mDb.insert(CHATS, null, chatValues);
     }

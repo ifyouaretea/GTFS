@@ -27,6 +27,9 @@ import java.util.concurrent.Semaphore;
 public class NetworkThread extends Thread{
     private final String hostname = "128.199.73.51";
     private final int hostport = 8091;
+//    private final String userID;
+//    private final String sessionToken;
+
 
     private MessageBundle authMessage = null;
     private Socket client;
@@ -63,7 +66,7 @@ public class NetworkThread extends Thread{
                         Log.d("Received", received.toString());
                         sleep = true;
                     }
-                    if(sleep)
+                    if(!sleep)
                         sleep(1000);
                 }
             } catch (Exception e) {
@@ -93,7 +96,6 @@ public class NetworkThread extends Thread{
         try {
             JsonReader jIn = new JsonReader(client.getInputStream(), true);
             Map receivedMap = (Map) jIn.readObject();
-
             outMessageQueue.offer(receivedMap);
             Log.d("Semaphore", "Releasing semaphore");
             availableMessages.release();
@@ -118,6 +120,7 @@ public class NetworkThread extends Thread{
         return outMessageQueue.poll();
     }
     private boolean authenticate(){
+        //TODO: remove hardcoding
         final MessageBundle authBundle = new MessageBundle("82238071", "asdsd",
                 MessageBundle.messageType.AUTH);
         authBundle.putUsername("sy");

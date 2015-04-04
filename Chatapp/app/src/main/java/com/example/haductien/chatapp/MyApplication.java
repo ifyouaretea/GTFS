@@ -27,8 +27,8 @@ import io.fabric.sdk.android.Fabric;
 
 public class MyApplication extends Application {
 
-    private static MyApplication singleton;
-    private static SharedPreferences prefs;
+//    private static MyApplication singleton;
+//    private static SharedPreferences prefs;
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
 //    private static final String TWITTER_KEY = "lgj3wZm2PTAYugiOWZddMS1Rv";
 //    private static final String TWITTER_SECRET = "JwWBe8KKddQdd451UE7SXpqsVdPSPdFnfjYHTJnVTgKXHGfxer";

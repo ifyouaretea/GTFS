@@ -69,4 +69,4 @@
             android:layout_height="wrap_content"
             android:text="@string/dgts_pin_code_terms"/>
     </LinearLayout>
-</ScrollView><!-- From: file:/Users/android/workspace/jenkins/workspace/fabric-android-deploy-to-staging/sdk/kits/digits/src/main/res/layout/dgts__activity_pin_code.xml --><!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/layout/dgts__activity_pin_code.xml -->
+</ScrollView><!-- From: file:/Users/android/workspace/jenkins/workspace/fabric-android-deploy-to-staging/sdk/kits/digits/src/main/res/layout/dgts__activity_pin_code.xml --><!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/layout/dgts__activity_pin_code.xml -->

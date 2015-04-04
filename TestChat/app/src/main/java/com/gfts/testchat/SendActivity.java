@@ -1,8 +1,10 @@
 package com.gfts.testchat;
 
+import android.content.Context;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
+import java.util.jar.Attributes;
 
 import serverUtils.*;
 
@@ -31,6 +34,7 @@ public class SendActivity extends ActionBarActivity {
 
     private EditText mMessageBody;
     private TextView mMessageDisplay;
+    private NetworkThread networkThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +43,9 @@ public class SendActivity extends ActionBarActivity {
         mMessageBody = (EditText) findViewById(R.id.editBody);
         mMessageDisplay = (TextView) findViewById(R.id.receivedMessage);
 
-        final NetworkThread networkThread = new NetworkThread();
+        networkThread = new NetworkThread();
         networkThread.start();
+
 
         Button sendButton = (Button) findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -51,22 +56,28 @@ public class SendActivity extends ActionBarActivity {
 
                 textBundle.putMessage("HI BRAH");
                 textBundle.putToPhoneNumber("82238071");
-                textBundle.putChatroomID("12345");
+                textBundle.putChatroomID("BF43F36CA3D484D186BE9178A9674E14F470AC56");
 
                 networkThread.addMessageToQueue(textBundle.getMessage());
 
-                Map received = null;
-
-                while(received == null){
-                    received = networkThread.getMessage();
-                }
-
-                Log.d("Main thread received", received.toString());
-                mMessageDisplay.setText(received.toString());
             }
         });
+//        Thread displayThread = new Thread(){
+//            public void run(){
+//                Map received;
+//                while(true) {
+//                    received = null;
+//                    while (received == null) {
+//                        received = networkThread.getMessage();
+//                    }
+//                    Log.d("Main thread received", received.toString());
+//                    mMessageDisplay.setText(received.toString());
+//                }
+//
+//            }
+//        };
+//        displayThread.start();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
