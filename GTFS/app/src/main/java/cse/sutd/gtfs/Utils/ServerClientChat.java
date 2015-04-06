@@ -27,7 +27,7 @@ public class ServerClientChat {
 //		JsonReader jIn = new JsonReader(serverSideClient.getInputStream());
 
 
-        jOut.write(new MessageBundle(ownID, "hi", MessageBundle.messageType.TEXT));
+        jOut.write(new MessageBundle(ownID, "hi", MessageBundle.messageType.TEXT, true));
         jOut.flush();
 
         BufferedReader in = new BufferedReader(new InputStreamReader(serverSideClient.getInputStream()));

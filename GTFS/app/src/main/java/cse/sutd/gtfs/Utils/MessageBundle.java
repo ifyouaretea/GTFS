@@ -15,12 +15,13 @@ public class MessageBundle {
     private String fromID;
     private String message;
     private messageType type;
-
-    public MessageBundle(String fromID, String message, messageType type) {
+    private boolean isMine;
+    public MessageBundle(String fromID, String message, messageType type, boolean mine) {
         super();
         this.fromID = fromID;
         this.message = message;
         this.type = type;
+        this.isMine=mine;
     }
 
     public String toString(){
@@ -38,4 +39,6 @@ public class MessageBundle {
     public messageType getType() {
         return type;
     }
+
+    public boolean isMine(){return isMine;}
 }

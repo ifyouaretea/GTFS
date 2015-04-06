@@ -4,15 +4,22 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import cse.sutd.gtfs.Adapters.MessageAdapter;
+import cse.sutd.gtfs.Utils.MessageBundle;
 
 
 public class MessagingActivity extends ActionBarActivity {
-
+    private ListView listview;
+    private TextView msg;
+    private Button send;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,55 +30,33 @@ public class MessagingActivity extends ActionBarActivity {
         }
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setLogo(R.drawable.ic_action_profile); //user's pic
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle(recei);
         setContentView(R.layout.activity_messaging);
-        final ListView listview = (ListView) findViewById(R.id.messageList);
-        String[] messages = new String[] { "Hi", "Let's ", "go", "For", "Beer", "Tonight!", "OK!"};
-        final ArrayList<String> message = new ArrayList<String>();
-        for (int i = 0; i < messages.length; ++i) {
-            message.add(messages[i]);
-        }
+        listview = (ListView) findViewById(R.id.messageList);
+        MessageBundle hi = new MessageBundle("1234", "hi Nikhil!", MessageBundle.messageType.TEXT, true);
+        MessageBundle hi1 = new MessageBundle("1234", "Beer Tonight! On?", MessageBundle.messageType.TEXT, false);
+        final ArrayList<MessageBundle> message = new ArrayList<MessageBundle>();
+        message.add(hi);
+        message.add(hi1);
+
+        populateMsgs(message);
+        msg = (TextView)findViewById(R.id.message);
+        send = (Button)findViewById(R.id.sendMessageButton);
+        send.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "TODO: Implement sending", Toast.LENGTH_LONG).show();
+                message.add(new MessageBundle("1234", msg.getText().toString(), MessageBundle.messageType.TEXT, true));
+                populateMsgs(message);
+                msg.setText("");
+            }
+        });
+    }
+    public void populateMsgs(ArrayList<MessageBundle> message){
         final MessageAdapter adapter = new MessageAdapter(this, message);
+        //adapter.notifyDataSetChanged();
         listview.setAdapter(adapter);
-//        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, final View view,
-//                                    int position, long id) {
-//                final String item = (String) parent.getItemAtPosition(position);
-//                Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
-//                i.putExtra("receiver", message.get(position));
-//                startActivity(i);
-//            }
-//
-//        });
-        //        adapter = new SimpleCursorAdapter(getActivity(),
-//                R.layout.chat_list_item,
-//                null,
-//                new String[]{DataProvider.COL_MSG, DataProvider.COL_AT},
-//                new int[]{R.id.text1, R.id.text2},
-//                0);
-//        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
-//
-//            @Override
-//            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-//                switch(view.getId()) {
-//                    case R.id.text1:
-//                        LinearLayout root = (LinearLayout) view.getParent().getParent();
-//                        if (cursor.getString(cursor.getColumnIndex(" "/*DataProvider.COL_FROM*/)) == null) {
-//                            root.setGravity(Gravity.RIGHT);
-//                            root.setPadding(50, 10, 10, 10);
-//                        } else {
-//                            root.setGravity(Gravity.LEFT);
-//                            root.setPadding(10, 10, 50, 10);
-//                        }
-//                        break;
-//                }
-//                return false;
-//            }
-//        });
     }
 
     @Override
