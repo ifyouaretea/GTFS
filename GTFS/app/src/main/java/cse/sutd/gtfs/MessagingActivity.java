@@ -1,5 +1,6 @@
 package cse.sutd.gtfs;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -20,6 +21,8 @@ public class MessagingActivity extends ActionBarActivity {
     private ListView listview;
     private TextView msg;
     private Button send;
+    private GTFSClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,29 +37,39 @@ public class MessagingActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle(recei);
         setContentView(R.layout.activity_messaging);
+
+        client = (GTFSClient)getApplicationContext();
+        SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
+        final String userID = prefs.getString("userid", null);
+
         listview = (ListView) findViewById(R.id.messageList);
-        MessageBundle hi = new MessageBundle("1234", "hi Nikhil!", MessageBundle.messageType.TEXT, true);
-        MessageBundle hi1 = new MessageBundle("1234", "Beer Tonight! On?", MessageBundle.messageType.TEXT, false);
+        MessageBundle hi = new MessageBundle("1234","asdsd" , MessageBundle.messageType.TEXT);
+        hi.putMessage("hi Nikhil!"); hi.putToPhoneNumber("3128869026"); hi.putChatroomID("12345");
+        MessageBundle hi1 = new MessageBundle("3128869026","asdsd" , MessageBundle.messageType.TEXT);
+        hi1.putMessage("Beer Tonight! On?"); hi1.putToPhoneNumber("1234"); hi1.putChatroomID("12345");
         final ArrayList<MessageBundle> message = new ArrayList<MessageBundle>();
         message.add(hi);
         message.add(hi1);
-
-        populateMsgs(message);
+        final MessageAdapter adapter = new MessageAdapter(this, message, userID);
+        listview.setAdapter(adapter);
         msg = (TextView)findViewById(R.id.message);
         send = (Button)findViewById(R.id.sendMessageButton);
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "TODO: Implement sending", Toast.LENGTH_LONG).show();
-                message.add(new MessageBundle("1234", msg.getText().toString(), MessageBundle.messageType.TEXT, true));
-                populateMsgs(message);
-                msg.setText("");
+                if(msg.getText().toString().trim().length()>0) {
+                    final MessageBundle textBundle = new MessageBundle(userID, "asdsd",
+                            MessageBundle.messageType.TEXT);
+
+                    textBundle.putMessage(msg.getText().toString());
+                    textBundle.putToPhoneNumber("82238071");
+                    textBundle.putChatroomID("12345");
+                    Toast.makeText(getApplicationContext(), "TODO: Implement sending", Toast.LENGTH_LONG).show();
+                    message.add(textBundle);
+                    adapter.notifyDataSetChanged();
+                    msg.setText("");
+                }
             }
         });
-    }
-    public void populateMsgs(ArrayList<MessageBundle> message){
-        final MessageAdapter adapter = new MessageAdapter(this, message);
-        //adapter.notifyDataSetChanged();
-        listview.setAdapter(adapter);
     }
 
     @Override
