@@ -412,6 +412,7 @@
     <string name="title_activity_chat">ChatActivity</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_messaging">MessagingActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
     <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/src/main/res/values/strings_activity_settings.xml -->
     <eat-comment/>
     <string name="title_activity_settings">Settings</string>

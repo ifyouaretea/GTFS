@@ -1,0 +1,44 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# Changes to be committed:
+#	deleted:    GTFS/app/build/intermediates/incremental/aidl/androidTest/debug/dependency.store
+#	deleted:    GTFS/app/build/intermediates/incremental/mergeAssets/androidTest/debug/merger.xml
+#	deleted:    GTFS/app/build/intermediates/incremental/mergeResources/androidTest/debug/merger.xml
+#	modified:   GTFS/app/build/intermediates/incremental/mergeResources/debug/merger.xml
+#	deleted:    GTFS/app/build/intermediates/manifests/androidTest/debug/AndroidManifest.xml
+#	modified:   GTFS/app/build/intermediates/manifests/full/debug/AndroidManifest.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values/com_crashlytics_build_id.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values/values.xml
+#	deleted:    GTFS/app/build/intermediates/resources/resources-debug-androidTest.ap_
+#	modified:   GTFS/app/build/intermediates/resources/resources-debug.ap_
+#	modified:   GTFS/app/build/intermediates/symbols/debug/R.txt
+#	modified:   GTFS/app/build/outputs/logs/manifest-merger-debug-report.txt
+#	modified:   GTFS/app/src/main/AndroidManifest.xml
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/Adapters/MessageAdapter.java
+#	new file:   GTFS/app/src/main/java/cse/sutd/gtfs/Adapters/SquareImageView.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/MessagingActivity.java
+#	new file:   GTFS/app/src/main/java/cse/sutd/gtfs/ProfileActivity.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/Utils/MessageBundle.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/Utils/ServerClientChat.java
+#	new file:   GTFS/app/src/main/res/drawable-hdpi/ic_action_edit.png
+#	new file:   GTFS/app/src/main/res/drawable-mdpi/ic_action_edit.png
+#	new file:   GTFS/app/src/main/res/drawable-xhdpi/ic_action_edit.png
+#	new file:   GTFS/app/src/main/res/drawable-xxhdpi/ic_action_edit.png
+#	modified:   GTFS/app/src/main/res/layout/activity_messaging.xml
+#	new file:   GTFS/app/src/main/res/layout/activity_profile.xml
+#	renamed:    GTFS/app/src/main/res/layout/message_list_item.xml -> GTFS/app/src/main/res/layout/message_list_item_left.xml
+#	new file:   GTFS/app/src/main/res/layout/message_list_item_right.xml
+#
+# Changes not staged for commit:
+#	modified:   GTFS/app/src/main/res/values/strings.xml
+#	modified:   GTFS/build/intermediates/model_data.bin
+#	modified:   GTFS/local.properties
+#
+# Untracked files:
+#	GTFS/app/src/main/res/menu/menu_profile.xml
+#
+
