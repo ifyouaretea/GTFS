@@ -106,6 +106,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 
     private void loadData(String query) {
         ArrayList<String> chats = new ArrayList<String>();
+        //TODO: Remove hardcoding
         chats.add("Nikhil");
         chats.add("HaoQin");
         chats.add("KangSheng");

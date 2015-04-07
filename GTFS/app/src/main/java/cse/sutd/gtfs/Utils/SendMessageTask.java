@@ -5,45 +5,30 @@ package cse.sutd.gtfs.Utils;
  */
 
 import android.os.AsyncTask;
+import android.util.Log;
 
-import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
-import java.io.IOException;
-import java.net.Socket;
+import java.io.OutputStream;
 
 public class SendMessageTask extends AsyncTask<MessageBundle, Void, Boolean>{
 
-    public static final String hostname = "128.199.73.51";
-    public static final int hostport = 8091;
-    private MessageBundle message;
+    private final OutputStream mOutputStream;
 
-    public SendMessageTask(MessageBundle message){
-        this.message = message;
+    public SendMessageTask(OutputStream outputStream){
+        mOutputStream = outputStream;
     }
-
     @Override
     protected Boolean doInBackground(MessageBundle[] params) {
-        while(true){
-            try{
-                Socket server = new Socket(hostname, hostport);
-                server.setSoTimeout(10000); //attempts to send to server every 10 seconds
+        Log.d("Sender", "Successful");
 
-                JsonWriter serverOut = new JsonWriter(server.getOutputStream());
-                JsonReader serverIn = new JsonReader(server.getInputStream());
+        JsonWriter serverOut = new JsonWriter(mOutputStream);
 
-                serverOut.write(message);
-                serverOut.flush();
-
-                serverOut.close();
-                serverIn.close();
-                server.close();
-                break;
-            }
-            catch(IOException e){
-                e.printStackTrace();
-            }
+        for(MessageBundle message : params) {
+            serverOut.write(message);
+            serverOut.flush();
         }
+
         return true;
     }
 }

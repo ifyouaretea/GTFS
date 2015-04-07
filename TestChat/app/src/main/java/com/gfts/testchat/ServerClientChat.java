@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import serverUtils.MessageBundle;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
+
+import serverUtils.MessageBundle;
 
 public class ServerClientChat {
 	public static final String hostname = "localhost"; //= "128.199.73.51";

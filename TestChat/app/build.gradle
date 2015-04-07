@@ -22,6 +22,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:21.0.3'
-    compile files('C:/Users/tes/Downloads/TestChat/libs/json-io-3.0.0.jar')
-    compile files('C:/Users/tes/Downloads/TestChat/libs/json-io-3.0.0-javadoc.jar')
+    compile files('C:/Users/tes/Documents/GitHub/GTFS/TestChat/libs/json-io-3.0.0.jar')
+    compile files('C:/Users/tes/Documents/GitHub/GTFS/TestChat/libs/json-io-3.0.0-javadoc.jar')
 }

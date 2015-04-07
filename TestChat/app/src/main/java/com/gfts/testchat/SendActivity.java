@@ -1,5 +1,6 @@
 package com.gfts.testchat;
 
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,18 +14,23 @@ import android.widget.TextView;
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Map;
+
+import serverUtils.*;
 
 
 public class SendActivity extends ActionBarActivity {
 
+    //TODO: Replace debugging values
+
+    private final String ownID = "12345";
+
     private EditText mMessageBody;
     private TextView mMessageDisplay;
-    private String mMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,52 +39,31 @@ public class SendActivity extends ActionBarActivity {
         mMessageBody = (EditText) findViewById(R.id.editBody);
         mMessageDisplay = (TextView) findViewById(R.id.receivedMessage);
 
+        final NetworkThread networkThread = new NetworkThread();
+        networkThread.start();
+
         Button sendButton = (Button) findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread networkThread = new Thread() {
-                    @Override
-                    public void run(){
+            final MessageBundle textBundle = new MessageBundle("82238071", "asdsd",
+                    MessageBundle.messageType.TEXT);
 
-                        final String hostname = "localhost"; //= "128.199.73.51";
-                        final int hostport = 8091;
-                        final String ownID = "12345";
-                        Log.d("Success!!!!!", "Thread created");
+                textBundle.putMessage("HI BRAH");
+                textBundle.putToPhoneNumber("82238071");
+                textBundle.putChatroomID("12345");
 
-                        ServerSocket server = null;
-                        try {
-                            server = new ServerSocket(hostport);
-                            Socket client = new Socket(hostname, hostport);
+                networkThread.addMessageToQueue(textBundle.getMessage());
 
-                            Socket serverSideClient = server.accept();
+                Map received = null;
 
-                            JsonWriter jOut = new JsonWriter(client.getOutputStream());
-                            JsonReader jIn = new JsonReader(serverSideClient.getInputStream());
-
-
-                            jOut.write(new MessageBundle(ownID, mMessageBody.getText().toString(), MessageBundle.messageType.TEXT));
-                            jOut.flush();
-
-                            mMessage = ((MessageBundle) jIn.readObject()).getMessage();
-                            Log.d("Success!!!!!", mMessage);
-                            server.close();
-                            client.close();
-                            serverSideClient.close();
-
-                        } catch (IOException e) {
-                            Log.d("FAILURE", e.getMessage());
-                        }
-                    }
-                    };
-                    networkThread.start();
-                try {
-                    networkThread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                while(received == null){
+                    received = networkThread.getMessage();
                 }
-                mMessageDisplay.setText(mMessage);
-                };
+
+                Log.d("Main thread received", received.toString());
+                mMessageDisplay.setText(received.toString());
+            }
         });
     }
 
