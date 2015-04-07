@@ -1,0 +1,516 @@
+﻿Merge remote-tracking branch 'origin/master'
+
+Conflicts:
+	GTFS/app/build/intermediates/incremental/mergeResources/debug/merger.xml
+	GTFS/app/build/intermediates/res/debug/layout/chat_list_item.xml
+	GTFS/app/build/intermediates/res/debug/layout/fragment_messages_grid.xml
+	GTFS/app/build/intermediates/res/debug/layout/fragment_messages_list.xml
+	GTFS/app/build/intermediates/res/debug/layout/main_list_item.xml
+	GTFS/app/build/intermediates/res/debug/values-large-v4/values.xml
+	GTFS/app/build/intermediates/res/debug/values-sw600dp-v13/values.xml
+	GTFS/app/build/intermediates/res/debug/values/com_crashlytics_build_id.xml
+	GTFS/app/build/intermediates/res/debug/values/values.xml
+	GTFS/app/build/intermediates/resources/resources-debug-androidTest.ap_
+	GTFS/app/build/intermediates/resources/resources-debug.ap_
+	GTFS/app/src/main/java/cse/sutd/gtfs/GTFSClient.java
+	GTFS/local.properties
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 1 and 7 different commits each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   Chatapp/.idea/misc.xml
+#	modified:   Chatapp/Chatapp.iml
+#	modified:   Chatapp/app/app.iml
+#	modified:   Chatapp/app/build.gradle
+#	modified:   Chatapp/app/src/main/AndroidManifest.xml
+#	deleted:    Chatapp/app/src/main/java/com/example/haductien/chatapp/AddContactDialog.java
+#	deleted:    Chatapp/app/src/main/java/com/example/haductien/chatapp/DataProvider.java
+#	deleted:    Chatapp/app/src/main/java/com/example/haductien/chatapp/ExampleAdapter.java
+#	new file:   Chatapp/app/src/main/java/com/example/haductien/chatapp/MainFragment.java
+#	new file:   Chatapp/app/src/main/java/com/example/haductien/chatapp/Profile_menu.java
+#	new file:   Chatapp/app/src/main/java/com/example/haductien/chatapp/create_groupchat.java
+#	deleted:    Chatapp/app/src/main/java/com/example/haductien/chatapp/dummy/DummyContent.java
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/app_icon_quantum.png
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/app_icon_quantum_card.png
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/card_background_default.9.png
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/default_background.xml
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/grid_bg.png
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/movie.png
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/scrubber_disabled.png
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/scrubber_focussed.png
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/scrubber_normal.png
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/scrubber_pressed.png
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/shadow7.9.png
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/star_icon.png
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/videos_by_google_banner.png
+#	new file:   Chatapp/app/src/main/res/drawable-hdpi/videos_by_google_icon.png
+#	new file:   Chatapp/app/src/main/res/drawable-mdpi/BG.jpg
+#	new file:   Chatapp/app/src/main/res/drawable-mdpi/app_icon_quantum.png
+#	new file:   Chatapp/app/src/main/res/drawable-mdpi/app_icon_quantum_card.png
+#	new file:   Chatapp/app/src/main/res/drawable-mdpi/ic_launcher.png
+#	new file:   Chatapp/app/src/main/res/drawable-mdpi/images.png
+#	new file:   Chatapp/app/src/main/res/drawable-mdpi/videos_by_google_banner.png
+#	new file:   Chatapp/app/src/main/res/drawable-mdpi/videos_by_google_icon.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/app_icon_quantum.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/app_icon_quantum_card.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/default_background.xml
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/grid_bg.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/ic_launcher.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/ic_pause_playcontrol_focussed.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/ic_pause_playcontrol_normal.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/ic_pause_playcontrol_pressed.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/ic_play_action_focussed.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/ic_play_action_normal.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/ic_play_action_pressed.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/ic_play_playcontrol_focussed.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/ic_play_playcontrol_normal.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/ic_play_playcontrol_pressed.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/movie.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/star_icon.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/videos_by_google_banner.png
+#	new file:   Chatapp/app/src/main/res/drawable-xhdpi/videos_by_google_icon.png
+#	new file:   Chatapp/app/src/main/res/drawable-xxhdpi/app_icon_quantum.png
+#	new file:   Chatapp/app/src/main/res/drawable-xxhdpi/app_icon_quantum_card.png
+#	new file:   Chatapp/app/src/main/res/drawable-xxhdpi/videos_by_google_banner.png
+#	new file:   Chatapp/app/src/main/res/drawable-xxhdpi/videos_by_google_icon.png
+#	new file:   Chatapp/app/src/main/res/drawable/app_icon_quantum.png
+#	new file:   Chatapp/app/src/main/res/drawable/app_icon_quantum_card.png
+#	new file:   Chatapp/app/src/main/res/drawable/app_icon_your_company.png
+#	new file:   Chatapp/app/src/main/res/drawable/details_img.png
+#	new file:   Chatapp/app/src/main/res/drawable/ic_action_a.png
+#	new file:   Chatapp/app/src/main/res/drawable/ic_title.png
+#	new file:   Chatapp/app/src/main/res/drawable/movie.png
+#	new file:   Chatapp/app/src/main/res/drawable/player_bg_gradient_dark.xml
+#	new file:   Chatapp/app/src/main/res/drawable/shadow7.9.png
+#	new file:   Chatapp/app/src/main/res/drawable/videos_by_google_banner.png
+#	new file:   Chatapp/app/src/main/res/drawable/videos_by_google_icon.png
+#	modified:   Chatapp/app/src/main/res/layout/activity_contacts.xml
+#	new file:   Chatapp/app/src/main/res/layout/activity_create_groupchat.xml
+#	new file:   Chatapp/app/src/main/res/layout/activity_profile_menu.xml
+#	modified:   Chatapp/app/src/main/res/layout/fragment_main.xml
+#	new file:   Chatapp/app/src/main/res/layout/playback_controls.xml
+#	new file:   Chatapp/app/src/main/res/menu/menu_create_groupchat.xml
+#	new file:   Chatapp/app/src/main/res/menu/menu_profile_menu.xml
+#	new file:   Chatapp/app/src/main/res/values/colors.xml
+#	modified:   Chatapp/app/src/main/res/values/strings.xml
+#	new file:   Chatapp/app/src/main/res/values/themes.xml
+#	modified:   GTFS/app/build/intermediates/incremental/mergeResources/debug/merger.xml
+#	modified:   GTFS/app/build/intermediates/manifests/full/debug/AndroidManifest.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_action_bar_title_item.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_action_bar_up_container.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_action_bar_view_list_nav_layout.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_action_menu_item_layout.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_action_menu_layout.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_action_mode_bar.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_action_mode_close_item_material.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_activity_chooser_view.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_activity_chooser_view_list_item.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_expanded_menu_layout.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_list_menu_item_checkbox.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_list_menu_item_icon.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_list_menu_item_layout.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_list_menu_item_radio.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_popup_menu_item_layout.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_screen_content_include.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_screen_simple.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_screen_simple_overlay_action_mode.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_screen_toolbar.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_search_dropdown_item_icons_2line.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_search_view.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/abc_simple_dropdown_hint.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/activity_chat.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/activity_login.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/activity_main.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/chat_list_item.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/dgts__activity_confirmation.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/dgts__activity_contacts.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/dgts__activity_failure.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/dgts__activity_phone_number.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/dgts__activity_pin_code.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/dgts__country_row.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/dgts__state_button.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/fragment_messages_grid.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/fragment_messages_list.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/main_list_item.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/support_simple_spinner_dropdown_item.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/tw__activity_oauth.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/tw__activity_share_email.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/tw__tweet.xml
+#	deleted:    GTFS/app/build/intermediates/res/debug/layout/tw__tweet_compact.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-large-v4/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-sw600dp-v13/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values/com_crashlytics_build_id.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values/values.xml
+#	modified:   GTFS/app/build/intermediates/resources/resources-debug-androidTest.ap_
+#	deleted:    GTFS/app/build/intermediates/resources/resources-debug.ap_
+#	modified:   GTFS/app/build/intermediates/symbols/debug/R.txt
+#	modified:   GTFS/app/build/outputs/logs/manifest-merger-debug-report.txt
+#	modified:   GTFS/app/src/main/AndroidManifest.xml
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/Adapters/ChatAdapters.java
+#	new file:   GTFS/app/src/main/java/cse/sutd/gtfs/Adapters/MessageAdapter.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/ChatActivity.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/GTFSClient.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/LoginActivity.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/MainActivity.java
+#	deleted:    GTFS/app/src/main/java/cse/sutd/gtfs/MessagesFragment.java
+#	new file:   GTFS/app/src/main/java/cse/sutd/gtfs/MessagingActivity.java
+#	new file:   GTFS/app/src/main/res/drawable-hdpi/ic_action_dark_profile.png
+#	new file:   GTFS/app/src/main/res/drawable-mdpi/ic_action_dark_profile.png
+#	new file:   GTFS/app/src/main/res/drawable-xhdpi/ic_action_dark_profile.png
+#	new file:   GTFS/app/src/main/res/drawable-xxhdpi/ic_action_dark_profile.png
+#	modified:   GTFS/app/src/main/res/layout/activity_main.xml
+#	new file:   GTFS/app/src/main/res/layout/activity_messaging.xml
+#	deleted:    GTFS/app/src/main/res/layout/chat_list_item.xml
+#	deleted:    GTFS/app/src/main/res/layout/chatrow.xml
+#	deleted:    GTFS/app/src/main/res/layout/fragment_messages_grid.xml
+#	deleted:    GTFS/app/src/main/res/layout/fragment_messages_list.xml
+#	modified:   GTFS/app/src/main/res/layout/main_list_item.xml
+#	new file:   GTFS/app/src/main/res/layout/message_list_item.xml
+#	new file:   GTFS/app/src/main/res/menu/menu_messaging.xml
+#	deleted:    GTFS/app/src/main/res/values-large/refs.xml
+#	deleted:    GTFS/app/src/main/res/values-sw600dp/refs.xml
+#	deleted:    GTFS/app/src/main/res/values/refs.xml
+#	modified:   GTFS/app/src/main/res/values/strings.xml
+#	modified:   GTFS/build/intermediates/model_data.bin
+#	modified:   GTFS/local.properties
+#
+# Changes not staged for commit:
+#	modified:   Chatapp/.gitignore
+#	modified:   Chatapp/.idea/compiler.xml
+#	modified:   Chatapp/.idea/copyright/profiles_settings.xml
+#	modified:   Chatapp/.idea/encodings.xml
+#	modified:   Chatapp/.idea/gradle.xml
+#	modified:   Chatapp/.idea/inspectionProfiles/Project_Default.xml
+#	modified:   Chatapp/.idea/inspectionProfiles/profiles_settings.xml
+#	modified:   Chatapp/.idea/misc.xml
+#	modified:   Chatapp/.idea/modules.xml
+#	modified:   Chatapp/.idea/scopes/scope_settings.xml
+#	modified:   Chatapp/.idea/vcs.xml
+#	modified:   Chatapp/Chatapp.iml
+#	modified:   Chatapp/app/.gitignore
+#	modified:   Chatapp/app/app.iml
+#	modified:   Chatapp/app/build.gradle
+#	modified:   Chatapp/app/crashlytics.properties
+#	modified:   Chatapp/app/proguard-rules.pro
+#	modified:   Chatapp/app/src/androidTest/java/com/example/haductien/chatapp/ApplicationTest.java
+#	modified:   Chatapp/app/src/main/AndroidManifest.xml
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/ChatActivity.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/Contacts.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/LoginActivity.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/MainActivity.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/MainFragment.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/MessageWindow.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/MessagesFragment.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/MyApplication.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/Profile_menu.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/SettingsActivity.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/createEvent.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/create_groupchat.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/serverUtils/MessageBundle.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/serverUtils/ReceiveListenerTask.java
+#	modified:   Chatapp/app/src/main/java/com/example/haductien/chatapp/serverUtils/SendMessageTask.java
+#	modified:   Chatapp/app/src/main/res/drawable-hdpi/default_background.xml
+#	modified:   Chatapp/app/src/main/res/drawable-xhdpi/default_background.xml
+#	modified:   Chatapp/app/src/main/res/drawable/Android Design - Icons 20131120/export_script_README.txt
+#	modified:   Chatapp/app/src/main/res/drawable/box.xml
+#	modified:   Chatapp/app/src/main/res/drawable/player_bg_gradient_dark.xml
+#	modified:   Chatapp/app/src/main/res/layout-land/activity_main.xml
+#	modified:   Chatapp/app/src/main/res/layout/activity_chat.xml
+#	modified:   Chatapp/app/src/main/res/layout/activity_contacts.xml
+#	modified:   Chatapp/app/src/main/res/layout/activity_create_event.xml
+#	modified:   Chatapp/app/src/main/res/layout/activity_create_groupchat.xml
+#	modified:   Chatapp/app/src/main/res/layout/activity_login.xml
+#	modified:   Chatapp/app/src/main/res/layout/activity_main.xml
+#	modified:   Chatapp/app/src/main/res/layout/activity_profile_menu.xml
+#	modified:   Chatapp/app/src/main/res/layout/activity_setting.xml
+#	modified:   Chatapp/app/src/main/res/layout/chat_list_item.xml
+#	modified:   Chatapp/app/src/main/res/layout/fragment_chats_grid.xml
+#	modified:   Chatapp/app/src/main/res/layout/fragment_chats_list.xml
+#	modified:   Chatapp/app/src/main/res/layout/fragment_main.xml
+#	modified:   Chatapp/app/src/main/res/layout/list_chats.xml
+#	modified:   Chatapp/app/src/main/res/layout/list_item_message_left.xml
+#	modified:   Chatapp/app/src/main/res/layout/list_item_message_right.xml
+#	modified:   Chatapp/app/src/main/res/layout/main_list_item.xml
+#	modified:   Chatapp/app/src/main/res/layout/playback_controls.xml
+#	modified:   Chatapp/app/src/main/res/menu/global.xml
+#	modified:   Chatapp/app/src/main/res/menu/main.xml
+#	modified:   Chatapp/app/src/main/res/menu/menu_contacts.xml
+#	modified:   Chatapp/app/src/main/res/menu/menu_create_event.xml
+#	modified:   Chatapp/app/src/main/res/menu/menu_create_groupchat.xml
+#	modified:   Chatapp/app/src/main/res/menu/menu_main.xml
+#	modified:   Chatapp/app/src/main/res/menu/menu_message_window.xml
+#	modified:   Chatapp/app/src/main/res/menu/menu_profile_menu.xml
+#	modified:   Chatapp/app/src/main/res/menu/menu_setting.xml
+#	modified:   Chatapp/app/src/main/res/values-large/refs.xml
+#	modified:   Chatapp/app/src/main/res/values-sw600dp/refs.xml
+#	modified:   Chatapp/app/src/main/res/values-w820dp/dimens.xml
+#	modified:   Chatapp/app/src/main/res/values/attrs_my_view.xml
+#	modified:   Chatapp/app/src/main/res/values/color.xml
+#	modified:   Chatapp/app/src/main/res/values/colors.xml
+#	modified:   Chatapp/app/src/main/res/values/dimens.xml
+#	modified:   Chatapp/app/src/main/res/values/refs.xml
+#	modified:   Chatapp/app/src/main/res/values/strings.xml
+#	modified:   Chatapp/app/src/main/res/values/strings_activity_login.xml
+#	modified:   Chatapp/app/src/main/res/values/strings_activity_settings.xml
+#	modified:   Chatapp/app/src/main/res/values/styles.xml
+#	modified:   Chatapp/app/src/main/res/values/themes.xml
+#	modified:   Chatapp/app/src/main/res/xml/pref_data_sync.xml
+#	modified:   Chatapp/app/src/main/res/xml/pref_general.xml
+#	modified:   Chatapp/app/src/main/res/xml/pref_headers.xml
+#	modified:   Chatapp/app/src/main/res/xml/pref_messaging.xml
+#	modified:   Chatapp/app/src/main/res/xml/pref_notification.xml
+#	modified:   Chatapp/app/src/main/res/xml/searchable.xml
+#	modified:   Chatapp/build.gradle
+#	modified:   Chatapp/crashlytics.properties
+#	modified:   Chatapp/gradle.properties
+#	modified:   Chatapp/gradle/wrapper/gradle-wrapper.properties
+#	modified:   Chatapp/gradlew
+#	modified:   Chatapp/gradlew.bat
+#	modified:   Chatapp/proguard-com.twitter.sdk.android.twitter.txt
+#	modified:   Chatapp/settings.gradle
+#	modified:   GTFS/.gitignore
+#	modified:   GTFS/.idea/compiler.xml
+#	modified:   GTFS/.idea/copyright/profiles_settings.xml
+#	modified:   GTFS/.idea/encodings.xml
+#	modified:   GTFS/.idea/gradle.xml
+#	modified:   GTFS/.idea/misc.xml
+#	modified:   GTFS/.idea/modules.xml
+#	modified:   GTFS/.idea/scopes/scope_settings.xml
+#	modified:   GTFS/.idea/vcs.xml
+#	modified:   GTFS/GTFS.iml
+#	modified:   GTFS/app/.gitignore
+#	modified:   GTFS/app/app.iml
+#	modified:   GTFS/app/build.gradle
+#	modified:   GTFS/app/build/intermediates/incremental/mergeAssets/debug/merger.xml
+#	modified:   GTFS/app/build/intermediates/manifests/full/debug/AndroidManifest.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/anim/abc_fade_in.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/anim/abc_fade_out.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/anim/abc_grow_fade_in_from_bottom.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/anim/abc_shrink_fade_out_from_bottom.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/anim/abc_slide_in_bottom.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/anim/abc_slide_in_top.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/anim/abc_slide_out_bottom.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/anim/abc_slide_out_top.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/color/abc_background_cache_hint_selector_material_dark.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/color/abc_background_cache_hint_selector_material_light.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/color/abc_primary_text_disable_only_material_dark.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/color/abc_primary_text_disable_only_material_light.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/color/abc_primary_text_material_dark.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/color/abc_primary_text_material_light.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/color/abc_search_url_text.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/color/abc_secondary_text_material_dark.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/color/abc_secondary_text_material_light.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_btn_check_material.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_btn_default_mtrl_shape.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_btn_radio_material.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_cab_background_internal_bg.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_cab_background_top_material.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_edit_text_material.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_item_background_holo_dark.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_item_background_holo_light.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_list_selector_background_transition_holo_dark.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_list_selector_background_transition_holo_light.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_list_selector_holo_dark.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_list_selector_holo_light.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_ratingbar_full_material.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_spinner_textfield_background_material.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_switch_thumb_material.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_tab_indicator_material.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/abc_textfield_search_material.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/box.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/dgts__digits_btn.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/dgts__digits_btn_default.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/dgts__digits_btn_pressed.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/progress_dark.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/progress_light.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/tw__bg_tweet.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/tw__bg_tweet_compact.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/tw__login_btn.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/tw__login_btn_default.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/tw__login_btn_default_light.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/tw__login_btn_disabled.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/tw__login_btn_light.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/tw__login_btn_pressed.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/tw__login_btn_pressed_light.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/tw__login_btn_text_color_light.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/drawable/tw__transparent.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/layout-v11/abc_screen_content_include.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/menu/menu_chat.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/menu/menu_login.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/menu/menu_main.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-af/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-am/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ar/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-bg/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-bn-rBD/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ca/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-cs/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-da/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-de/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-el/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-en-rGB/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-en-rIN/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-en-rSS/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-en-rXX/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-es-rUS/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-es/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-et-rEE/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-eu-rES/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-fa/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-fi/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-fr-rCA/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-fr/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-gl-rES/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-hdpi-v4/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-hi/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-hr/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-hu/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-hy-rAM/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-in/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-is-rIS/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-it/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-iw/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ja/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ka-rGE/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-kk-rKZ/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-km-rKH/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-kn-rIN/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ko/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ky-rKG/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-land/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-lo-rLA/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-lt/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-lv/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-mk-rMK/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ml-rIN/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-mn-rMN/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-mr-rIN/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ms-rMY/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ms/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-my-rMM/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-nb/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ne-rNP/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-nl/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-pl/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-port/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-pt-rPT/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-pt/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ro/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ru/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-si-rLK/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-sk/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-sl/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-sr/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-sv/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-sw/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-sw720dp-v13/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ta-rIN/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-te-rIN/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-th/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-tl/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-tr/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-uk/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ur-rPK/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-ur/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-uz-rUZ/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-v11/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-v14/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-v17/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-v21/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-vi/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-w360dp-v13/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-w480dp-v13/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-w500dp-v13/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-w600dp-v13/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-w720dp-v13/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-w820dp-v13/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-xhdpi-v4/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-xlarge-land-v4/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-xlarge-v4/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-xxhdpi-v4/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-zh-rCN/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-zh-rHK/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-zh-rTW/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/values-zu/values.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/xml/pref_data_sync.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/xml/pref_general.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/xml/pref_headers.xml
+#	modified:   GTFS/app/build/intermediates/res/debug/xml/pref_notification.xml
+#	modified:   GTFS/app/build/intermediates/symbols/debug/R.txt
+#	modified:   GTFS/app/build/outputs/logs/manifest-merger-debug-report.txt
+#	modified:   GTFS/app/fabric.properties
+#	modified:   GTFS/app/proguard-rules.pro
+#	modified:   GTFS/app/src/androidTest/java/cse/sutd/gtfs/ApplicationTest.java
+#	modified:   GTFS/app/src/main/AndroidManifest.xml
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/Adapters/ChatAdapters.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/Adapters/MessageAdapter.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/ChatActivity.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/LoginActivity.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/MainActivity.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/MessagingActivity.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/SettingsActivity.java
+#	modified:   GTFS/app/src/main/java/cse/sutd/gtfs/dummy/DummyContent.java
+#	modified:   GTFS/app/src/main/res/drawable/box.xml
+#	modified:   GTFS/app/src/main/res/layout/activity_chat.xml
+#	modified:   GTFS/app/src/main/res/layout/activity_login.xml
+#	modified:   GTFS/app/src/main/res/layout/activity_main.xml
+#	modified:   GTFS/app/src/main/res/layout/activity_messaging.xml
+#	modified:   GTFS/app/src/main/res/layout/main_list_item.xml
+#	modified:   GTFS/app/src/main/res/menu/menu_chat.xml
+#	modified:   GTFS/app/src/main/res/menu/menu_login.xml
+#	modified:   GTFS/app/src/main/res/menu/menu_main.xml
+#	modified:   GTFS/app/src/main/res/menu/menu_messaging.xml
+#	modified:   GTFS/app/src/main/res/values-w820dp/dimens.xml
+#	modified:   GTFS/app/src/main/res/values/dimens.xml
+#	modified:   GTFS/app/src/main/res/values/strings.xml
+#	modified:   GTFS/app/src/main/res/values/strings_activity_settings.xml
+#	modified:   GTFS/app/src/main/res/values/styles.xml
+#	modified:   GTFS/app/src/main/res/xml/pref_data_sync.xml
+#	modified:   GTFS/app/src/main/res/xml/pref_general.xml
+#	modified:   GTFS/app/src/main/res/xml/pref_headers.xml
+#	modified:   GTFS/app/src/main/res/xml/pref_notification.xml
+#	modified:   GTFS/build.gradle
+#	modified:   GTFS/build/intermediates/dex-cache/cache.xml
+#	modified:   GTFS/build/intermediates/model_data.bin
+#	modified:   GTFS/gradle.properties
+#	modified:   GTFS/gradle/wrapper/gradle-wrapper.properties
+#	modified:   GTFS/gradlew
+#	modified:   GTFS/gradlew.bat
+#	modified:   GTFS/proguard-com.twitter.sdk.android.twitter.txt
+#	modified:   GTFS/settings.gradle
+#	modified:   TestChat/app/src/main/AndroidManifest.xml
+#	modified:   TestChat/app/src/main/java/com/gfts/testchat/MyApplication.java
+#	modified:   TestChat/app/src/main/java/com/gfts/testchat/SendActivityWithService.java
+#	modified:   TestChat/app/src/main/java/messageManagement/ManagerService.java
+#	modified:   TestChat/app/src/main/java/messageManagement/MessageDbAdapter.java
+#	modified:   TestChat/app/src/main/java/serverUtils/NetworkService.java
+#
+# Untracked files:
+#	GTFS/app/src/main/java/cse/sutd/gtfs/Adapters/SquareImageView.java
+#	GTFS/app/src/main/java/cse/sutd/gtfs/ProfileActivity.java
+#	GTFS/app/src/main/java/cse/sutd/gtfs/Utils/
+#	GTFS/app/src/main/res/drawable-hdpi/ic_action_edit.png
+#	GTFS/app/src/main/res/drawable-mdpi/ic_action_edit.png
+#	GTFS/app/src/main/res/drawable-xhdpi/ic_action_edit.png
+#	GTFS/app/src/main/res/drawable-xxhdpi/ic_action_edit.png
+#	GTFS/app/src/main/res/layout/activity_profile.xml
+#	GTFS/app/src/main/res/layout/message_list_item_left.xml
+#	GTFS/app/src/main/res/layout/message_list_item_right.xml
+#	GTFS/app/src/main/res/menu/menu_profile.xml
+#	PC Test Client/
+#	TestChat/.navigation/
+#
+
