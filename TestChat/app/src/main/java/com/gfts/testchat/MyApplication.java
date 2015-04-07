@@ -14,6 +14,15 @@ public class MyApplication extends Application {
 
     private MessageDbAdapter messageDbAdapter;
     private boolean authenticated = false;
+    private boolean listening = false;
+
+    public boolean isListening() {
+        return listening;
+    }
+
+    public void setListening(boolean listening) {
+        this.listening = listening;
+    }
 
     public boolean isAuthenticated() {
         return authenticated;

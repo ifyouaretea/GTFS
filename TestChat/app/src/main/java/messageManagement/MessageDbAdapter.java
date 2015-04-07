@@ -88,24 +88,26 @@ public class MessageDbAdapter {
      * 2 if the chat been inserted has not existed previously
      */
     public int storeMessage(Map message){
-
+        Log.d("path", mDb.getPath());
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
         String timestamp = (String) message.get(MessageBundle.TIMESTAMP);
         String from_phone_number = (String) message.get(MessageBundle.FROM_PHONE_NUMBER);
         String body = (String) message.get(MessageBundle.MESSAGE);
 
-        Cursor exists = mDb.rawQuery(String.format("SELECT _id FROM messages WHERE " +
-                "chatID='%s', timestamp='%s', from_phone_number='%s', body='%s'"
+        Log.d("Database store", message.toString());
+
+        Cursor messageExists = mDb.rawQuery(String.format("SELECT _id FROM messages WHERE " +
+                "chatID='%s' AND timestamp='%s' AND from_phone_number='%s' AND body='%s';"
                 ,chatID, timestamp, from_phone_number, body), null);
 
         //check if a copy of the message is already in the database
-        if (exists.getCount() != 0)
+        if (messageExists.getCount() != 0)
             return -1;
 
-        exists = mDb.rawQuery(String.format("SELECT chatID FROM messages WHERE " +
-                "chatID='%s'", chatID), null);
+        Cursor chatExists = mDb.rawQuery(String.format("SELECT _id FROM chats WHERE " +
+                "_id='%s'", chatID), null);
 
-        boolean chatExists = exists.getCount() > 0;
+        boolean isChatExists = chatExists.getCount() > 0;
 
         //if chat doesn't exist, create a new entry in the chats table
         //NOTE: THIS SHOULD ONLY BE USED FOR INDIVIDUAL CHATS
@@ -113,26 +115,33 @@ public class MessageDbAdapter {
         //createGroupChat() and should be called appropriately when the message type
         //is evaluated
         ContentValues chatValues= new ContentValues();
-        if(!chatExists){
+        if(!isChatExists){
             chatValues.put(ROWID, chatID);
             chatValues.put(CHATNAME, from_phone_number);
+            chatValues.put(LAST_MESSAGE, String.valueOf(System.currentTimeMillis()));
+            mDb.insert(CHATS, null, chatValues);
+        }else{
+            String updateSQL =
+                    "UPDATE chats SET " + LAST_MESSAGE + " = '" +
+                            String.valueOf(System.currentTimeMillis()) +
+                            "' WHERE _id = '"+ chatID + "'";
+
+            mDb.execSQL(updateSQL);
+            //mDb.update(CHATS, chatValues, "_id =" + chatID, null);
         }
 
-        chatValues.put(LAST_MESSAGE, System.currentTimeMillis());
-        mDb.insert(CHATS, null, chatValues);
-
         ContentValues messageValues = new ContentValues();
-        messageValues.put(CHATID, (String)message.get(chatID));
-        messageValues.put(TIMESTAMP, (String) message.get(MessageBundle.TIMESTAMP));
-        messageValues.put(BODY, (String) message.get(MessageBundle.MESSAGE));
-        messageValues.put(FROM_PHONE_NUMBER, (String) message.get(MessageBundle.FROM_PHONE_NUMBER));
+        messageValues.put(CHATID, chatID);
+        messageValues.put(TIMESTAMP, timestamp);
+        messageValues.put(BODY, body);
+        messageValues.put(FROM_PHONE_NUMBER, from_phone_number);
 
         //if inserting fails, return -1
         if (mDb.insert(MESSAGES, null, messageValues) < 0)
             return -1;
 
         //if inserting succeeds, return 2 if the chat is new, 1 if it's not new
-        return chatExists ? 1 : 2;
+        return isChatExists ? 1 : 2;
     }
 
     public Cursor getChatMessages(String chatID){

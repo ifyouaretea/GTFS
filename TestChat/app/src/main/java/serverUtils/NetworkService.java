@@ -1,14 +1,18 @@
 package serverUtils;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 import com.gfts.testchat.MyApplication;
+import com.gfts.testchat.R;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -35,9 +39,11 @@ public class NetworkService extends IntentService {
     private MessageBundle authMessage;
     private Socket client;
     private ListenerThread listener;
-    private Executor executor = Executors.newFixedThreadPool(4);
 
     private class ListenerThread extends Thread {
+
+        private ListenerThread singleton;
+
         public void run() {
             while (true) {
                 try {
@@ -46,6 +52,7 @@ public class NetworkService extends IntentService {
                         authenticate();
                     }
                     Map received = receive();
+                    Log.d("Listener received", received.toString());
                     if (received == null)
                         sleep(1000);
                 } catch (Exception e) {
@@ -60,37 +67,38 @@ public class NetworkService extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        listener = new ListenerThread();
-        listener.start();
-        return super.onStartCommand(intent, flags, startId);
+        super.onStartCommand(intent, flags, startId);
+        if(!((MyApplication)getApplication()).isListening()) {
+            listener = new ListenerThread();
+            listener.start();
+            ((MyApplication)getApplication()).setListening(true);
+        }
+        return START_STICKY;
     }
 
     @Override
     protected void onHandleIntent(Intent workIntent){
         final Intent receivedIntent = workIntent;
-        executor.execute(new Runnable() {
-            @Override
-            public void run(){
-                String jsonString = receivedIntent.getStringExtra(MESSAGE_KEY);
-                if(jsonString==null)
-                    return;
-                Map message = JsonReader.jsonToMaps(jsonString);
 
-                //loop until authenticated
-                if(!authenticated()) {
-                    Log.d("Sending authenticated", String.valueOf(authenticated()));
-                    authenticate();
-                }
+        String jsonString = receivedIntent.getStringExtra(MESSAGE_KEY);
+        if(jsonString==null)
+            return;
+        Map message = JsonReader.jsonToMaps(jsonString);
 
-                while(!send(message)){
-                    Log.d("Sending", "retrying");
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {}
-                }
-            }
-           });
+        //loop until authenticated
+        if(!authenticated()) {
+            Log.d("Sending authenticated", String.valueOf(authenticated()));
+            authenticate();
         }
+
+        while(!send(message)) {
+            Log.d("Sending", "retrying");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
+        }
+    }
 
 
 
@@ -101,11 +109,14 @@ public class NetworkService extends IntentService {
         try {
             if(client == null){
                 client = new Socket(hostname, hostport);
+                ((MyApplication) getApplication()).setAuthenticated(false);
+                authenticate();
             }
             JsonWriter serverOut = new JsonWriter(client.getOutputStream());
             serverOut.write(message);
             serverOut.flush();
             Log.d("Message sent out", message.toString());
+
         }catch (Exception e){
             e.printStackTrace();
             return false;
@@ -117,10 +128,13 @@ public class NetworkService extends IntentService {
         try {
             if(client == null){
                 client = new Socket(hostname, hostport);
+                ((MyApplication) getApplication()).setAuthenticated(false);
+                authenticate();
             }
             JsonReader jIn = new JsonReader(client.getInputStream(), true);
             Map receivedMap = (Map) jIn.readObject();
             String messageType = (String) receivedMap.get(MessageBundle.TYPE);
+
             if(!MessageBundle.messageType.AUTH.toString().equals(messageType)) {
                 Intent receivedMessageIntent = new Intent(MESSAGE_RECEIVED).putExtra
                         (MESSAGE_KEY, JsonWriter.objectToJson(receivedMap));
@@ -128,6 +142,16 @@ public class NetworkService extends IntentService {
                 LocalBroadcastManager.getInstance(getApplicationContext()).
                         sendBroadcast(receivedMessageIntent);
             }
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setContentTitle("Message Received")
+                            .setContentText(receivedMap.toString());
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+            mNotificationManager.notify(0, mBuilder.build());
+
             return receivedMap;
         }catch (Exception e){
             e.printStackTrace();

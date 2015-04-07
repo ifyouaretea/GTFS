@@ -31,21 +31,11 @@ public class ManagerService extends Service{
         private MessageBroadcastReceiver(){}
         @Override
         public void onReceive(Context context, Intent intent){
+            Log.d("Receiver", "received intent!");
             Map received = (Map) JsonReader.jsonToJava(intent.getStringExtra
                     (NetworkService.MESSAGE_KEY));
             handleMessage(received);
         }
-    }
-
-    public ManagerService(){
-        super();
-        IntentFilter receivedIntentFilter = new IntentFilter(NetworkService.MESSAGE_RECEIVED);
-        broadcastReceiver = new MessageBroadcastReceiver();
-
-        LocalBroadcastManager.getInstance(getApplicationContext())
-                .registerReceiver(broadcastReceiver, receivedIntentFilter);
-
-        this.dbAdapter = ((MyApplication) getApplication()).getDatabaseAdapter();
     }
 
     @Override
@@ -53,7 +43,20 @@ public class ManagerService extends Service{
         return null;
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        IntentFilter receivedIntentFilter = new IntentFilter(NetworkService.MESSAGE_RECEIVED);
+        broadcastReceiver = new MessageBroadcastReceiver();
+
+        LocalBroadcastManager.getInstance(getApplicationContext())
+                .registerReceiver(broadcastReceiver, receivedIntentFilter);
+
+        this.dbAdapter = ((MyApplication) getApplication()).getDatabaseAdapter();
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     public void handleMessage(Map message){
+        Log.d("Handle message", "I'm handling a message!");
         String messageType = (String) message.get(MessageBundle.TYPE);
 
         if (messageType.equals(MessageBundle.messageType.TEXT.toString())){

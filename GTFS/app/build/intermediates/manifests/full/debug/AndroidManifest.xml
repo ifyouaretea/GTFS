@@ -46,6 +46,14 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
+            android:name="cse.sutd.gtfs.MessagingActivity"
+            android:label="@string/title_activity_messaging" >
+        </activity>
+        <activity
+            android:name="cse.sutd.gtfs.ProfileActivity"
+            android:label="@string/title_activity_profile" >
+        </activity>
+        <activity
             android:name="com.twitter.sdk.android.core.identity.OAuthActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"

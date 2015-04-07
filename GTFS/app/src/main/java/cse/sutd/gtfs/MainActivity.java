@@ -3,8 +3,10 @@ package cse.sutd.gtfs;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +22,7 @@ import cse.sutd.gtfs.Adapters.ChatAdapters;
 
 
 public class MainActivity extends ActionBarActivity {
-
+    private GTFSClient client;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -28,34 +30,41 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-
         getSupportActionBar().setTitle("Chats");
         setContentView(R.layout.activity_main);
-        final ListView listview = (ListView) findViewById(R.id.list);
-        String[] values = new String[] { "Nikhil", "Sharma", "HaoQin", "KangSheng", "Glen", "SiawYoung", "Fran"};
+        client = (GTFSClient)getApplicationContext();
+        SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
+        String userID = prefs.getString("userid", null);
+        Log.d("user", userID);
+        final ListView listview = (ListView) findViewById(R.id.chatList);
+        String[] chatsID = new String[] { "Nikhil", "Sharma", "HaoQin", "KangSheng", "Glen", "SiawYoung", "Fran"};
 
-        final ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < values.length; ++i) {
-            list.add(values[i]);
+        final ArrayList<String> chats = new ArrayList<String>();
+        for (int i = 0; i < chatsID.length; ++i) {
+            chats.add(chatsID[i]);
         }
-        final ChatAdapters adapter = new ChatAdapters(this, list);
-        listview.setAdapter(adapter);
 
+        final ChatAdapters adapter = new ChatAdapters(this, chats);
+        listview.setAdapter(adapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
                 final String item = (String) parent.getItemAtPosition(position);
-                view.animate().setDuration(2000).alpha(0)
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                list.remove(item);
-                                adapter.notifyDataSetChanged();
-                                view.setAlpha(1);
-                            }
-                        });
+                Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
+                i.putExtra("receiver",chats.get(position));
+                startActivity(i);
+//                view.animate().setDuration(2000).alpha(0)
+//                        .withEndAction(new Runnable() {
+//                            @Override
+//                            public void run() {
+//
+//                                chats.remove(item);
+////                                adapter.notifyDataSetChanged();
+//                                view.setsetAlpha(1);
+//                            }
+//                        });
             }
 
         });
@@ -107,6 +116,10 @@ public class MainActivity extends ActionBarActivity {
                 return true;
             case R.id.action_logout:
                 Digits.getSessionManager().clearActiveSession();
+                SharedPreferences.Editor editor = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE).edit();
+                editor.putString("userid", null);
+                editor.commit();
+                client.setID(null);
                 MainActivity.this.finish();
                 System.exit(0);
                 return true;
