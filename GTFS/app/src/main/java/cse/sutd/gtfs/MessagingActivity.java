@@ -1,8 +1,15 @@
 package cse.sutd.gtfs;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,10 +18,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cedarsoftware.util.io.JsonReader;
+import com.cedarsoftware.util.io.JsonWriter;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 import cse.sutd.gtfs.Adapters.MessageAdapter;
-import cse.sutd.gtfs.Utils.MessageBundle;
+import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.serverUtils.MessageBundle;
+import cse.sutd.gtfs.serverUtils.NetworkService;
 
 
 public class MessagingActivity extends ActionBarActivity {
@@ -22,15 +35,19 @@ public class MessagingActivity extends ActionBarActivity {
     private TextView msg;
     private Button send;
     private GTFSClient client;
+    private MessageAdapter adapter;
+    private MessageBroadcastReceiver broadcastReceiver;
+    private MessageDbAdapter dbMessages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
-        String recei="";
+        String recei = "";
         if (extras != null) {
             recei = extras.getString("receiver");
         }
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_action_profile); //user's pic
@@ -38,25 +55,37 @@ public class MessagingActivity extends ActionBarActivity {
         getSupportActionBar().setTitle(recei);
         setContentView(R.layout.activity_messaging);
 
-        client = (GTFSClient)getApplicationContext();
+        client = (GTFSClient) getApplicationContext();
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         final String userID = prefs.getString("userid", null);
 
         listview = (ListView) findViewById(R.id.messageList);
-        MessageBundle hi = new MessageBundle("1234","asdsd" , MessageBundle.messageType.TEXT);
-        hi.putMessage("hi Nikhil!"); hi.putToPhoneNumber("3128869026"); hi.putChatroomID("12345");
-        MessageBundle hi1 = new MessageBundle("3128869026","asdsd" , MessageBundle.messageType.TEXT);
-        hi1.putMessage("Beer Tonight! On?"); hi1.putToPhoneNumber("1234"); hi1.putChatroomID("12345");
+        dbMessages = MessageDbAdapter.getInstance(this);
+        Cursor msgBundles = dbMessages.getChatMessages("12345");
         final ArrayList<MessageBundle> message = new ArrayList<MessageBundle>();
-        message.add(hi);
-        message.add(hi1);
-        final MessageAdapter adapter = new MessageAdapter(this, message, userID);
+        if (msgBundles != null) {
+            msgBundles.moveToFirst();
+            while(msgBundles.moveToNext()) {
+                message.add(new MessageBundle(msgBundles.getString(0),msgBundles.getString(1),MessageBundle.messageType.TEXT));
+                Log.d("phonenum",msgBundles.getString(0));
+                Log.d("txt",msgBundles.getString(1));
+            }
+            msgBundles.close();
+        }
+//        MessageBundle hi = new MessageBundle("1234", "asdsd", MessageBundle.messageType.TEXT);
+//        hi.putMessage("hi Nikhil!"); hi.putToPhoneNumber("3128869026"); hi.putChatroomID("12345");
+//        MessageBundle hi1 = new MessageBundle("3128869026", "asdsd", MessageBundle.messageType.TEXT);
+//        hi1.putMessage("Beer Tonight! On?"); hi1.putToPhoneNumber("1234"); hi1.putChatroomID("12345");
+
+//        message.add(hi); message.add(hi1);
+
+        adapter = new MessageAdapter(this, message, userID);
         listview.setAdapter(adapter);
-        msg = (TextView)findViewById(R.id.message);
-        send = (Button)findViewById(R.id.sendMessageButton);
+        msg = (TextView) findViewById(R.id.message);
+        send = (Button) findViewById(R.id.sendMessageButton);
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(msg.getText().toString().trim().length()>0) {
+                if (msg.getText().toString().trim().length() > 0) {
                     final MessageBundle textBundle = new MessageBundle(userID, "asdsd",
                             MessageBundle.messageType.TEXT);
 
@@ -65,7 +94,16 @@ public class MessagingActivity extends ActionBarActivity {
                     textBundle.putChatroomID("12345");
                     Toast.makeText(getApplicationContext(), "TODO: Implement sending", Toast.LENGTH_LONG).show();
                     message.add(textBundle);
-                    adapter.notifyDataSetChanged();
+                    Intent intent = new Intent(MessagingActivity.this, NetworkService.class);
+                    intent.putExtra(NetworkService.MESSAGE_KEY,
+                            JsonWriter.objectToJson(textBundle.getMessage()));
+                    MessagingActivity.this.startService(intent);
+
+                    IntentFilter receivedIntentFilter = new IntentFilter(NetworkService.MESSAGE_RECEIVED);
+                    broadcastReceiver = new MessageBroadcastReceiver();
+                    LocalBroadcastManager.getInstance(getApplicationContext())
+                            .registerReceiver(broadcastReceiver, receivedIntentFilter);
+
                     msg.setText("");
                 }
             }
@@ -92,5 +130,28 @@ public class MessagingActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void handleMessage(Map message) {
+        Log.d("Handle message", "I'm handling a message!");
+        String messageType = (String) message.get(MessageBundle.TYPE);
+
+        if (MessageBundle.messageType.TEXT.toString().equals(messageType)) {
+            adapter.notifyDataSetChanged();
+            Log.d("adapter updated", message.toString());
+        }
+    }
+
+    private class MessageBroadcastReceiver extends BroadcastReceiver {
+        private MessageBroadcastReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("Receiver", "received intent!");
+            Map received = (Map) JsonReader.jsonToJava(intent.getStringExtra
+                    (NetworkService.MESSAGE_KEY));
+            handleMessage(received);
+        }
     }
 }

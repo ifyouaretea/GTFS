@@ -5,17 +5,16 @@ package cse.sutd.gtfs;
  */
 
 import android.app.Application;
+import android.content.Intent;
 import android.content.res.Configuration;
-import android.util.Log;
 
-import com.digits.sdk.android.Digits;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterCore;
+import com.matesnetwork.callverification.Cognalys;
 
-import java.io.File;
+import java.sql.SQLException;
 
-import cse.sutd.gtfs.Utils.MessageBundle;
-import io.fabric.sdk.android.Fabric;
+import cse.sutd.gtfs.messageManagement.ManagerService;
+import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.serverUtils.NetworkService;
 
 public class GTFSClient extends Application{
 
@@ -23,27 +22,51 @@ public class GTFSClient extends Application{
     private final String TWITTER_KEY = "6Rs5gyo7xHoEYYkls0ajWP9PO";
     private final String TWITTER_SECRET = "8nvcBPCoqhkt1Lvzjv6Pb5GmBB4uBmreV3KSgVxfcgCJrMQT8E";
     public static final String PREFS_NAME = "MyPrefsFile";
-    private GTFSClient instance;
-//    private SendMessageTask sender;
-//    private ReceiveListenerTask listener;
-    private boolean isAuthenticated;
+    private static GTFSClient instance;
 
-    private String PROFILE_ID;
+    private static GTFSClient singleton;
 
-    public GTFSClient() {
+    private MessageDbAdapter messageDbAdapter;
+    private boolean authenticated = false;
+    private boolean listening = false;
+
+    public boolean isListening() {
+        return listening;
+    }
+
+    public void setListening(boolean listening) {
+        this.listening = listening;
+    }
+
+    public boolean isAuthenticated() {
+        return authenticated;
+    }
+
+    public void setAuthenticated(boolean authenticated) {
+        this.authenticated = authenticated;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        messageDbAdapter = MessageDbAdapter.getInstance(this);
+        try {
+            messageDbAdapter.open();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        singleton = this;
+        startService(new Intent(this, ManagerService.class));
+        startService(new Intent(this, NetworkService.class));
+        initSingletons();
+//        final TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+//        Fabric.with(this, new TwitterCore(authConfig), new Digits());
+        Cognalys.enableAnalytics(getApplicationContext(), true, true);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-    }
-    @Override
-    public void onCreate(){
-        super.onCreate();
-        // Initialize the singletons so their instances are bound to the application process.
-        initSingletons();
-        final TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new TwitterCore(authConfig), new Digits());
     }
 
     @Override
@@ -56,6 +79,12 @@ public class GTFSClient extends Application{
         super.onTerminate();
     }
 
+    public MessageDbAdapter getDatabaseAdapter(){
+        return messageDbAdapter;
+    }
+    private String PROFILE_ID;
+
+
     protected void initSingletons(){
         // Initialize the instance of MySingleton
         if (instance == null){
@@ -64,63 +93,11 @@ public class GTFSClient extends Application{
         }
     }
 
-    public GTFSClient getInstance(){
-        // Initialize the instance of MySingleton
-        if (instance == null)
-            instance = new GTFSClient();            // Create the instance
-
-        return instance;
-    }
-
     public String getID() {
         return PROFILE_ID;
     }
 
     public void setID(String ID) {
         this.PROFILE_ID = ID;
-    }
-
-    public boolean getLoggedIn() {
-        return isAuthenticated;
-    }
-
-    public void setLoggedIn(boolean log) {
-        this.isAuthenticated = log;
-    }
-
-    public void sendMessage(MessageBundle[] msg){
-
-    }
-
-    public void authenticate(MessageBundle[] msg){
-
-    }
-
-    public void clearAppData() {
-        File cache = getCacheDir();
-        File appDir = new File(cache.getParent());
-        if (appDir.exists()) {
-            String[] children = appDir.list();
-            for (String s : children) {
-                if (!s.equals("lib")) {
-                    deleteDir(new File(appDir, s));
-                    Log.i("TAG", "**************** File /data/data/APP_PACKAGE/" + s + " DELETED *******************");
-                }
-            }
-        }
-    }
-
-    public static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-
-        return dir.delete();
     }
 }

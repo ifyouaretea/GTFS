@@ -27,9 +27,11 @@ tools:context="cse.sutd.gtfs.ProfileActivity">
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText3"
-        android:hint="Status"
-        android:editable="true"
+        android:id="@+id/phonenum"
+        android:hint="Phone Number"
+        android:editable="false"
+        android:layout_margin="4dp"
+        android:background="@drawable/edit_drawable"
         android:layout_below="@+id/prof_name"
         android:layout_alignParentEnd="true" />
 
@@ -42,5 +44,21 @@ tools:context="cse.sutd.gtfs.ProfileActivity">
         android:layout_alignBottom="@+id/profpic"
         android:layout_alignParentEnd="true"
         android:clickable="true" />
+
+    <Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Save"
+    android:id="@+id/save"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:id="@+id/cancel"
+        android:layout_alignTop="@+id/save"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

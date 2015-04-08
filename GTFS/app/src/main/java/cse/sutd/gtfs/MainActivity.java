@@ -14,8 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
-import com.digits.sdk.android.Digits;
-
 import java.util.ArrayList;
 
 import cse.sutd.gtfs.Adapters.ChatAdapters;
@@ -23,21 +21,22 @@ import cse.sutd.gtfs.Adapters.ChatAdapters;
 
 public class MainActivity extends ActionBarActivity {
     private GTFSClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle("Chats");
         setContentView(R.layout.activity_main);
-        client = (GTFSClient)getApplicationContext();
+        client = (GTFSClient) getApplicationContext();
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         String userID = prefs.getString("userid", null);
         Log.d("user", userID);
         final ListView listview = (ListView) findViewById(R.id.chatList);
-        String[] chatsID = new String[] { "Nikhil", "Sharma", "HaoQin", "KangSheng", "Glen", "SiawYoung", "Fran"};
+        String[] chatsID = new String[]{"Nikhil", "Sharma", "HaoQin", "KangSheng", "Glen", "SiawYoung", "Fran"};
 
         final ArrayList<String> chats = new ArrayList<String>();
         for (int i = 0; i < chatsID.length; ++i) {
@@ -53,20 +52,9 @@ public class MainActivity extends ActionBarActivity {
                                     int position, long id) {
                 final String item = (String) parent.getItemAtPosition(position);
                 Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
-                i.putExtra("receiver",chats.get(position));
+                i.putExtra("receiver", chats.get(position));
                 startActivity(i);
-//                view.animate().setDuration(2000).alpha(0)
-//                        .withEndAction(new Runnable() {
-//                            @Override
-//                            public void run() {
-//
-//                                chats.remove(item);
-////                                adapter.notifyDataSetChanged();
-//                                view.setsetAlpha(1);
-//                            }
-//                        });
             }
-
         });
     }
 
@@ -75,18 +63,18 @@ public class MainActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
-        getMenuInflater().inflate(R.menu.menu_main,menu);
-        SearchManager manager=(SearchManager)getSystemService(Context.SEARCH_SERVICE);
-        SearchView search=(SearchView)menu.findItem(R.id.action_search).getActionView();
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView search = (SearchView) menu.findItem(R.id.action_search).getActionView();
         search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
-        search.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
-            public boolean onQueryTextSubmit(String query){
+            public boolean onQueryTextSubmit(String query) {
                 return true;
             }
 
             @Override
-            public boolean onQueryTextChange(String query){
+            public boolean onQueryTextChange(String query) {
                 return true;
             }
         });
@@ -99,7 +87,8 @@ public class MainActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch(item.getItemId()){
+        Intent intent;
+        switch (item.getItemId()) {
             case R.id.action_search:
                 return true;
             case R.id.action_contacts:
@@ -109,13 +98,15 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_group:
                 return true;
             case R.id.action_profile:
+                intent = new Intent(this, ProfileActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_settings:
-                Intent intent=new Intent(this,SettingsActivity.class);
+                intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_logout:
-                Digits.getSessionManager().clearActiveSession();
+//                Digits.getSessionManager().clearActiveSession();
                 SharedPreferences.Editor editor = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE).edit();
                 editor.putString("userid", null);
                 editor.commit();

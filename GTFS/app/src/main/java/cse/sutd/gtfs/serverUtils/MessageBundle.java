@@ -3,15 +3,17 @@ package cse.sutd.gtfs.serverUtils;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * Created by Glen on 02/04/2015.
+ */
 public class MessageBundle {
-	
-	//Predefined message types
-	public static enum messageType{
-		AUTH, TEXT, TYPING, CREATE_ROOM,INVITATION,
+
+    //Predefined message types
+    public static enum messageType{
+        AUTH, TEXT, TYPING, CREATE_ROOM,INVITATION,
         ACCEPT_INVITATION, LEAVE, GROUP_EXPIRED,
-		FETCH_NOTE, EDIT_NOTE;
-	}
+        FETCH_NOTE, EDIT_NOTE;
+    }
 
     private Map<String, String> messageMap;
 
@@ -20,21 +22,23 @@ public class MessageBundle {
     public static final String TYPE = "type";
     public static final String USERNAME = "username";
     public static final String CHATROOMID = "chatroom_id";
+    public static final String CHATROOM_NAME = "chatroom_name";
     public static final String MESSAGE = "message";
     public static final String NOTEID = "noteID";
     public static final String TO_PHONE_NUMBER = "to_phone_number";
+    public static final String USERS = "users";
     public static final String TIMESTAMP= "timestamp";
     public static final String STATUS = "status";
     public static final String VALID_STATUS = "1";
 
-	public MessageBundle(String fromNumber, String sessionToken, messageType type) {
-		super();
-		messageMap = new HashMap<>();
+    public MessageBundle(String fromNumber, String sessionToken, messageType type) {
+        super();
+        messageMap = new HashMap<>();
         messageMap.put(FROM_PHONE_NUMBER, fromNumber);
         messageMap.put(SESSION_TOKEN, sessionToken);
         messageMap.put(TYPE, type.toString());
         putTimestamp();
-	}
+    }
 
     public String putUsername(String username){
         return messageMap.put(USERNAME, username);
@@ -63,6 +67,14 @@ public class MessageBundle {
 
     public String putToPhoneNumber(String toPhoneNumber){
         return messageMap.put(TO_PHONE_NUMBER, toPhoneNumber);
+    }
+
+    public String putUsers(String... users){
+        return messageMap.put(USERS, users.toString());
+    }
+
+    public String putChatroomName(String chatroomName){
+        return messageMap.put(CHATROOM_NAME, chatroomName);
     }
 
     public Map getMessage(){

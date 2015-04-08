@@ -38,8 +38,19 @@ public class LoginActivity extends Activity {
             Log.d("TAG", sessionID.toString());
             startActivity(intent);
             LoginActivity.this.finish();
-        }else
-            login();
+        }else{
+//            client.setID("3128869026");
+//            SharedPreferences.Editor editor = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE).edit();
+//            editor.putString("userid", "3128869026");//3128869026
+//            editor.commit();
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//            intent.putExtra("SessionID", sessionID);
+//            Log.d("TAG", sessionID.toString());
+//            startActivity(intent);
+//            LoginActivity.this.finish();
+              login();
+        }
+
     }
 
     private void login(){
@@ -53,7 +64,7 @@ public class LoginActivity extends Activity {
                 String userid = String.valueOf(session.getId());
                 client.setID(userid);
                 SharedPreferences.Editor editor = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE).edit();
-                editor.putString("userid", userid);
+                editor.putString("userid", userid);//3128869026
                 editor.commit();
                 intent.putExtra("userid", userid);
                 intent.putExtra("SessionID", sessionID);

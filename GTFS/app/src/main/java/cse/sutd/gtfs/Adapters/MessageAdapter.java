@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cse.sutd.gtfs.R;
-import cse.sutd.gtfs.Utils.MessageBundle;
+import cse.sutd.gtfs.serverUtils.MessageBundle;
 
 /**
  * Created by Francisco Furtado on 02/04/2015.
