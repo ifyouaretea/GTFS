@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
+@Deprecated
 public class SendMessageTask extends AsyncTask<MessageBundle, Void, Boolean>{
 
     private final OutputStream mOutputStream;

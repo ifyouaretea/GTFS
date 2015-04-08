@@ -3,6 +3,7 @@ package com.gfts.testchat;
 import android.app.Application;
 import android.content.Intent;
 
+import java.net.Socket;
 import java.sql.SQLException;
 
 import messageManagement.ManagerService;
@@ -15,6 +16,15 @@ public class MyApplication extends Application {
     private MessageDbAdapter messageDbAdapter;
     private boolean authenticated = false;
     private boolean listening = false;
+    private Socket client;
+
+    public Socket getClient() {
+        return client;
+    }
+
+    public void setClient(Socket client) {
+        this.client = client;
+    }
 
     public boolean isListening() {
         return listening;

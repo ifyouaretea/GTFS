@@ -12,6 +12,8 @@ import serverUtils.NetworkThread;
 /**
  * Created by tes on 01/04/2015.
  */
+
+@Deprecated
 public class ManagerThread extends Thread{
 
     NetworkThread networkThread;

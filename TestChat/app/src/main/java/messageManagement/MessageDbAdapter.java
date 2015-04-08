@@ -35,13 +35,13 @@ public class MessageDbAdapter {
     private static MessageDbAdapter instance;
     private static class DatabaseHelper extends SQLiteOpenHelper {
         private static final String DATABASE_CREATE_MESSAGES =
-                "create table messages (_id integer primary key autoincrement, "
+                "create table messages (_id text primary key, "
                         + "chatID text not null, body text not null," +
                         "from_phone_number text not null, timestamp text not null);";
 
         private static final String DATABASE_CREATE_CHATS =
                 "create table chats (_id text primary key, "
-                + "chatName text not null, lastMessage integer not null);";
+                + "chatName text not null, lastMessage integer);";
 
         private static final String DATABASE_NAME = "data";
 
@@ -84,25 +84,25 @@ public class MessageDbAdapter {
     /**
      *
      * @param message
-     * @return -1 if not inserted, 1 if inserted correctly,
+     * @return -2 if message is already in db, -1 if not inserted, 1 if inserted correctly,
      * 2 if the chat been inserted has not existed previously
      */
-    public int storeMessage(Map message){
+    public int storeMessage(Map message) {
         Log.d("path", mDb.getPath());
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
         String timestamp = (String) message.get(MessageBundle.TIMESTAMP);
         String from_phone_number = (String) message.get(MessageBundle.FROM_PHONE_NUMBER);
         String body = (String) message.get(MessageBundle.MESSAGE);
+        String messageID = (String) message.get(MessageBundle.MESSAGEID);
 
         Log.d("Database store", message.toString());
 
         Cursor messageExists = mDb.rawQuery(String.format("SELECT _id FROM messages WHERE " +
-                "chatID='%s' AND timestamp='%s' AND from_phone_number='%s' AND body='%s';"
-                ,chatID, timestamp, from_phone_number, body), null);
+                "_id ='%s';", messageID), null);
 
         //check if a copy of the message is already in the database
         if (messageExists.getCount() != 0)
-            return -1;
+            return -2;
 
         Cursor chatExists = mDb.rawQuery(String.format("SELECT _id FROM chats WHERE " +
                 "_id='%s'", chatID), null);
@@ -114,27 +114,26 @@ public class MessageDbAdapter {
         //new group chats must be handled by the invitation callback function
         //createGroupChat() and should be called appropriately when the message type
         //is evaluated
-        ContentValues chatValues= new ContentValues();
-        if(!isChatExists){
-            chatValues.put(ROWID, chatID);
-            chatValues.put(CHATNAME, from_phone_number);
-            chatValues.put(LAST_MESSAGE, String.valueOf(System.currentTimeMillis()));
-            mDb.insert(CHATS, null, chatValues);
-        }else{
-            String updateSQL =
-                    "UPDATE chats SET " + LAST_MESSAGE + " = '" +
-                            String.valueOf(System.currentTimeMillis()) +
-                            "' WHERE _id = '"+ chatID + "'";
-
-            mDb.execSQL(updateSQL);
-            //mDb.update(CHATS, chatValues, "_id =" + chatID, null);
-        }
+        ContentValues chatValues = new ContentValues();
+        //mDb.update(CHATS, chatValues, "_id =" + chatID, null);
 
         ContentValues messageValues = new ContentValues();
         messageValues.put(CHATID, chatID);
         messageValues.put(TIMESTAMP, timestamp);
         messageValues.put(BODY, body);
         messageValues.put(FROM_PHONE_NUMBER, from_phone_number);
+        messageValues.put(ROWID, messageID);
+
+
+        if (!isChatExists)
+            createGroupChat(message);
+
+        String updateSQL =
+                "UPDATE chats SET " + LAST_MESSAGE + " = '" +
+                        messageID +
+                        "' WHERE _id = '" + chatID + "'";
+
+        mDb.execSQL(updateSQL);
 
         //if inserting fails, return -1
         if (mDb.insert(MESSAGES, null, messageValues) < 0)
@@ -158,9 +157,9 @@ public class MessageDbAdapter {
         String chatName = (String) message.get(CHATNAME);
 
         ContentValues chatValues = new ContentValues();
-        chatValues.put(ROWID, (String) message.get(chatID));
-        chatValues.put(CHATNAME, (String) message.get(chatName));
-
+        chatValues.put(ROWID, chatID);
+        chatValues.put(CHATNAME, chatName);
+        chatValues.put(LAST_MESSAGE, chatID);
         return mDb.insert(CHATS, null, chatValues);
     }
 

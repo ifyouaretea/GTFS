@@ -21,6 +21,7 @@ import java.util.Map;
  * Listens continuously for a connection from the server.
  *
  */
+@Deprecated
 public class ReceiveListenerThread extends Thread{
 
     public final InputStream mInputStream;

@@ -52,7 +52,7 @@ public class SendActivityWithService extends ActionBarActivity {
 
             textBundle.putMessage("HI BRAH");
             textBundle.putToPhoneNumber("81572260");
-            textBundle.putChatroomID("7A9282FF7DE64558DF8AE80AA7B9A7AB3A53D679");
+            textBundle.putChatroomID("1428400316768767");
 
                 Intent intent = new Intent(SendActivityWithService.this, NetworkService.class);
 

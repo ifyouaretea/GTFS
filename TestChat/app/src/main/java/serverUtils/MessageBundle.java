@@ -23,6 +23,7 @@ public class MessageBundle {
     public static final String CHATROOM_NAME = "chatroom_name";
     public static final String MESSAGE = "message";
     public static final String NOTEID = "noteID";
+    public static final String MESSAGEID = "message_id";
     public static final String TO_PHONE_NUMBER = "to_phone_number";
     public static final String USERS = "users";
     public static final String TIMESTAMP= "timestamp";

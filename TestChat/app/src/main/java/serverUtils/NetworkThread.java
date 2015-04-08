@@ -24,6 +24,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Created by tes on 30/03/2015.
  */
+@Deprecated
 public class NetworkThread extends Thread{
     private final String hostname = "128.199.73.51";
     private final int hostport = 8091;

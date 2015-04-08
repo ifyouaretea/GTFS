@@ -59,11 +59,16 @@ public class ManagerService extends Service{
         Log.d("Handle message", "I'm handling a message!");
         String messageType = (String) message.get(MessageBundle.TYPE);
 
-        if (messageType.equals(MessageBundle.messageType.TEXT.toString())){
-            //TODO: implement notification code
+        if (MessageBundle.messageType.TEXT.toString().equals(messageType)){
             dbAdapter.storeMessage(message);
-            Log.d("Database insertion", message.toString());
+            Log.d("Database message insertion", message.toString());
+        }else if(messageType.equals(MessageBundle.messageType.CREATE_ROOM.toString()) ||
+                messageType.equals(MessageBundle.messageType.INVITATION.toString())
+                ){
+            dbAdapter.createGroupChat(message);
+            Log.d("Database chat insertion", message.toString());
         }
+
         Log.d("Received Message", message.toString());
     }
 }

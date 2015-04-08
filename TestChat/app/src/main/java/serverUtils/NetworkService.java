@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
@@ -37,7 +38,6 @@ public class NetworkService extends IntentService {
     private final int hostport = 8091;
 
     private MessageBundle authMessage;
-    private Socket client;
     private ListenerThread listener;
 
     private class ListenerThread extends Thread {
@@ -73,6 +73,7 @@ public class NetworkService extends IntentService {
             listener.start();
             ((MyApplication)getApplication()).setListening(true);
         }
+
         return START_STICKY;
     }
 
@@ -107,12 +108,12 @@ public class NetworkService extends IntentService {
             return false;
 
         try {
-            if(client == null){
-                client = new Socket(hostname, hostport);
+            if(((MyApplication)getApplication()).getClient() == null){
+                ((MyApplication)getApplication()).setClient(new Socket(hostname, hostport));
                 ((MyApplication) getApplication()).setAuthenticated(false);
                 authenticate();
             }
-            JsonWriter serverOut = new JsonWriter(client.getOutputStream());
+            JsonWriter serverOut = new JsonWriter(((MyApplication)getApplication()).getClient().getOutputStream());
             serverOut.write(message);
             serverOut.flush();
             Log.d("Message sent out", message.toString());
@@ -125,47 +126,54 @@ public class NetworkService extends IntentService {
     }
 
     private Map receive(){
-        try {
-            if(client == null){
-                client = new Socket(hostname, hostport);
-                ((MyApplication) getApplication()).setAuthenticated(false);
-                authenticate();
+            try {
+                if (((MyApplication) getApplication()).getClient() == null) {
+                    ((MyApplication) getApplication()).setClient(new Socket(hostname, hostport));
+                    ((MyApplication) getApplication()).setAuthenticated(false);
+                    authenticate();
+                }
+                JsonReader jIn = new JsonReader(((MyApplication) getApplication()).getClient().getInputStream(), true);
+                Map receivedMap = (Map) jIn.readObject();
+                String messageType = (String) receivedMap.get(MessageBundle.TYPE);
+
+                if (!MessageBundle.messageType.AUTH.toString().equals(messageType) &&
+                        messageType != null){
+
+                    Intent receivedMessageIntent = new Intent(MESSAGE_RECEIVED).putExtra
+                            (MESSAGE_KEY, JsonWriter.objectToJson(receivedMap));
+
+                    LocalBroadcastManager.getInstance(getApplicationContext()).
+                            sendBroadcast(receivedMessageIntent);
+                }
+                //TODO: Remove universal notifications
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentTitle("Message Received")
+                                .setContentText(receivedMap.toString())
+                                .setStyle(new NotificationCompat.BigTextStyle()
+                                        .bigText(receivedMap.toString()));
+
+                NotificationManager mNotificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                mNotificationManager.notify(0, mBuilder.build());
+
+                return receivedMap;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            JsonReader jIn = new JsonReader(client.getInputStream(), true);
-            Map receivedMap = (Map) jIn.readObject();
-            String messageType = (String) receivedMap.get(MessageBundle.TYPE);
-
-            if(!MessageBundle.messageType.AUTH.toString().equals(messageType)) {
-                Intent receivedMessageIntent = new Intent(MESSAGE_RECEIVED).putExtra
-                        (MESSAGE_KEY, JsonWriter.objectToJson(receivedMap));
-
-                LocalBroadcastManager.getInstance(getApplicationContext()).
-                        sendBroadcast(receivedMessageIntent);
-            }
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.drawable.ic_launcher)
-                            .setContentTitle("Message Received")
-                            .setContentText(receivedMap.toString());
-            NotificationManager mNotificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-            mNotificationManager.notify(0, mBuilder.build());
-
-            return receivedMap;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
         return null;
     }
 
     private void authenticate(){
         while(true) {
             try {
-                if(client == null)
-                    client = new Socket(hostname, hostport);
-                if (client.isClosed() || !client.isConnected())
-                    client = new Socket(hostname, hostport);
+                if(((MyApplication)getApplication()).getClient() == null)
+                    ((MyApplication)getApplication()).setClient(new Socket(hostname, hostport));
+                if (((MyApplication)getApplication()).getClient().isClosed() ||
+                        !((MyApplication)getApplication()).getClient().isConnected())
+                    ((MyApplication)getApplication()).setClient(new Socket(hostname, hostport));
 
                 //TODO: remove hardcoding
                 final MessageBundle authBundle = new MessageBundle("82238071", "asdsd",
@@ -174,16 +182,15 @@ public class NetworkService extends IntentService {
                 send(authBundle.getMessage());
                 Map receivedMessage = receive();
                 Log.d("Authentication", receivedMessage.toString());
+
                 if(!MessageBundle.messageType.AUTH.toString().
                         equals(receivedMessage.get(MessageBundle.TYPE)))
                     return;
                 if (String.valueOf(receivedMessage.get(MessageBundle.STATUS)).
-                        equals(MessageBundle.VALID_STATUS)) {
-
+                        equals(MessageBundle.VALID_STATUS)){
                     ((MyApplication)getApplication()).setAuthenticated(true);
                     break;
                 }else{
-
                     ((MyApplication)getApplication()).setAuthenticated(false);
                 }
             }catch(Exception e){

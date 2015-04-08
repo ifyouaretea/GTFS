@@ -21,6 +21,7 @@ import java.util.List;
  * Listens continuously for a connection from the server.
  *
  */
+@Deprecated
 public class ReceiveListenerTask extends AsyncTask<Void, Void, String>{
 	public static final String hostname = "128.199.73.51";
     public static final int hostport = 8091;
