@@ -155,6 +155,7 @@ public class MessageDbAdapter {
     }
 
     public long createGroupChat(Map message){
+        Log.d("Chat creation", message.toString());
         String chatID = (String) message.get(CHATID);
         String chatName = (String) message.get(CHATNAME);
 

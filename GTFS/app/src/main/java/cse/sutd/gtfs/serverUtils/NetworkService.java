@@ -17,8 +17,9 @@ import java.util.Map;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.R;
 
+
 /**
- * Created by Glen on 03/04/2015.
+ * Created by tes on 03/04/2015.
  */
 public class NetworkService extends IntentService {
 
@@ -30,7 +31,6 @@ public class NetworkService extends IntentService {
     private final int hostport = 8091;
 
     private MessageBundle authMessage;
-    private Socket client;
     private ListenerThread listener;
 
     private class ListenerThread extends Thread {
@@ -40,7 +40,7 @@ public class NetworkService extends IntentService {
         public void run() {
             while (true) {
                 try {
-                    if (!authenticated()) {
+                    if(!authenticated()) {
                         Log.d("Receiving authenticated", String.valueOf(authenticated()));
                         authenticate();
                     }
@@ -54,38 +54,38 @@ public class NetworkService extends IntentService {
             }
         }
     }
-
-    public NetworkService() {
+    public NetworkService(){
         super("GTFS.NetworkService");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        if (!((GTFSClient) getApplication()).isListening()) {
+        if(!((GTFSClient)getApplication()).isListening()) {
             listener = new ListenerThread();
             listener.start();
-            ((GTFSClient) getApplication()).setListening(true);
+            ((GTFSClient)getApplication()).setListening(true);
         }
+
         return START_STICKY;
     }
 
     @Override
-    protected void onHandleIntent(Intent workIntent) {
+    protected void onHandleIntent(Intent workIntent){
         final Intent receivedIntent = workIntent;
 
         String jsonString = receivedIntent.getStringExtra(MESSAGE_KEY);
-        if (jsonString == null)
+        if(jsonString==null)
             return;
         Map message = JsonReader.jsonToMaps(jsonString);
 
         //loop until authenticated
-        if (!authenticated()) {
+        if(!authenticated()) {
             Log.d("Sending authenticated", String.valueOf(authenticated()));
             authenticate();
         }
 
-        while (!send(message)) {
+        while(!send(message)) {
             Log.d("Sending", "retrying");
             try {
                 Thread.sleep(1000);
@@ -94,52 +94,57 @@ public class NetworkService extends IntentService {
         }
     }
 
-
-    private boolean send(Map message) {
+    private boolean send(Map message){
         if (message == null)
             return false;
 
         try {
-            if (client == null) {
-                client = new Socket(hostname, hostport);
+            if(((GTFSClient)getApplication()).getClient() == null){
+                ((GTFSClient)getApplication()).setClient(new Socket(hostname, hostport));
                 ((GTFSClient) getApplication()).setAuthenticated(false);
                 authenticate();
             }
-            JsonWriter serverOut = new JsonWriter(client.getOutputStream());
+            JsonWriter serverOut = new JsonWriter(((GTFSClient)getApplication()).getClient().getOutputStream());
             serverOut.write(message);
             serverOut.flush();
             Log.d("Message sent out", message.toString());
 
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
             return false;
         }
         return true;
     }
 
-    private Map receive() {
+    private Map receive(){
         try {
-            if (client == null) {
-                client = new Socket(hostname, hostport);
+            if (((GTFSClient) getApplication()).getClient() == null) {
+                ((GTFSClient) getApplication()).setClient(new Socket(hostname, hostport));
                 ((GTFSClient) getApplication()).setAuthenticated(false);
                 authenticate();
             }
-            JsonReader jIn = new JsonReader(client.getInputStream(), true);
+            JsonReader jIn = new JsonReader(((GTFSClient) getApplication()).getClient().getInputStream(), true);
             Map receivedMap = (Map) jIn.readObject();
             String messageType = (String) receivedMap.get(MessageBundle.TYPE);
 
-            if (!MessageBundle.messageType.AUTH.toString().equals(messageType)) {
+            if (!MessageBundle.messageType.AUTH.toString().equals(messageType) &&
+                    messageType != null){
+
                 Intent receivedMessageIntent = new Intent(MESSAGE_RECEIVED).putExtra
                         (MESSAGE_KEY, JsonWriter.objectToJson(receivedMap));
 
                 LocalBroadcastManager.getInstance(getApplicationContext()).
                         sendBroadcast(receivedMessageIntent);
             }
+            //TODO: Remove universal notifications
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle("Message Received")
-                            .setContentText(receivedMap.toString());
+                            .setContentText(receivedMap.toString())
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText(receivedMap.toString()));
+
             NotificationManager mNotificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -152,13 +157,14 @@ public class NetworkService extends IntentService {
         return null;
     }
 
-    private void authenticate() {
-        while (true) {
+    private void authenticate(){
+        while(true) {
             try {
-                if (client == null)
-                    client = new Socket(hostname, hostport);
-                if (client.isClosed() || !client.isConnected())
-                    client = new Socket(hostname, hostport);
+                if(((GTFSClient)getApplication()).getClient() == null)
+                    ((GTFSClient)getApplication()).setClient(new Socket(hostname, hostport));
+                if (((GTFSClient)getApplication()).getClient().isClosed() ||
+                        !((GTFSClient)getApplication()).getClient().isConnected())
+                    ((GTFSClient)getApplication()).setClient(new Socket(hostname, hostport));
 
                 //TODO: remove hardcoding
                 final MessageBundle authBundle = new MessageBundle("82238071", "asdsd",
@@ -167,21 +173,20 @@ public class NetworkService extends IntentService {
                 send(authBundle.getMessage());
                 Map receivedMessage = receive();
                 Log.d("Authentication", receivedMessage.toString());
-                if (!MessageBundle.messageType.AUTH.toString().
+
+                if(!MessageBundle.messageType.AUTH.toString().
                         equals(receivedMessage.get(MessageBundle.TYPE)))
                     return;
                 if (String.valueOf(receivedMessage.get(MessageBundle.STATUS)).
-                        equals(MessageBundle.VALID_STATUS)) {
-
-                    ((GTFSClient) getApplication()).setAuthenticated(true);
+                        equals(MessageBundle.VALID_STATUS)){
+                    ((GTFSClient)getApplication()).setAuthenticated(true);
                     break;
-                } else {
-
-                    ((GTFSClient) getApplication()).setAuthenticated(false);
+                }else{
+                    ((GTFSClient)getApplication()).setAuthenticated(false);
                 }
-            } catch (Exception e) {
+            }catch(Exception e){
                 e.printStackTrace();
-            } finally {
+            }finally{
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -191,7 +196,7 @@ public class NetworkService extends IntentService {
         }
     }
 
-    private boolean authenticated() {
+    private boolean authenticated(){
         return ((GTFSClient) getApplication()).isAuthenticated();
     }
 }

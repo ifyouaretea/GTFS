@@ -52,7 +52,7 @@ public class LoginActivityCog extends Activity {
                                 InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 //                                verify();
-                                String number = country_code_tv.getText().toString().concat(phoneNumbTv.getText().toString());
+                                String number = phoneNumbTv.getText().toString();
                                 client.setID(number);
                                 SharedPreferences.Editor editor = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE).edit();
                                 editor.putString("userid", number);//3128869026

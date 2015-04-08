@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 
 import com.matesnetwork.callverification.Cognalys;
 
+import java.net.Socket;
 import java.sql.SQLException;
 
 import cse.sutd.gtfs.messageManagement.ManagerService;
@@ -23,13 +24,18 @@ public class GTFSClient extends Application{
     private final String TWITTER_SECRET = "8nvcBPCoqhkt1Lvzjv6Pb5GmBB4uBmreV3KSgVxfcgCJrMQT8E";
     public static final String PREFS_NAME = "MyPrefsFile";
     private static GTFSClient instance;
-
-    private static GTFSClient singleton;
+    private Socket client;
 
     private MessageDbAdapter messageDbAdapter;
     private boolean authenticated = false;
     private boolean listening = false;
+    public Socket getClient() {
+        return client;
+    }
 
+    public void setClient(Socket client) {
+        this.client = client;
+    }
     public boolean isListening() {
         return listening;
     }
@@ -55,10 +61,9 @@ public class GTFSClient extends Application{
         }catch (SQLException e){
             e.printStackTrace();
         }
-        singleton = this;
         startService(new Intent(this, ManagerService.class));
         startService(new Intent(this, NetworkService.class));
-        initSingletons();
+        getInstance();
 //        final TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
 //        Fabric.with(this, new TwitterCore(authConfig), new Digits());
         Cognalys.enableAnalytics(getApplicationContext(), true, true);
@@ -85,7 +90,7 @@ public class GTFSClient extends Application{
     private String PROFILE_ID;
 
 
-    protected void initSingletons(){
+    protected void getInstance(){
         // Initialize the instance of MySingleton
         if (instance == null){
             // Create the instance

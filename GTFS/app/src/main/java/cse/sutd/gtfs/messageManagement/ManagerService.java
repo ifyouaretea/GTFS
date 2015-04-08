@@ -54,14 +54,14 @@ public class ManagerService extends Service{
     }
 
     public void handleMessage(Map message){
-        Log.d("Handle message", "I'm handling a message!");
+        Log.d("Handle message", message.toString());
         String messageType = (String) message.get(MessageBundle.TYPE);
 
         if (MessageBundle.messageType.TEXT.toString().equals(messageType)){
             dbAdapter.storeMessage(message);
             Log.d("DB message insertion", message.toString());
         }else if(messageType.equals(MessageBundle.messageType.CREATE_ROOM.toString()) ||
-                messageType.equals(MessageBundle.messageType.INVITATION.toString())
+                messageType.equals(MessageBundle.messageType.ROOM_INVITATION.toString())
                 ){
             dbAdapter.createGroupChat(message);
             Log.d("Database chat insertion", message.toString());

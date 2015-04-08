@@ -25,6 +25,13 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <service
+            android:name="cse.sutd.gtfs.serverUtils.NetworkService"
+            android:exported="false" />
+        <service
+            android:name="cse.sutd.gtfs.messageManagement.ManagerService"
+            android:exported="false" />
+
         <activity
             android:name="cse.sutd.gtfs.LoginActivity"
             android:label="@string/app_name" >
@@ -34,26 +41,20 @@
             android:name="io.fabric.ApiKey"
             android:value="590e1a8a24152769bb618444413d56832cf0eb7c" />
 
-        <!-- <receiver -->
-        <!-- android:name=".MyResultReceiver" -->
-        <!-- android:exported="false" > -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="com.digits.sdk.android.UPLOAD_COMPLETE" /> -->
-        <!-- <action android:name="com.digits.sdk.android.UPLOAD_FAILED" /> -->
-        <!-- </intent-filter> -->
-        <!-- </receiver> -->
-
         <activity
             android:name="cse.sutd.gtfs.MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
         <activity
             android:name="cse.sutd.gtfs.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="cse.sutd.gtfs.MainActivity" >
+>
         </activity>
         <activity
             android:name="cse.sutd.gtfs.MessagingActivity"
-            android:label="@string/title_activity_messaging" >
+            android:label="@string/title_activity_messaging"
+            android:parentActivityName="cse.sutd.gtfs.MainActivity" >
         </activity>
         <activity
             android:name="cse.sutd.gtfs.ProfileActivity"
@@ -62,7 +63,7 @@
         </activity>
         <activity
             android:name="cse.sutd.gtfs.LoginActivityCog"
-            android:label="@string/title_activity_login_activity_cog" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -38,6 +38,7 @@ public class MessagingActivity extends ActionBarActivity {
     private MessageAdapter adapter;
     private MessageBroadcastReceiver broadcastReceiver;
     private MessageDbAdapter dbMessages;
+    private ArrayList<MessageBundle> message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +62,16 @@ public class MessagingActivity extends ActionBarActivity {
 
         listview = (ListView) findViewById(R.id.messageList);
         dbMessages = MessageDbAdapter.getInstance(this);
-        Cursor msgBundles = dbMessages.getChatMessages("12345");
-        final ArrayList<MessageBundle> message = new ArrayList<MessageBundle>();
+        Cursor msgBundles = dbMessages.getChatMessages("1428480589161444");
+        message = new ArrayList<MessageBundle>();
+        final ArrayList<String> timestamp = new ArrayList<String>();
         if (msgBundles != null) {
             msgBundles.moveToFirst();
             while(msgBundles.moveToNext()) {
-                message.add(new MessageBundle(msgBundles.getString(0),msgBundles.getString(1),MessageBundle.messageType.TEXT));
+                MessageBundle a = new MessageBundle(msgBundles.getString(0),"asdsd",MessageBundle.messageType.TEXT);
+                a.putMessage(msgBundles.getString(1)); a.putChatroomID(msgBundles.getString(2));
+                message.add(a);
+                timestamp.add(msgBundles.getString(2));
                 Log.d("phonenum",msgBundles.getString(0));
                 Log.d("txt",msgBundles.getString(1));
             }
@@ -90,8 +95,8 @@ public class MessagingActivity extends ActionBarActivity {
                             MessageBundle.messageType.TEXT);
 
                     textBundle.putMessage(msg.getText().toString());
-                    textBundle.putToPhoneNumber("82238071");
-                    textBundle.putChatroomID("12345");
+                    textBundle.putToPhoneNumber("81572260");
+                    textBundle.putChatroomID("1428480589161444");
                     Toast.makeText(getApplicationContext(), "TODO: Implement sending", Toast.LENGTH_LONG).show();
                     message.add(textBundle);
                     Intent intent = new Intent(MessagingActivity.this, NetworkService.class);
@@ -105,6 +110,7 @@ public class MessagingActivity extends ActionBarActivity {
                             .registerReceiver(broadcastReceiver, receivedIntentFilter);
 
                     msg.setText("");
+                    adapter.notifyDataSetChanged();
                 }
             }
         });

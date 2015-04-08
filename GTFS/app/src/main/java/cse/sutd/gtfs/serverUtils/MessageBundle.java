@@ -10,7 +10,7 @@ public class MessageBundle {
 
     //Predefined message types
     public static enum messageType{
-        AUTH, TEXT, TYPING, CREATE_ROOM,INVITATION,
+        AUTH, TEXT, TYPING, CREATE_ROOM,ROOM_INVITATION,
         ACCEPT_INVITATION, LEAVE, GROUP_EXPIRED,
         FETCH_NOTE, EDIT_NOTE;
     }

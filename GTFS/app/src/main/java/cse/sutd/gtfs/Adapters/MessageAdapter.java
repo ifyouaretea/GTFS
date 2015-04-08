@@ -36,7 +36,7 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView;
-        if(user.equalsIgnoreCase((String)message.getMessage().get("from_phone_number"))) {
+        if(user.equalsIgnoreCase((String)message.getMessage().get("from_phone_number"))) { //
             rowView = inflater.inflate(R.layout.message_list_item_right, parent, false);
             LinearLayout lay = (LinearLayout) rowView.findViewById(R.id.userAndMessage);
             lay.setBackgroundColor(Color.GREEN);
