@@ -114,8 +114,6 @@ public class MessageDbAdapter {
         //new group chats must be handled by the invitation callback function
         //createGroupChat() and should be called appropriately when the message type
         //is evaluated
-        ContentValues chatValues = new ContentValues();
-        //mDb.update(CHATS, chatValues, "_id =" + chatID, null);
 
         ContentValues messageValues = new ContentValues();
         messageValues.put(CHATID, chatID);

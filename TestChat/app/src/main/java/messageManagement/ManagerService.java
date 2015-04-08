@@ -24,6 +24,9 @@ import serverUtils.NetworkThread;
  */
 public class ManagerService extends Service{
 
+    public static final String NEW_TEXT_MESSAGE = "com.gtfs.NEW_TEXT_MESSAGE";
+    public static final String NEW_CHAT = "com.gtfs.NEW_CHAT";
+
     MessageDbAdapter dbAdapter;
     MessageBroadcastReceiver broadcastReceiver;
 
@@ -62,10 +65,18 @@ public class ManagerService extends Service{
         if (MessageBundle.messageType.TEXT.toString().equals(messageType)){
             dbAdapter.storeMessage(message);
             Log.d("Database message insertion", message.toString());
+
+            Intent intent = new Intent(NEW_TEXT_MESSAGE).putExtra
+                    (MessageBundle.CHATROOMID, (String) message.get(MessageBundle.CHATROOMID));
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+
         }else if(messageType.equals(MessageBundle.messageType.CREATE_ROOM.toString()) ||
                 messageType.equals(MessageBundle.messageType.INVITATION.toString())
                 ){
             dbAdapter.createGroupChat(message);
+
+            Intent intent = new Intent(NEW_CHAT);
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
             Log.d("Database chat insertion", message.toString());
         }
 
