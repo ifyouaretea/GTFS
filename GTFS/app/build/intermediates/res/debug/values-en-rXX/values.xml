@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-en-rXX/values.xml -->
 =======
 <<<<<<< HEAD
@@ -9,6 +10,12 @@
     <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-en-rXX/values.xml -->
 >>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
 >>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714
+=======
+    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-en-rXX/values.xml -->
+=======
+    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-en-rXX/values.xml -->
+>>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf
+>>>>>>> origin/master
     <eat-comment/>
     <plurals name="tw__time_hours">
         <item quantity="one">[1h]</item>
@@ -23,6 +30,7 @@
         <item quantity="other">[%ds]</item>
     </plurals>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-en-rXX/values.xml -->
 =======
 <<<<<<< HEAD
@@ -31,6 +39,12 @@
     <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-en-rXX/values.xml -->
 >>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
 >>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714
+=======
+    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-en-rXX/values.xml -->
+=======
+    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-en-rXX/values.xml -->
+>>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf
+>>>>>>> origin/master
     <eat-comment/>
     <string name="dgts__cancel">[Cåäncéêl]</string>
     <string name="dgts__communication_error">[Cöømmünïícåätïíöøn Erröør]</string>
@@ -80,6 +94,7 @@
         thïís åäpp. Whéên yöøü tåäp Okåäy, wéê\'ll üplöøåäd yöøür åäddréêss böøöøk töø Dïígïíts by Twïíttéêr åänd\
         éênåäbléê öøthéêr üséêrs öøf öøür åäpp töø dïíscöøvéêr yöøü.]</string>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-en-rXX/values.xml -->
 =======
 <<<<<<< HEAD
@@ -93,17 +108,30 @@
 =======
     <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-en-rXX/values.xml -->
 >>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714
+=======
+    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-en-rXX/values.xml -->
+=======
+    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-en-rXX/values.xml -->
+>>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf
+>>>>>>> origin/master
     <eat-comment/>
     <string name="tw__loading_tweet">[Löøåädïíng Twéêéêt]</string>
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/twitter-core/1.3.1/res/values-en-rXX/values.xml -->
     <eat-comment/>
     <string name="tw__login_btn_txt">[Sïígn ïín wïíth Twïíttéêr]</string>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-en-rXX/values.xml -->
 =======
     <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-en-rXX/values.xml -->
 >>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
 >>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714
+=======
+    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-en-rXX/values.xml -->
+=======
+    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-en-rXX/values.xml -->
+>>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf
+>>>>>>> origin/master
     <eat-comment/>
     <string name="tw__relative_date_format_long">[MM/dd/yy]</string>
     <string name="tw__relative_date_format_short">[MMM dd]</string>

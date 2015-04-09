@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <merger version="3"><dataSet config="main"><source path="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\src\androidTest\res"/><source path="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\generated\res\rs\androidTest\debug"/><source path="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\generated\res\generated\androidTest\debug"/></dataSet><mergedItems/></merger>
 =======
 <<<<<<< HEAD
@@ -8,3 +9,9 @@
 <merger version="3"><dataSet config="main"><source path="C:\Users\Ha Duc Tien\Documents\GTFS\GTFS\app\src\androidTest\res"/><source path="C:\Users\Ha Duc Tien\Documents\GTFS\GTFS\app\build\generated\res\rs\androidTest\debug"/><source path="C:\Users\Ha Duc Tien\Documents\GTFS\GTFS\app\build\generated\res\generated\androidTest\debug"/></dataSet><mergedItems/></merger>
 >>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
 >>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714
+=======
+<merger version="3"><dataSet config="main"><source path="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\src\androidTest\res"/><source path="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\build\generated\res\rs\androidTest\debug"/><source path="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\build\generated\res\generated\androidTest\debug"/></dataSet><mergedItems/></merger>
+=======
+<merger version="3"><dataSet config="main"><source path="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\src\androidTest\res"/><source path="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\generated\res\rs\androidTest\debug"/><source path="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\generated\res\generated\androidTest\debug"/></dataSet><mergedItems/></merger>
+>>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf
+>>>>>>> origin/master

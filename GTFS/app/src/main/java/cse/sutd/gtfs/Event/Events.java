@@ -8,27 +8,16 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observer;
 
-import javax.security.auth.Subject;
 
-public class Events implements Subject {
+
+public class Events {
     private String EVENT_NAME;
 
     public static final String FIRSTNAME = "firstName";
 
     private List<Person> observers = new ArrayList<Person>();
     private List<PropertyChangeListener> listener = new ArrayList<PropertyChangeListener>();
-
-    @Override
-    public void addObserver(Observer o) {
-
-    }
-
-    @Override
-    public void removeObserver(Observer o) {
-
-    }
 
     public class Person {
 
@@ -59,10 +48,7 @@ public class Events implements Subject {
         }
 
         public void setLastName(String lastName) {
-            notifyListeners(this,
-                    LASTNAME,
-                    this.lastName,
-                    this.lastName = lastName);
+
         }
     }
 
