@@ -25,10 +25,11 @@ public class GTFSClient extends Application{
     public static final String PREFS_NAME = "MyPrefsFile";
     private static GTFSClient instance;
     private Socket client;
-
+    private String PROFILE_ID;
     private MessageDbAdapter messageDbAdapter;
     private boolean authenticated = false;
     private boolean listening = false;
+
     public Socket getClient() {
         return client;
     }
@@ -87,7 +88,7 @@ public class GTFSClient extends Application{
     public MessageDbAdapter getDatabaseAdapter(){
         return messageDbAdapter;
     }
-    private String PROFILE_ID;
+
 
 
     protected void getInstance(){

@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -165,6 +164,7 @@ public class NetworkService extends IntentService {
 
     private void authenticate(){
         while(true) {
+
             try {
                 if(((GTFSClient)getApplication()).getClient() == null)
                     ((GTFSClient)getApplication()).setClient(new Socket(hostname, hostport));
@@ -173,8 +173,14 @@ public class NetworkService extends IntentService {
                     ((GTFSClient)getApplication()).setClient(new Socket(hostname, hostport));
 
                 //TODO: remove hardcoding
-                final MessageBundle authBundle = new MessageBundle(((GTFSClient)
-                        getApplication()).getID(), "asdsd", MessageBundle.messageType.AUTH);
+
+                String userID = ((GTFSClient)getApplication()).getID();
+                while(userID == null){
+                    Thread.sleep(SLEEP_TIME);
+                    userID = ((GTFSClient)getApplication()).getID();
+                }
+                final MessageBundle authBundle = new MessageBundle(userID, "asdsd",
+                        MessageBundle.messageType.AUTH);
                 authBundle.putUsername("sy");
                 send(authBundle.getMessage());
                 Map receivedMessage = receive();
