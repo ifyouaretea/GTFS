@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<<<<<<< HEAD
     <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/twitter-core/1.3.1/res/values-sw720dp-v13/values.xml -->
-=======
-    <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/twitter-core/1.3.1/res/values-sw720dp-v13/values.xml -->
->>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
     <eat-comment/>
     <dimen name="tw__padding_permission_horizontal_container">128dp</dimen>
 </resources>
