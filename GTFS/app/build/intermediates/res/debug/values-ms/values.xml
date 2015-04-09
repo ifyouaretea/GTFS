@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<<<<<<< HEAD
     <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-ms/values.xml -->
+=======
+    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-ms/values.xml -->
+>>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf
     <eat-comment/>
     <plurals name="tw__time_hours">
         <item quantity="one">1j</item>
@@ -14,7 +18,11 @@
         <item quantity="one">1s</item>
         <item quantity="other">%ds</item>
     </plurals>
+<<<<<<< HEAD
     <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-ms/values.xml -->
+=======
+    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-ms/values.xml -->
+>>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf
     <eat-comment/>
     <string name="dgts__cancel">Batal</string>
     <string name="dgts__communication_error">Ralat Komunikasi</string>
@@ -48,7 +56,11 @@
     <string name="dgts__try_again_phone_number">Sila semak nombor anda dan cuba sekali lagi.</string>
     <string name="dgts__try_another_phone">Cuba nombor telefon lain</string>
     <string name="dgts__upload_contacts">Kami menggunaka Digits by Twitter untuk mencari lebih ramai rakan anda yang menggunakan aplikasi ini. Apabila anda mengetik Okay, kami akan memuat naik buku alamat anda ke Digits by Twitter dan membolehkan pengguna lain aplikasi anda menemui anda.</string>
+<<<<<<< HEAD
     <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-ms/values.xml -->
+=======
+    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-ms/values.xml -->
+>>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf
     <eat-comment/>
     <string name="tw__relative_date_format_long">d/M/y</string>
     <string name="tw__relative_date_format_short">d MMM</string>

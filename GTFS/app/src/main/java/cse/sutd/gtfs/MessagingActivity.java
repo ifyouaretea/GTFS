@@ -39,7 +39,7 @@ public class MessagingActivity extends ActionBarActivity {
     private MessageBroadcastReceiver broadcastReceiver;
     private MessageDbAdapter dbMessages;
     private ArrayList<MessageBundle> message;
-
+    private String chatroomID = "1428589109493729";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +62,7 @@ public class MessagingActivity extends ActionBarActivity {
 
         listview = (ListView) findViewById(R.id.messageList);
         dbMessages = MessageDbAdapter.getInstance(this);
-        Cursor msgBundles = dbMessages.getChatMessages("1428480589161444");
+        Cursor msgBundles = dbMessages.getChatMessages(chatroomID);
         message = new ArrayList<MessageBundle>();
         final ArrayList<String> timestamp = new ArrayList<String>();
         if (msgBundles != null) {
@@ -97,7 +97,7 @@ public class MessagingActivity extends ActionBarActivity {
 
                     textBundle.putMessage(msg.getText().toString());
                     textBundle.putToPhoneNumber("81572260");
-                    textBundle.putChatroomID("1428480589161444");
+                    textBundle.putChatroomID(chatroomID);
                     textBundle.putTimestamp();
                     Toast.makeText(getApplicationContext(), "TODO: Implement sending",
                             Toast.LENGTH_LONG).show();

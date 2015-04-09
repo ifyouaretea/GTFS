@@ -31,4 +31,8 @@
         android:positiveButtonText="@null" />
 
 </PreferenceScreen>
+<<<<<<< HEAD
 <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/src/main/res/xml/pref_general.xml -->
+=======
+<!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/src/main/res/xml/pref_general.xml -->
+>>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf

@@ -31,6 +31,7 @@ public class LoginActivityCog extends Activity {
         sessionID = UUID.randomUUID();
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         String userID = prefs.getString("userid", null);
+        ((GTFSClient)getApplication()).setID(userID);
         if (userID != null) {
             Intent intent = new Intent(LoginActivityCog.this, MainActivity.class);
             intent.putExtra("SessionID", sessionID);

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<<<<<<< HEAD
     <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-hr/values.xml -->
+=======
+    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-hr/values.xml -->
+>>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf
     <eat-comment/>
     <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Idi na početnu"</string>
     <string msgid="1397052879051804371" name="abc_action_bar_home_description_format">"%1$s, %2$s"</string>

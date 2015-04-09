@@ -14,6 +14,7 @@ import com.digits.sdk.android.DigitsSession;
 
 import java.util.UUID;
 
+@Deprecated
 public class LoginActivity extends Activity {
 
     private GTFSClient client;
@@ -32,6 +33,7 @@ public class LoginActivity extends Activity {
         sessionID = UUID.randomUUID();
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         String userID = prefs.getString("userid", null);
+        ((GTFSClient)getApplication()).setID(userID);
         if (userID != null) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("SessionID", sessionID);
@@ -63,6 +65,9 @@ public class LoginActivity extends Activity {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 String userid = String.valueOf(session.getId());
                 client.setID(userid);
+                synchronized (userid){
+                    userid.notifyAll();
+                }
                 SharedPreferences.Editor editor = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE).edit();
                 editor.putString("userid", userid);//3128869026
                 editor.commit();
