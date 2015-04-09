@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<<<<<<< HEAD
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-v11/values.xml -->
+=======
+<<<<<<< HEAD
+    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-v11/values.xml -->
+=======
+    <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-v11/values.xml -->
+>>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
+>>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714
     <eat-comment/>
     <style name="Base.TextAppearance.AppCompat.Inverse">
         <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
@@ -185,12 +193,28 @@
         <item name="android:dropDownSelector">?attr/listChoiceBackgroundIndicator</item>
         <item name="android:popupBackground">@drawable/abc_popup_background_mtrl_mult</item>
     </style>
+<<<<<<< HEAD
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-v11/values.xml -->
+=======
+<<<<<<< HEAD
+    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-v11/values.xml -->
+=======
+    <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-v11/values.xml -->
+>>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
+>>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714
     <eat-comment/>
     <style name="Digits_default" parent="@android:style/Theme.Holo.Light">
         <item name="dgts__accentColor">@color/dgts__default_accent</item>
     </style>
+<<<<<<< HEAD
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-v11/values.xml -->
+=======
+<<<<<<< HEAD
+    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-v11/values.xml -->
+=======
+    <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-v11/values.xml -->
+>>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
+>>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714
     <eat-comment/>
     <style name="Platform.AppCompat" parent="android:Theme.Holo">
         <item name="android:windowNoTitle">true</item>

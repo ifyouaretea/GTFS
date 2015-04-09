@@ -4,4 +4,12 @@
     <stroke
         android:width="@dimen/tw__tweet_container_width"
         android:color="@color/tw__tweet_container_border"/>
+<<<<<<< HEAD
 </shape><!-- From: file:/Users/android/workspace/jenkins/workspace/fabric-android-deploy-to-staging/sdk/kits/tweetui/src/main/res/drawable/tw__bg_tweet.xml --><!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/drawable/tw__bg_tweet.xml -->
+=======
+<<<<<<< HEAD
+</shape><!-- From: file:/Users/android/workspace/jenkins/workspace/fabric-android-deploy-to-staging/sdk/kits/tweetui/src/main/res/drawable/tw__bg_tweet.xml --><!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/drawable/tw__bg_tweet.xml -->
+=======
+</shape><!-- From: file:/Users/android/workspace/jenkins/workspace/fabric-android-deploy-to-staging/sdk/kits/tweetui/src/main/res/drawable/tw__bg_tweet.xml --><!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/drawable/tw__bg_tweet.xml -->
+>>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
+>>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714

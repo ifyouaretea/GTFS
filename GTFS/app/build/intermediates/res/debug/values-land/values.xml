@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<<<<<<< HEAD
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-land/values.xml -->
+=======
+<<<<<<< HEAD
+    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-land/values.xml -->
+=======
+    <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-land/values.xml -->
+>>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
+>>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714
     <eat-comment/>
     <bool name="abc_action_bar_embed_tabs_pre_jb">true</bool>
     <bool name="abc_config_allowActionMenuItemTextWithIcon">true</bool>
