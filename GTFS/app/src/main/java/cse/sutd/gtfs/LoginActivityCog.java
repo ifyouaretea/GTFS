@@ -20,48 +20,55 @@ import java.util.UUID;
 
 
 public class LoginActivityCog extends Activity {
-    private EditText phoneNumbTv = null;
+    private EditText phoneNumbTv;
     private GTFSClient client;
     private UUID sessionID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         client = (GTFSClient) getApplicationContext();
-        sessionID = UUID.randomUUID();
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = prefs.edit();
+
+        sessionID = UUID.randomUUID();
+        client.setSESSION_ID(sessionID.toString());
+        Log.d("sessionID", sessionID.toString());
+
         String userID = prefs.getString("userid", null);
-        ((GTFSClient)getApplication()).setID(userID);
+
         if (userID != null) {
+            client.setID(userID);
+            client.setPROFILE_NAME(prefs.getString("username",null));
             Intent intent = new Intent(LoginActivityCog.this, MainActivity.class);
-            intent.putExtra("SessionID", sessionID);
-            Log.d("TAG", sessionID.toString());
             startActivity(intent);
             LoginActivityCog.this.finish();
         } else {
             setContentView(R.layout.activity_login_activity_cog);
+
             phoneNumbTv = (EditText) findViewById(R.id.ph_et);
+
             final TextView country_code_tv = (TextView) findViewById(R.id.country_code_tv);
             country_code_tv.setText(Cognalys.getCountryCode(getApplicationContext()));
-            String number;
+
             findViewById(R.id.verifybutton).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (!TextUtils.isEmpty(phoneNumbTv.getText().toString())) {
-                                InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                            if (!TextUtils.isEmpty(phoneNumbTv.getText().toString().trim())) {
+                                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-//                                verify();
-                                String number = phoneNumbTv.getText().toString();
+
+                                String number = phoneNumbTv.getText().toString().trim();
                                 client.setID(number);
-                                SharedPreferences.Editor editor = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE).edit();
+
                                 editor.putString("userid", number);//3128869026
                                 editor.commit();
 
                                 Intent intent = new Intent(LoginActivityCog.this, ProfileActivity.class);
-                                intent.putExtra("SessionID", sessionID);
 
-                                Log.d("TAG", sessionID.toString());
+                                Log.d("userid", number);
                                 startActivity(intent);
                                 LoginActivityCog.this.finish();
                             } else {

@@ -21,20 +21,41 @@ import cse.sutd.gtfs.Adapters.ChatAdapters;
 
 public class MainActivity extends ActionBarActivity {
     private GTFSClient client;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        client = (GTFSClient) getApplicationContext();
+        prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
+        editor = prefs.edit();
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle("Chats");
         setContentView(R.layout.activity_main);
-        client = (GTFSClient) getApplicationContext();
-        SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
-        String userID = prefs.getString("userid", null);
-        Log.d("user", userID);
+
+        Log.d("user", prefs.getString("userid", null));
+//        MessageDbAdapter  dbMessages = MessageDbAdapter.getInstance(this);
+//        Cursor chatrooms = dbMessages.getChatMessages(prefs.getString("userid", null));
+//
+//        ArrayList<MessageBundle> chatroom = new ArrayList<MessageBundle>();
+//
+//        if (chatrooms != null) {
+//            chatrooms.moveToFirst();
+//            while(chatrooms.moveToNext()) {
+//                MessageBundle a = new MessageBundle(chatrooms.getString(0),
+//                        "asdsd",MessageBundle.messageType.TEXT);
+//                a.putMessage(chatrooms.getString(1)); a.putChatroomID(chatrooms.getString(2));
+//                message.add(a);
+//                timestamp.add(chatrooms.getString(2));
+//                Log.d("phonenum",chatrooms.getString(0));
+//                Log.d("txt",chatrooms.getString(1));
+//            }
+//            chatrooms.close();
+//        }
         final ListView listview = (ListView) findViewById(R.id.chatList);
         String[] chatsID = new String[]{"Nikhil", "Sharma", "HaoQin", "KangSheng", "Glen", "SiawYoung", "Fran"};
 
@@ -109,7 +130,6 @@ public class MainActivity extends ActionBarActivity {
                 return true;
             case R.id.action_logout:
 //                Digits.getSessionManager().clearActiveSession();
-                SharedPreferences.Editor editor = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE).edit();
                 editor.putString("userid", null);
                 editor.commit();
                 client.setID(null);
