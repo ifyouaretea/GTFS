@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<<<<<<< HEAD
     <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-xlarge-v4/values.xml -->
+=======
+    <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-xlarge-v4/values.xml -->
+>>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
     <eat-comment/>
     <bool name="abc_action_bar_expanded_action_views_exclusive">false</bool>
     <dimen name="abc_search_view_text_min_width">192dip</dimen>

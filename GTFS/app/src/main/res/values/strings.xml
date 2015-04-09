@@ -8,4 +8,5 @@
     <string name="title_activity_messaging">MessagingActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_login_activity_cog">LoginActivityCog</string>
+    <string name="title_activity_new_group">NewGroupActivity</string>
 </resources>

@@ -96,6 +96,8 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_chat:
                 return true;
             case R.id.action_group:
+                intent = new Intent(this, NewGroupActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_profile:
                 intent = new Intent(this, ProfileActivity.class);
