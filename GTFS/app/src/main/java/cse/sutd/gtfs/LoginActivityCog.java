@@ -46,7 +46,6 @@ public class LoginActivityCog extends Activity {
             String number;
             findViewById(R.id.verifybutton).setOnClickListener(
                     new View.OnClickListener() {
-
                         @Override
                         public void onClick(View v) {
                             if (!TextUtils.isEmpty(phoneNumbTv.getText().toString())) {
