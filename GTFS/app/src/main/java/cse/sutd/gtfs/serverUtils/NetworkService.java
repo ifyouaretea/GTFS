@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -26,7 +27,7 @@ public class NetworkService extends IntentService {
     public static final String SEND_MESSAGE = "com.gtfs.SEND_MESSAGE";
     public static final String MESSAGE_RECEIVED = "com.gtfs.MESSAGE_RECEIVED";
     public static final String MESSAGE_KEY = "message";
-
+    public static final int SLEEP_TIME = 1000;
     private final String hostname = "128.199.73.51";
     private final int hostport = 8091;
 
@@ -47,9 +48,12 @@ public class NetworkService extends IntentService {
                     Map received = receive();
                     Log.d("Listener received", received.toString());
                     if (received == null)
-                        sleep(1000);
+                        sleep(SLEEP_TIME);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    try {
+                        sleep(SLEEP_TIME);
+                    }catch (InterruptedException e1){}
                 }
             }
         }
@@ -88,7 +92,7 @@ public class NetworkService extends IntentService {
         while(!send(message)) {
             Log.d("Sending", "retrying");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(SLEEP_TIME);
             } catch (InterruptedException e) {
             }
         }
@@ -104,7 +108,9 @@ public class NetworkService extends IntentService {
                 ((GTFSClient) getApplication()).setAuthenticated(false);
                 authenticate();
             }
-            JsonWriter serverOut = new JsonWriter(((GTFSClient)getApplication()).getClient().getOutputStream());
+
+            JsonWriter serverOut = new JsonWriter(((GTFSClient)getApplication()).
+                    getClient().getOutputStream());
             serverOut.write(message);
             serverOut.flush();
             Log.d("Message sent out", message.toString());
@@ -167,8 +173,8 @@ public class NetworkService extends IntentService {
                     ((GTFSClient)getApplication()).setClient(new Socket(hostname, hostport));
 
                 //TODO: remove hardcoding
-                final MessageBundle authBundle = new MessageBundle("82238071", "asdsd",
-                        MessageBundle.messageType.AUTH);
+                final MessageBundle authBundle = new MessageBundle(((GTFSClient)
+                        getApplication()).getID(), "asdsd", MessageBundle.messageType.AUTH);
                 authBundle.putUsername("sy");
                 send(authBundle.getMessage());
                 Map receivedMessage = receive();
@@ -188,7 +194,7 @@ public class NetworkService extends IntentService {
                 e.printStackTrace();
             }finally{
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(SLEEP_TIME);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -57,7 +57,7 @@ public class ManagerService extends Service{
         Log.d("Handle message", message.toString());
         String messageType = (String) message.get(MessageBundle.TYPE);
 
-        if (MessageBundle.messageType.TEXT.toString().equals(messageType)){
+        if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)){
             dbAdapter.storeMessage(message);
             Log.d("DB message insertion", message.toString());
         }else if(messageType.equals(MessageBundle.messageType.CREATE_ROOM.toString()) ||

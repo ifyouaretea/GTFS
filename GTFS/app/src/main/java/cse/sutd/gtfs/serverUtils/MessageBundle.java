@@ -10,7 +10,7 @@ public class MessageBundle {
 
     //Predefined message types
     public static enum messageType{
-        AUTH, TEXT, TYPING, CREATE_ROOM,ROOM_INVITATION,
+        AUTH, TEXT, TYPING, TEXT_RECEIVED, CREATE_ROOM,ROOM_INVITATION,
         ACCEPT_INVITATION, LEAVE, GROUP_EXPIRED,
         FETCH_NOTE, EDIT_NOTE;
     }
@@ -37,7 +37,6 @@ public class MessageBundle {
         messageMap.put(FROM_PHONE_NUMBER, fromNumber);
         messageMap.put(SESSION_TOKEN, sessionToken);
         messageMap.put(TYPE, type.toString());
-        putTimestamp();
     }
 
     public String putUsername(String username){

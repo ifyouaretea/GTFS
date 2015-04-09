@@ -68,7 +68,8 @@ public class MessagingActivity extends ActionBarActivity {
         if (msgBundles != null) {
             msgBundles.moveToFirst();
             while(msgBundles.moveToNext()) {
-                MessageBundle a = new MessageBundle(msgBundles.getString(0),"asdsd",MessageBundle.messageType.TEXT);
+                MessageBundle a = new MessageBundle(msgBundles.getString(0),
+                        "asdsd",MessageBundle.messageType.TEXT);
                 a.putMessage(msgBundles.getString(1)); a.putChatroomID(msgBundles.getString(2));
                 message.add(a);
                 timestamp.add(msgBundles.getString(2));
@@ -97,8 +98,12 @@ public class MessagingActivity extends ActionBarActivity {
                     textBundle.putMessage(msg.getText().toString());
                     textBundle.putToPhoneNumber("81572260");
                     textBundle.putChatroomID("1428480589161444");
-                    Toast.makeText(getApplicationContext(), "TODO: Implement sending", Toast.LENGTH_LONG).show();
+                    textBundle.putTimestamp();
+                    Toast.makeText(getApplicationContext(), "TODO: Implement sending",
+                            Toast.LENGTH_LONG).show();
+
                     message.add(textBundle);
+
                     Intent intent = new Intent(MessagingActivity.this, NetworkService.class);
                     intent.putExtra(NetworkService.MESSAGE_KEY,
                             JsonWriter.objectToJson(textBundle.getMessage()));

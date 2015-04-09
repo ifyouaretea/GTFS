@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-th/values.xml -->
+    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-th/values.xml -->
     <eat-comment/>
     <plurals name="tw__time_hours">
         <item quantity="one">1ชม.</item>
@@ -14,7 +14,7 @@
         <item quantity="one">1วิ</item>
         <item quantity="other">%dวิ</item>
     </plurals>
-    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-th/values.xml -->
+    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-th/values.xml -->
     <eat-comment/>
     <string msgid="4600421777120114993" name="abc_action_bar_home_description">"นำทางไปหน้าแรก"</string>
     <string msgid="1397052879051804371" name="abc_action_bar_home_description_format">"%1$s, %2$s"</string>
@@ -32,7 +32,7 @@
     <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"แชร์กับ"</string>
     <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"แชร์กับ %s"</string>
     <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"ยุบ"</string>
-    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-th/values.xml -->
+    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-th/values.xml -->
     <eat-comment/>
     <string name="dgts__cancel">ยกเลิก</string>
     <string name="dgts__communication_error">ข้อผิดพลาดการสื่อสาร</string>
@@ -71,7 +71,7 @@
     <string name="dgts__try_again_phone_number">กรุณาตรวจสอบหมายเลขของคุณแล้วลองอีกครั้ง</string>
     <string name="dgts__try_another_phone">ลองใช้หมายเลขโทรศัพท์อื่น</string>
     <string name="dgts__upload_contacts">เราใช้ Digits โดยทวิตเตอร์เพื่อตามหาเพื่อนของคุณที่ใช้งานแอปนี้เพิ่มเติม เมื่อคุณแตะที่ โอเค เราจะอัพโหลดสมุดที่อยู่ของคุณไปที่ Digits โดยทวิตเตอร์และอนุญาตให้ผู้ใช้อื่นในแอปของเราสามารถหาคุณเจอได้</string>
-    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-th/values.xml -->
+    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-th/values.xml -->
     <eat-comment/>
     <string name="tw__loading_tweet">กำลังโหลดทวีต</string>
     <string name="tw__relative_date_format_long">d/M/y</string>

@@ -120,6 +120,7 @@ public class MessageDbAdapter {
             chatValues.put(ROWID, chatID);
             chatValues.put(CHATNAME, from_phone_number);
             chatValues.put(LAST_MESSAGE, String.valueOf(System.currentTimeMillis()));
+            Log.d("Chat Values", chatValues.toString());
             mDb.insert(CHATS, null, chatValues);
         }else{
             String updateSQL =
@@ -136,7 +137,7 @@ public class MessageDbAdapter {
         messageValues.put(TIMESTAMP, timestamp);
         messageValues.put(BODY, body);
         messageValues.put(FROM_PHONE_NUMBER, from_phone_number);
-
+        Log.d("Message Values", messageValues.toString());
         //if inserting fails, return -1
         if (mDb.insert(MESSAGES, null, messageValues) < 0)
             return -1;
