@@ -181,7 +181,7 @@ public class NetworkService extends IntentService {
                 }
                 final MessageBundle authBundle = new MessageBundle(userID, "asdsd",
                         MessageBundle.messageType.AUTH);
-                authBundle.putUsername("sy");
+                authBundle.putUsername("phone");
                 send(authBundle.getMessage());
                 Map receivedMessage = receive();
                 Log.d("Authentication", receivedMessage.toString());

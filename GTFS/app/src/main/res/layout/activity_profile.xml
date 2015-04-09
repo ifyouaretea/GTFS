@@ -12,7 +12,7 @@ tools:context="cse.sutd.gtfs.ProfileActivity">
         android:layout_height="@android:dimen/thumbnail_width"
         android:src="@drawable/ic_action_profile"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="fill_parent"
