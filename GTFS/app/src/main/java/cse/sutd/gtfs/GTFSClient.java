@@ -61,8 +61,10 @@ public class GTFSClient extends Application{
         }catch (SQLException e){
             e.printStackTrace();
         }
-        startService(new Intent(this, ManagerService.class));
-        startService(new Intent(this, NetworkService.class));
+        if(!getID().equals(null)) {
+            startService(new Intent(this, ManagerService.class));
+            startService(new Intent(this, NetworkService.class));
+        }
         getInstance();
 //        final TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
 //        Fabric.with(this, new TwitterCore(authConfig), new Digits());

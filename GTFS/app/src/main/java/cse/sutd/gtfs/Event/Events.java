@@ -3,14 +3,19 @@ package cse.sutd.gtfs.Event;
 /**
  * Created by Francisco Furtado on 08/04/2015.
  */
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observer;
 
-public class Events implements Subject{
+import javax.security.auth.Subject;
+
+public class Events implements Subject {
+    private String EVENT_NAME;
+
     public static final String FIRSTNAME = "firstName";
-    public static final String LASTNAME = "lastName";
 
     private List<Person> observers = new ArrayList<Person>();
     private List<PropertyChangeListener> listener = new ArrayList<PropertyChangeListener>();
