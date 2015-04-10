@@ -73,13 +73,18 @@ public class LoginActivityCog extends Activity {
 
                                 Log.d("userid", number);
                                 startActivity(intent);
+
+                                startService(new Intent(getApplicationContext(), ManagerService.class));
+                                startService(new Intent(getApplicationContext(), NetworkService.class));
+
                                 LoginActivityCog.this.finish();
+
                             } else {
                                 Toast.makeText(getApplicationContext(),
                                         "Please enter your phone number to verify", Toast.LENGTH_LONG).show();
                             }
-                            startService(new Intent(getApplicationContext(), ManagerService.class));
-                            startService(new Intent(getApplicationContext(), NetworkService.class));
+
+
                         }
                     });
 
