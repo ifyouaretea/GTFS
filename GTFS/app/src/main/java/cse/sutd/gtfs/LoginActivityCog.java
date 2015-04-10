@@ -18,6 +18,9 @@ import com.matesnetwork.interfaces.VerificationListner;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import cse.sutd.gtfs.messageManagement.ManagerService;
+import cse.sutd.gtfs.serverUtils.NetworkService;
+
 
 public class LoginActivityCog extends Activity {
     private EditText phoneNumbTv;
@@ -74,6 +77,8 @@ public class LoginActivityCog extends Activity {
                             } else {
                                 Toast.makeText(getApplicationContext(), "Please enter your phone number to verify", Toast.LENGTH_LONG).show();
                             }
+                            startService(new Intent(getApplicationContext(), ManagerService.class));
+                            startService(new Intent(getApplicationContext(), NetworkService.class));
                         }
                     });
 

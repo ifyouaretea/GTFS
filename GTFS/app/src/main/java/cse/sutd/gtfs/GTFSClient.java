@@ -66,7 +66,7 @@ public class GTFSClient extends Application{
         }catch (SQLException e){
             e.printStackTrace();
         }
-        if(!getID().equals(null)) {
+        if(getID() !=null) {
             startService(new Intent(this, ManagerService.class));
             startService(new Intent(this, NetworkService.class));
         }

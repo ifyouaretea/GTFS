@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<<<<<<< HEAD
-<<<<<<< HEAD
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-fi/values.xml -->
-=======
-<<<<<<< HEAD
-    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-fi/values.xml -->
-=======
-    <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-fi/values.xml -->
->>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
->>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714
-=======
-    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-fi/values.xml -->
-=======
-    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-fi/values.xml -->
->>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf
->>>>>>> origin/master
     <eat-comment/>
     <plurals name="tw__time_hours">
         <item quantity="one">1 h</item>
@@ -29,22 +14,7 @@
         <item quantity="one">1 s</item>
         <item quantity="other">%d s</item>
     </plurals>
-<<<<<<< HEAD
-<<<<<<< HEAD
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-fi/values.xml -->
-=======
-<<<<<<< HEAD
-    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-fi/values.xml -->
-=======
-    <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-fi/values.xml -->
->>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
->>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714
-=======
-    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-fi/values.xml -->
-=======
-    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-fi/values.xml -->
->>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf
->>>>>>> origin/master
     <eat-comment/>
     <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Siirry etusivulle"</string>
     <string msgid="1397052879051804371" name="abc_action_bar_home_description_format">"%1$s, %2$s"</string>
@@ -62,22 +32,7 @@
     <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Jakaminen:"</string>
     <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"Jakaminen: %s"</string>
     <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Kutista"</string>
-<<<<<<< HEAD
-<<<<<<< HEAD
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-fi/values.xml -->
-=======
-<<<<<<< HEAD
-    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-fi/values.xml -->
-=======
-    <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-fi/values.xml -->
->>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
->>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714
-=======
-    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-fi/values.xml -->
-=======
-    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.3.0/res/values-fi/values.xml -->
->>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf
->>>>>>> origin/master
     <eat-comment/>
     <string name="dgts__cancel">Peruuta</string>
     <string name="dgts__communication_error">Viestintävirhe</string>
@@ -116,22 +71,7 @@
     <string name="dgts__try_again_phone_number">Tarkista numero ja yritä uudelleen.</string>
     <string name="dgts__try_another_phone">Kokeile toista puhelinnumeroa</string>
     <string name="dgts__upload_contacts">Digits by Twitter -palvelu auttaa löytämään muita tätä sovellusta käyttäviä ystäviäsi. Kun napautat OK, lähetämme osoitekirjasi Digits by Twitterille ja sallimme sovelluksen muiden käyttäjien löytää sinut.</string>
-<<<<<<< HEAD
-<<<<<<< HEAD
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-fi/values.xml -->
-=======
-<<<<<<< HEAD
-    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-fi/values.xml -->
-=======
-    <!-- From: file:/C:/Users/Ha%20Duc%20Tien/Documents/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-fi/values.xml -->
->>>>>>> 031275093cf3eae703080bd3c51701f227db7efe
->>>>>>> 907391aa096075e39f77af746cceb6b71b0ae714
-=======
-    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-fi/values.xml -->
-=======
-    <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/values-fi/values.xml -->
->>>>>>> 958465dee339fcee423f8bcdb05831084f5cbcdf
->>>>>>> origin/master
     <eat-comment/>
     <string name="tw__loading_tweet">Ladataan twiittiä</string>
     <string name="tw__relative_date_format_long">d.M.y</string>

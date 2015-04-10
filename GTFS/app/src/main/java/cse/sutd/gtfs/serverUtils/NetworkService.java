@@ -11,6 +11,7 @@ import android.util.Log;
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
+import java.io.InputStream;
 import java.net.Socket;
 import java.util.Map;
 
@@ -127,8 +128,17 @@ public class NetworkService extends IntentService {
                 ((GTFSClient) getApplication()).setClient(new Socket(hostname, hostport));
                 ((GTFSClient) getApplication()).setAuthenticated(false);
                 authenticate();
+            }else if(((GTFSClient) getApplication()).getClient().isClosed() ||
+                    !(((GTFSClient) getApplication()).getClient().isConnected())){
+                ((GTFSClient) getApplication()).setClient(new Socket(hostname, hostport));
+                ((GTFSClient) getApplication()).setAuthenticated(false);
+                authenticate();
             }
-            JsonReader jIn = new JsonReader(((GTFSClient) getApplication()).getClient().getInputStream(), true);
+            InputStream in = ((GTFSClient) getApplication()).getClient()
+                    .getInputStream();
+            JsonReader jIn = new JsonReader(in, true);
+            Log.d("Reader status", String.valueOf(in.available()));
+            Log.d("Socket status", (((GTFSClient) getApplication()).getClient()).toString());
             Map receivedMap = (Map) jIn.readObject();
             String messageType = (String) receivedMap.get(MessageBundle.TYPE);
 

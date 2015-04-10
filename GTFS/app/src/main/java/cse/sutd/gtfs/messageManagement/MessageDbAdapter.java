@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Map;
 
 import cse.sutd.gtfs.serverUtils.MessageBundle;
@@ -31,6 +32,7 @@ public class MessageDbAdapter {
     private static final String BODY= "body";
     private static final String CHATNAME = "chatName";
     private static final String LAST_MESSAGE = "lastMessage";
+    private static final String USERS = "users";
     private static final String TAG = "MessageDbAdapter";
 
     private static MessageDbAdapter instance;
@@ -42,7 +44,8 @@ public class MessageDbAdapter {
 
         private static final String DATABASE_CREATE_CHATS =
                 "create table chats (_id text primary key, "
-                        + "chatName text not null, lastMessage integer not null);";
+                        + "chatName text not null, lastMessage integer not null, "
+                        + "users string not null, expiry integer);";
 
         private static final String DATABASE_NAME = "data";
 
@@ -152,7 +155,8 @@ public class MessageDbAdapter {
     }
 
     public Cursor getChats(String userID){
-        return mDb.rawQuery(String.format("SELECT chatroom_id, room_users FROM chatrooms WHERE room_users LIKE '%"+userID+"%'"), null);
+        return mDb.rawQuery(String.format("SELECT chatroom_id, room_users FROM " +
+                "chatrooms WHERE room_users LIKE '%"+userID+"%'"), null);
     }
 
     public long createGroupChat(Map message){
@@ -161,9 +165,9 @@ public class MessageDbAdapter {
         String chatName = (String) message.get(CHATNAME);
 
         ContentValues chatValues = new ContentValues();
-        chatValues.put(ROWID, (String) message.get(chatID));
-        chatValues.put(CHATNAME, (String) message.get(chatName));
-
+        chatValues.put(ROWID, chatID);
+        chatValues.put(CHATNAME, chatName);
+        chatValues.put(USERS, Arrays.toString((String[])message.get(USERS)));
         return mDb.insert(CHATS, null, chatValues);
     }
 
