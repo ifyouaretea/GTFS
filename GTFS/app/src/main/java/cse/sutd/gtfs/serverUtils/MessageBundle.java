@@ -3,6 +3,8 @@ package cse.sutd.gtfs.serverUtils;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by Glen on 02/04/2015.
  */
@@ -29,6 +31,7 @@ public class MessageBundle {
     public static final String USERS = "users";
     public static final String TIMESTAMP= "timestamp";
     public static final String STATUS = "status";
+    public static final String EXPIRY = "expiry";
     public static final String VALID_STATUS = "1";
 
     public MessageBundle(String fromNumber, String sessionToken, messageType type) {
@@ -78,6 +81,10 @@ public class MessageBundle {
         return messageMap.put(CHATROOM_NAME, chatroomName);
     }
 
+    public String putExpiry(TimeUnit timeUnit, long duration){
+        return messageMap.put(EXPIRY, String.valueOf(System.currentTimeMillis() +
+                timeUnit.toMillis(duration)));
+    }
     public Map getMessage(){
         return this.messageMap;
     }
