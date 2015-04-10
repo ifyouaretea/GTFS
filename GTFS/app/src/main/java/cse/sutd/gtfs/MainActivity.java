@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -17,6 +18,8 @@ import android.widget.SearchView;
 import java.util.ArrayList;
 
 import cse.sutd.gtfs.Adapters.ChatAdapters;
+import cse.sutd.gtfs.Objects.ChatRooms;
+import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -38,33 +41,24 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         Log.d("user", prefs.getString("userid", null));
-//        MessageDbAdapter  dbMessages = MessageDbAdapter.getInstance(this);
-//        Cursor chatrooms = dbMessages.getChatMessages(prefs.getString("userid", null));
-//
-//        ArrayList<MessageBundle> chatroom = new ArrayList<MessageBundle>();
-//
-//        if (chatrooms != null) {
-//            chatrooms.moveToFirst();
-//            while(chatrooms.moveToNext()) {
-//                MessageBundle a = new MessageBundle(chatrooms.getString(0),
-//                        "asdsd",MessageBundle.messageType.TEXT);
-//                a.putMessage(chatrooms.getString(1)); a.putChatroomID(chatrooms.getString(2));
-//                message.add(a);
-//                timestamp.add(chatrooms.getString(2));
-//                Log.d("phonenum",chatrooms.getString(0));
-//                Log.d("txt",chatrooms.getString(1));
-//            }
-//            chatrooms.close();
-//        }
-        final ListView listview = (ListView) findViewById(R.id.chatList);
-        String[] chatsID = new String[]{"Nikhil", "Sharma", "HaoQin", "KangSheng", "Glen", "SiawYoung", "Fran"};
+        MessageDbAdapter  dbMessages = MessageDbAdapter.getInstance(this);
+        Cursor chatrooms = dbMessages.getChats();
 
-        final ArrayList<String> chats = new ArrayList<String>();
-        for (int i = 0; i < chatsID.length; ++i) {
-            chats.add(chatsID[i]);
+        final ArrayList<ChatRooms> chatroom = new ArrayList<ChatRooms>();
+
+        if (chatrooms != null) {
+            chatrooms.moveToFirst();
+            while(chatrooms.moveToNext()) {
+                ChatRooms a = new ChatRooms(chatrooms.getString(0),
+                chatrooms.getString(1),chatrooms.getString(2));
+                chatroom.add(a);
+                Log.d("chatroom",chatrooms.getString(0));
+            }
+            chatrooms.close();
         }
+        final ListView listview = (ListView) findViewById(R.id.chatList);
 
-        final ChatAdapters adapter = new ChatAdapters(this, chats);
+        final ChatAdapters adapter = new ChatAdapters(this, chatroom);
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -73,7 +67,8 @@ public class MainActivity extends ActionBarActivity {
                                     int position, long id) {
                 final String item = (String) parent.getItemAtPosition(position);
                 Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
-                i.putExtra("receiver", chats.get(position));
+                i.putExtra("ID", chatroom.get(position).getId());
+                i.putExtra("sessionToken", client.getSESSION_ID());
                 startActivity(i);
             }
         });

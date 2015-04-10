@@ -33,9 +33,9 @@ public class NetworkService extends IntentService {
 
     private MessageBundle authMessage;
     private ListenerThread listener;
+    private GTFSClient client;
 
     private class ListenerThread extends Thread {
-
         private ListenerThread singleton;
 
         public void run() {
@@ -189,9 +189,9 @@ public class NetworkService extends IntentService {
                     Thread.sleep(SLEEP_TIME);
                     userID = ((GTFSClient)getApplication()).getID();
                 }
-                final MessageBundle authBundle = new MessageBundle(userID, "asdsd",
+                final MessageBundle authBundle = new MessageBundle(userID, ((GTFSClient)getApplicationContext()).getSESSION_ID(),
                         MessageBundle.messageType.AUTH);
-                authBundle.putUsername("phone");
+                authBundle.putUsername(((GTFSClient)getApplicationContext()).getPROFILE_NAME());
                 send(authBundle.getMessage());
                 Map receivedMessage = receive();
                 Log.d("Authentication", receivedMessage.toString());

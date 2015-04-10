@@ -14,14 +14,15 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import cse.sutd.gtfs.Objects.ChatRooms;
 import cse.sutd.gtfs.R;
 
-public class ChatAdapters extends ArrayAdapter<String> {
+public class ChatAdapters extends ArrayAdapter<ChatRooms> {
 
     private final Context context;
-    private final ArrayList<String> values;
+    private final ArrayList<ChatRooms> values;
 
-    public ChatAdapters(Context context, ArrayList<String> values) {
+    public ChatAdapters(Context context, ArrayList<ChatRooms> values) {
         super(context, R.layout.main_list_item, values);
         this.context = context;
         this.values = values;
@@ -35,8 +36,7 @@ public class ChatAdapters extends ArrayAdapter<String> {
         TextView chatName = (TextView) rowView.findViewById(R.id.firstLine);
         TextView latestmsg = (TextView) rowView.findViewById(R.id.secondLine);
         ImageView avatar = (ImageView) rowView.findViewById(R.id.avatar);
-        chatName.setText(values.get(position));
-        String s = values.get(position);
+        chatName.setText(values.get(position).getName());
         avatar.setImageResource(R.drawable.ic_action_dark_profile);
 
         return rowView;

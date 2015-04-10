@@ -40,28 +40,31 @@ public class MessagingActivity extends ActionBarActivity {
     private MessageDbAdapter dbMessages;
     private ArrayList<MessageBundle> message;
 
-    private String toPhoneNumber = "81572260";
-    private String sessionToken = "asdsd";
-    private String chatroomID = "1428589109493729";
+    private String toPhoneNumber;   //idk yet
+    private String sessionToken;    //get from client.getSESSIONID();
+    private String chatroomID;      //get from previous intent
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
-        String recei = "";
         if (extras != null) {
-            recei = extras.getString("receiver");
+            chatroomID = extras.getString("ID");
         }
+
+        //TODO: Download chatrooms from server to local DB
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_action_profile); //user's pic
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setTitle(recei);
+        getSupportActionBar().setTitle(chatroomID);
         setContentView(R.layout.activity_messaging);
 
         client = (GTFSClient) getApplicationContext();
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         final String userID = prefs.getString("userid", null);
+
+        sessionToken = client.getSESSION_ID();
 
         listview = (ListView) findViewById(R.id.messageList);
         dbMessages = MessageDbAdapter.getInstance(this);
@@ -72,7 +75,7 @@ public class MessagingActivity extends ActionBarActivity {
             msgBundles.moveToFirst();
             while(msgBundles.moveToNext()) {
                 MessageBundle a = new MessageBundle(msgBundles.getString(0),
-                        "asdsd",MessageBundle.messageType.TEXT);
+                        sessionToken,MessageBundle.messageType.TEXT);
                 a.putMessage(msgBundles.getString(1)); a.putChatroomID(msgBundles.getString(2));
                 message.add(a);
                 timestamp.add(msgBundles.getString(2));

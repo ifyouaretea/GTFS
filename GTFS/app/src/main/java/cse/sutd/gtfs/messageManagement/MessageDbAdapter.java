@@ -154,9 +154,9 @@ public class MessageDbAdapter {
                 "timestamp FROM messages WHERE chatID ='%s'", chatID), null);
     }
 
-    public Cursor getChats(String userID){
-        return mDb.rawQuery(String.format("SELECT chatroom_id, room_users FROM " +
-                "chatrooms WHERE room_users LIKE '%"+userID+"%'"), null);
+    public Cursor getChats(){
+        return mDb.rawQuery(String.format("SELECT _id, chatName, lastMessage FROM " +
+                "chats"), null);
     }
 
     public long createGroupChat(Map message){
