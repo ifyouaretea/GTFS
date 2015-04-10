@@ -39,6 +39,9 @@ public class MessagingActivity extends ActionBarActivity {
     private MessageBroadcastReceiver broadcastReceiver;
     private MessageDbAdapter dbMessages;
     private ArrayList<MessageBundle> message;
+
+    private String toPhoneNumber = "81572260";
+    private String sessionToken = "asdsd";
     private String chatroomID = "1428589109493729";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +95,16 @@ public class MessagingActivity extends ActionBarActivity {
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (msg.getText().toString().trim().length() > 0) {
-                    final MessageBundle textBundle = new MessageBundle(userID, "asdsd",
+                    if(chatroomID == null){
+                        MessageBundle createBundle = new MessageBundle(userID, sessionToken,
+                                MessageBundle.messageType.CREATE_ROOM);
+                        createBundle.putChatroomName(userID + "," + toPhoneNumber);
+                    }
+                    final MessageBundle textBundle = new MessageBundle(userID, sessionToken,
                             MessageBundle.messageType.TEXT);
 
                     textBundle.putMessage(msg.getText().toString());
-                    textBundle.putToPhoneNumber("81572260");
+                    textBundle.putToPhoneNumber(toPhoneNumber);
                     textBundle.putChatroomID(chatroomID);
                     textBundle.putTimestamp();
                     Toast.makeText(getApplicationContext(), "TODO: Implement sending",
