@@ -13,6 +13,7 @@ import com.cedarsoftware.util.io.JsonWriter;
 
 import java.io.InputStream;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Map;
 
 import cse.sutd.gtfs.GTFSClient;
@@ -24,7 +25,6 @@ import cse.sutd.gtfs.R;
  */
 public class NetworkService extends IntentService {
 
-    public static final String SEND_MESSAGE = "com.gtfs.SEND_MESSAGE";
     public static final String MESSAGE_RECEIVED = "com.gtfs.MESSAGE_RECEIVED";
     public static final String MESSAGE_KEY = "message";
     public static final int SLEEP_TIME = 1000;
@@ -137,8 +137,11 @@ public class NetworkService extends IntentService {
             InputStream in = ((GTFSClient) getApplication()).getClient()
                     .getInputStream();
             JsonReader jIn = new JsonReader(in, true);
-            Log.d("Reader status", String.valueOf(in.available()));
-            Log.d("Socket status", (((GTFSClient) getApplication()).getClient()).toString());
+            Log.d("Socket connected", String.valueOf(
+                    ((GTFSClient) getApplication()).getClient().isConnected()));
+            Log.d("Socket closed", String.valueOf(
+                    ((GTFSClient) getApplication()).getClient().isClosed()));
+
             Map receivedMap = (Map) jIn.readObject();
             String messageType = (String) receivedMap.get(MessageBundle.TYPE);
 

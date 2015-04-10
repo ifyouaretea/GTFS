@@ -45,7 +45,7 @@ public class MessageDbAdapter {
         private static final String DATABASE_CREATE_CHATS =
                 "create table chats (_id text primary key, "
                         + "chatName text not null, lastMessage integer not null, "
-                        + "users string not null, expiry integer);";
+                        + "users string, expiry integer);";
 
         private static final String DATABASE_NAME = "data";
 

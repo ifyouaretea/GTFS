@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
+import android.util.Log;
 import com.cedarsoftware.util.io.JsonReader;
+import com.cedarsoftware.util.io.JsonWriter;
+
 
 import java.util.Map;
 
@@ -22,14 +24,16 @@ import cse.sutd.gtfs.serverUtils.NetworkService;
  */
 public class ManagerService extends Service{
 
+    public static final String UPDATE_UI = "com.gtfs.UPDATE_UI";
     MessageDbAdapter dbAdapter;
     MessageBroadcastReceiver broadcastReceiver;
+
 
     private class MessageBroadcastReceiver extends BroadcastReceiver{
         private MessageBroadcastReceiver(){}
         @Override
         public void onReceive(Context context, Intent intent){
-            Log.d("Receiver", "received intent!");
+            Log.d("Broadcast receiver", "received intent!");
             Map received = (Map) JsonReader.jsonToJava(intent.getStringExtra
                     (NetworkService.MESSAGE_KEY));
             handleMessage(received);
@@ -50,6 +54,7 @@ public class ManagerService extends Service{
                 .registerReceiver(broadcastReceiver, receivedIntentFilter);
 
         this.dbAdapter = ((GTFSClient) getApplication()).getDatabaseAdapter();
+        Log.d("Manager service", "Broadcast receiver registered");
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -59,11 +64,27 @@ public class ManagerService extends Service{
 
         if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)){
             dbAdapter.storeMessage(message);
+            //TODO: fix possible synchronisation problems
             Log.d("DB message insertion", message.toString());
+
+            Intent updateUIIntent = new Intent(UPDATE_UI);
+            updateUIIntent.putExtra(NetworkService.MESSAGE_KEY,
+                    JsonWriter.objectToJson(message));
+
+            LocalBroadcastManager.getInstance(getApplicationContext())
+                    .sendBroadcast(updateUIIntent);
+
         }else if(messageType.equals(MessageBundle.messageType.CREATE_ROOM.toString()) ||
                 messageType.equals(MessageBundle.messageType.ROOM_INVITATION.toString())
                 ){
             dbAdapter.createGroupChat(message);
+            Intent updateUIIntent = new Intent(UPDATE_UI);
+            updateUIIntent.putExtra(NetworkService.MESSAGE_KEY,
+                    JsonWriter.objectToJson(message));
+
+            LocalBroadcastManager.getInstance(getApplicationContext())
+                    .sendBroadcast(updateUIIntent);
+
             Log.d("Database chat insertion", message.toString());
         }
 

@@ -75,7 +75,8 @@ public class LoginActivityCog extends Activity {
                                 startActivity(intent);
                                 LoginActivityCog.this.finish();
                             } else {
-                                Toast.makeText(getApplicationContext(), "Please enter your phone number to verify", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),
+                                        "Please enter your phone number to verify", Toast.LENGTH_LONG).show();
                             }
                             startService(new Intent(getApplicationContext(), ManagerService.class));
                             startService(new Intent(getApplicationContext(), NetworkService.class));
@@ -87,7 +88,9 @@ public class LoginActivityCog extends Activity {
 
     private void verify() {
 
-        Cognalys.verifyMobileNumber(LoginActivityCog.this, "5f66dbb2d2e27560e9ea56a40 ", "768aa61cc5bf48090a4acb713", phoneNumbTv.getText().toString(), new VerificationListner() {
+        Cognalys.verifyMobileNumber(LoginActivityCog.this,
+                "5f66dbb2d2e27560e9ea56a40 ", "768aa61cc5bf48090a4acb713",
+                phoneNumbTv.getText().toString(), new VerificationListner() {
 
             @Override
             public void onVerificationStarted() {

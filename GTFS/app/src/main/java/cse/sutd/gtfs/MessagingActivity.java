@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import cse.sutd.gtfs.Adapters.MessageAdapter;
+import cse.sutd.gtfs.messageManagement.ManagerService;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
@@ -117,7 +118,7 @@ public class MessagingActivity extends ActionBarActivity {
                             JsonWriter.objectToJson(textBundle.getMessage()));
                     MessagingActivity.this.startService(intent);
 
-                    IntentFilter receivedIntentFilter = new IntentFilter(NetworkService.MESSAGE_RECEIVED);
+                    IntentFilter receivedIntentFilter = new IntentFilter(ManagerService.UPDATE_UI);
                     broadcastReceiver = new MessageBroadcastReceiver();
                     LocalBroadcastManager.getInstance(getApplicationContext())
                             .registerReceiver(broadcastReceiver, receivedIntentFilter);
@@ -155,7 +156,7 @@ public class MessagingActivity extends ActionBarActivity {
         Log.d("Handle message", "I'm handling a message!");
         String messageType = (String) message.get(MessageBundle.TYPE);
 
-        if (MessageBundle.messageType.TEXT.toString().equals(messageType)) {
+        if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)) {
             adapter.notifyDataSetChanged();
             Log.d("adapter updated", message.toString());
         }
