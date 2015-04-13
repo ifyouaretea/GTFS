@@ -48,6 +48,7 @@ public class MessagingActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
+
         if (extras != null) {
             chatroomID = extras.getString("ID");
         }
@@ -74,7 +75,7 @@ public class MessagingActivity extends ActionBarActivity {
         final ArrayList<String> timestamp = new ArrayList<String>();
         if (msgBundles != null) {
             msgBundles.moveToFirst();
-            while(msgBundles.moveToNext()) {
+            do{
                 MessageBundle a = new MessageBundle(msgBundles.getString(0),
                         sessionToken,MessageBundle.messageType.TEXT);
                 a.putMessage(msgBundles.getString(1)); a.putChatroomID(msgBundles.getString(2));
@@ -82,7 +83,8 @@ public class MessagingActivity extends ActionBarActivity {
                 timestamp.add(msgBundles.getString(2));
                 Log.d("phonenum",msgBundles.getString(0));
                 Log.d("txt",msgBundles.getString(1));
-            }
+            }while(msgBundles.moveToNext());
+
             msgBundles.close();
         }
 //        MessageBundle hi = new MessageBundle("1234", "asdsd", MessageBundle.messageType.TEXT);

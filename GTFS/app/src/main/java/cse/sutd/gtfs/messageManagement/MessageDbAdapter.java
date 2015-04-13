@@ -151,7 +151,7 @@ public class MessageDbAdapter {
 
     public Cursor getChatMessages(String chatID){
         return mDb.rawQuery(String.format("SELECT from_phone_number, body, " +
-                "timestamp FROM messages WHERE chatID ='%s'", chatID), null);
+                "timestamp FROM messages WHERE chatID ='%s' ORDER BY _id", chatID), null);
     }
 
     public Cursor getChats(){
