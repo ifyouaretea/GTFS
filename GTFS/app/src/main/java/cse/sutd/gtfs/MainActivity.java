@@ -65,7 +65,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                final String item = (String) parent.getItemAtPosition(position);
+                final String item = ((ChatRooms) parent.getItemAtPosition(position)).getId();
                 Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
                 i.putExtra("ID", chatroom.get(position).getId());
                 i.putExtra("sessionToken", client.getSESSION_ID());

@@ -161,13 +161,15 @@ public class MessageDbAdapter {
 
     public long createGroupChat(Map message){
         Log.d("Chat creation", message.toString());
-        String chatID = (String) message.get(CHATID);
-        String chatName = (String) message.get(CHATNAME);
+        String chatID = (String) message.get(MessageBundle.CHATROOMID);
+        String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);
+        String users = Arrays.toString((Object[])message.get(USERS));
 
         ContentValues chatValues = new ContentValues();
         chatValues.put(ROWID, chatID);
         chatValues.put(CHATNAME, chatName);
-        chatValues.put(USERS, Arrays.toString((String[])message.get(USERS)));
+        chatValues.put(USERS, users);
+        chatValues.put(LAST_MESSAGE, chatID);
         return mDb.insert(CHATS, null, chatValues);
     }
 

@@ -30,8 +30,7 @@ public class LoginActivityCog extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        client = (GTFSClient) getApplicationContext();
+        client = ((GTFSClient) getApplication());
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = prefs.edit();
 
@@ -47,9 +46,9 @@ public class LoginActivityCog extends Activity {
             Intent intent = new Intent(LoginActivityCog.this, MainActivity.class);
             startActivity(intent);
             LoginActivityCog.this.finish();
+            LoginActivityCog.this.finish();
         } else {
             setContentView(R.layout.activity_login_activity_cog);
-
             phoneNumbTv = (EditText) findViewById(R.id.ph_et);
 
             final TextView country_code_tv = (TextView) findViewById(R.id.country_code_tv);
@@ -60,7 +59,8 @@ public class LoginActivityCog extends Activity {
                         @Override
                         public void onClick(View v) {
                             if (!TextUtils.isEmpty(phoneNumbTv.getText().toString().trim())) {
-                                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                                InputMethodManager imm = (InputMethodManager)
+                                        getSystemService(INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
                                 String number = phoneNumbTv.getText().toString().trim();
@@ -83,11 +83,8 @@ public class LoginActivityCog extends Activity {
                                 Toast.makeText(getApplicationContext(),
                                         "Please enter your phone number to verify", Toast.LENGTH_LONG).show();
                             }
-
-
                         }
                     });
-
         }
     }
 
