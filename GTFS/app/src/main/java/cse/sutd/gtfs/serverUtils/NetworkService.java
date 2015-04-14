@@ -8,9 +8,11 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.cedarsoftware.util.io.JsonIoException;
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.util.Map;
@@ -135,11 +137,8 @@ public class NetworkService extends IntentService {
             }
             InputStream in = ((GTFSClient) getApplication()).getClient()
                     .getInputStream();
+
             JsonReader jIn = new JsonReader(in, true);
-            Log.d("Socket connected", String.valueOf(
-                    ((GTFSClient) getApplication()).getClient().isConnected()));
-            Log.d("Socket closed", String.valueOf(
-                    ((GTFSClient) getApplication()).getClient().isClosed()));
 
             Map receivedMap = (Map) jIn.readObject();
             String messageType = (String) receivedMap.get(MessageBundle.TYPE);
@@ -153,8 +152,8 @@ public class NetworkService extends IntentService {
                 LocalBroadcastManager.getInstance(getApplicationContext()).
                         sendBroadcast(receivedMessageIntent);
             }
-            //TODO: Remove universal notifications
-            NotificationCompat.Builder mBuilder =
+
+            /*NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle("Message Received")
@@ -166,9 +165,17 @@ public class NetworkService extends IntentService {
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
             mNotificationManager.notify(0, mBuilder.build());
-
+*/
             return receivedMap;
-        } catch (Exception e) {
+        } catch(JsonIoException jException){
+            try {
+                ((GTFSClient) getApplication()).setClient(new Socket(hostname, hostport));
+                ((GTFSClient) getApplication()).setAuthenticated(false);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -176,7 +183,6 @@ public class NetworkService extends IntentService {
 
     private void authenticate(){
         while(true) {
-
             try {
                 if(((GTFSClient)getApplication()).getClient() == null)
                     ((GTFSClient)getApplication()).setClient(new Socket(hostname, hostport));
@@ -191,7 +197,8 @@ public class NetworkService extends IntentService {
                     Thread.sleep(SLEEP_TIME);
                     userID = ((GTFSClient)getApplication()).getID();
                 }
-                final MessageBundle authBundle = new MessageBundle(userID, ((GTFSClient)getApplicationContext()).getSESSION_ID(),
+                final MessageBundle authBundle = new MessageBundle(userID,
+                        ((GTFSClient)getApplicationContext()).getSESSION_ID(),
                         MessageBundle.messageType.AUTH);
                 authBundle.putUsername(((GTFSClient)getApplicationContext()).getNAME());
                 send(authBundle.getMessage());

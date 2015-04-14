@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import cse.sutd.gtfs.Adapters.ChatAdapters;
 import cse.sutd.gtfs.Objects.ChatRooms;
@@ -65,13 +66,14 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                final String item = (String) parent.getItemAtPosition(position);
+                final String item = ((ChatRooms) parent.getItemAtPosition(position)).getId();
                 Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
                 i.putExtra("ID", chatroom.get(position).getId());
                 i.putExtra("sessionToken", client.getSESSION_ID());
                 startActivity(i);
             }
         });
+        client.resetNotificationMap();
     }
 
 
@@ -134,5 +136,11 @@ public class MainActivity extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        client.resetNotificationMap();
     }
 }

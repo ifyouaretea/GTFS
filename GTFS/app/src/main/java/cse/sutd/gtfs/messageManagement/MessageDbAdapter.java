@@ -33,6 +33,10 @@ public class MessageDbAdapter {
     private static final String CHATNAME = "chatName";
     private static final String LAST_MESSAGE = "lastMessage";
     private static final String USERS = "users";
+    private static final String NAME = "name";
+    private static final String EXPIRY = "expiry";
+    private static final String CONTACTS = "contacts";
+
     private static final String TAG = "MessageDbAdapter";
 
     private static MessageDbAdapter instance;
@@ -46,6 +50,11 @@ public class MessageDbAdapter {
                 "create table chats (_id text primary key, "
                         + "chatName text not null, lastMessage integer not null, "
                         + "users string, expiry integer);";
+
+        private static final String DATABASE_CREATE_CONTACTS =
+                "create table chats (_id text primary key, "
+                        + "name text);";
+
 
         private static final String DATABASE_NAME = "data";
 
@@ -151,27 +160,82 @@ public class MessageDbAdapter {
 
     public Cursor getChatMessages(String chatID){
         return mDb.rawQuery(String.format("SELECT from_phone_number, body, " +
-                "timestamp FROM messages WHERE chatID ='%s'", chatID), null);
+                "timestamp FROM messages WHERE chatID ='%s' ORDER BY _id", chatID), null);
     }
 
     public Cursor getChats(){
-        return mDb.rawQuery(String.format("SELECT _id, chatName, lastMessage FROM " +
-                "chats"), null);
+        return mDb.rawQuery("SELECT _id, chatName, lastMessage FROM " +
+                "chats", null);
     }
 
     public long createGroupChat(Map message){
-        Log.d("Chat creation", message.toString());
-        String chatID = (String) message.get(CHATID);
-        String chatName = (String) message.get(CHATNAME);
-
+        String chatID = (String) message.get(MessageBundle.CHATROOMID);
+        String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);
+        String users = Arrays.toString((Object[])message.get(USERS));
+        int expiry = (Integer) message.get(MessageBundle.EXPIRY);
         ContentValues chatValues = new ContentValues();
         chatValues.put(ROWID, chatID);
         chatValues.put(CHATNAME, chatName);
-        chatValues.put(USERS, Arrays.toString((String[])message.get(USERS)));
+        chatValues.put(USERS, users);
+        chatValues.put(LAST_MESSAGE, chatID);
+        chatValues.put(EXPIRY, expiry);
         return mDb.insert(CHATS, null, chatValues);
     }
 
+    public long putContact(String phoneNum, String contactName){
+        Log.d("Contact creation", phoneNum);
+        ContentValues chatValues = new ContentValues();
+        chatValues.put(ROWID, phoneNum);
+        chatValues.put(NAME, contactName);
+        return mDb.insert(CONTACTS, null, chatValues);
+    }
     public long deleteGroupChat(String chatID){
         return mDb.delete(CHATS, ROWID + "=" + chatID, null);
+    }
+
+    /**
+     *
+     * @return an array of the IDs removed
+     */
+    public String[] deleteExpiredChats(){
+        long currentTime = System.currentTimeMillis();
+        Cursor expiredChats = mDb.rawQuery("SELECT _id FROM chats WHERE expiry <= "
+                + currentTime, null);
+        if(expiredChats == null)
+            return null;
+        if (expiredChats.getCount() == 0)
+            return null;
+        expiredChats.moveToFirst();
+
+        String[] expiredArray = new String[expiredChats.getCount()];
+        int count = 0;
+        do{
+            expiredArray[count++] = expiredChats.getString(0);
+            deleteGroupChat(expiredChats.getString(0));
+        }while(expiredChats.moveToNext());
+        return expiredArray;
+    }
+
+    public String getChatroomName(String chatID){
+        Cursor result = mDb.rawQuery(String.format("SELECT chatName FROM chats WHERE _id = '%s'",
+                chatID), null);
+        result.moveToFirst();
+        return result.getString(0);
+    }
+
+    public void importChatrooms(Map message){
+        Map[] chatrooms = (Map[])message.get(MessageBundle.CHATROOMS);
+        for(Map chatroom : chatrooms){
+            String chatID = (String) message.get(MessageBundle.CHATROOMID);
+            String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);
+            String users = Arrays.toString((Object[])message.get(USERS));
+
+            ContentValues chatValues = new ContentValues();
+            chatValues.put(ROWID, chatID);
+            chatValues.put(CHATNAME, chatName);
+            chatValues.put(USERS, users);
+            chatValues.put(LAST_MESSAGE, chatID);
+            mDb.insert(CHATS, null, chatValues);
+        }
     }
 }

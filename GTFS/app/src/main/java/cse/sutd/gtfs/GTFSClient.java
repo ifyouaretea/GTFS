@@ -12,6 +12,9 @@ import com.matesnetwork.callverification.Cognalys;
 
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import cse.sutd.gtfs.messageManagement.ManagerService;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
@@ -23,14 +26,17 @@ public class GTFSClient extends Application{
     private final String TWITTER_KEY = "6Rs5gyo7xHoEYYkls0ajWP9PO";
     private final String TWITTER_SECRET = "8nvcBPCoqhkt1Lvzjv6Pb5GmBB4uBmreV3KSgVxfcgCJrMQT8E";
     public final String PREFS_NAME = "MyPrefsFile";
-    private static GTFSClient instance;
-    private Socket client;
+
     private String PROFILE_ID;
-    private MessageDbAdapter messageDbAdapter;
-    private boolean authenticated = false;
-    private boolean listening = false;
     private String PROFILE_NAME;
     private String SESSION_ID;
+
+    private Socket client;
+    private MessageDbAdapter messageDbAdapter;
+    private static GTFSClient instance;
+    private Map<String, ArrayList<String>> notificationMap;
+    private boolean authenticated = false;
+    private boolean listening = false;
 
     public Socket getClient() {
         return client;
@@ -66,6 +72,8 @@ public class GTFSClient extends Application{
         }catch (SQLException e){
             e.printStackTrace();
         }
+        notificationMap = new HashMap<>();
+
         startService(new Intent(this, ManagerService.class));
         startService(new Intent(this, NetworkService.class));
 //        final TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
@@ -114,4 +122,13 @@ public class GTFSClient extends Application{
     public String getSESSION_ID() { return SESSION_ID; }
 
     public void setSESSION_ID(String SESSION_ID) { this.SESSION_ID = SESSION_ID; }
+
+
+    public Map<String, ArrayList<String>> getNotificationMap() {
+        return notificationMap;
+    }
+
+    public void resetNotificationMap() {
+        this.notificationMap = new HashMap<String, ArrayList<String>>();
+    }
 }
