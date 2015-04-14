@@ -43,7 +43,7 @@ public class LoginActivityCog extends Activity {
 
         if (userID != null) {
             client.setID(userID);
-            client.setPROFILE_NAME(prefs.getString("username",null));
+            client.setNAME(prefs.getString("username", null));
             Intent intent = new Intent(LoginActivityCog.this, MainActivity.class);
             startActivity(intent);
             LoginActivityCog.this.finish();
