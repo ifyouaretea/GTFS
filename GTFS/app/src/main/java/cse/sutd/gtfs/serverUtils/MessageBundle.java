@@ -14,7 +14,7 @@ public class MessageBundle {
     public static enum messageType{
         AUTH, TEXT,TEXT_RECEIVED, TYPING, CREATE_ROOM,ROOM_INVITATION,
         ACCEPT_INVITATION, LEAVE, GROUP_EXPIRED,
-        FETCH_NOTE, EDIT_NOTE;
+        FETCH_NOTE, EDIT_NOTE, GET_ROOMS;
     }
 
     private Map<String, String> messageMap;
@@ -32,6 +32,7 @@ public class MessageBundle {
     public static final String TIMESTAMP= "timestamp";
     public static final String STATUS = "status";
     public static final String EXPIRY = "expiry";
+    public static final String CHATROOMS = "chatrooms";
     public static final String VALID_STATUS = "1";
 
     public MessageBundle(String fromNumber, String sessionToken, messageType type) {
@@ -50,7 +51,6 @@ public class MessageBundle {
     public String putChatroomID(String chatRoomID){
         return messageMap.put(CHATROOMID, chatRoomID);
     }
-
 
     public String putTimestamp(){
         Calendar c = Calendar.getInstance();

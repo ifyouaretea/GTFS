@@ -33,6 +33,10 @@ public class MessageDbAdapter {
     private static final String CHATNAME = "chatName";
     private static final String LAST_MESSAGE = "lastMessage";
     private static final String USERS = "users";
+    private static final String NAME = "name";
+    private static final String EXPIRY = "expiry";
+    private static final String CONTACTS = "contacts";
+
     private static final String TAG = "MessageDbAdapter";
 
     private static MessageDbAdapter instance;
@@ -46,6 +50,11 @@ public class MessageDbAdapter {
                 "create table chats (_id text primary key, "
                         + "chatName text not null, lastMessage integer not null, "
                         + "users string, expiry integer);";
+
+        private static final String DATABASE_CREATE_CONTACTS =
+                "create table chats (_id text primary key, "
+                        + "name text);";
+
 
         private static final String DATABASE_NAME = "data";
 
@@ -160,19 +169,26 @@ public class MessageDbAdapter {
     }
 
     public long createGroupChat(Map message){
-        Log.d("Chat creation", message.toString());
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
         String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);
         String users = Arrays.toString((Object[])message.get(USERS));
-
+        int expiry = (Integer) message.get(MessageBundle.EXPIRY);
         ContentValues chatValues = new ContentValues();
         chatValues.put(ROWID, chatID);
         chatValues.put(CHATNAME, chatName);
         chatValues.put(USERS, users);
         chatValues.put(LAST_MESSAGE, chatID);
+        chatValues.put(EXPIRY, expiry);
         return mDb.insert(CHATS, null, chatValues);
     }
 
+    public long putContact(String phoneNum, String contactName){
+        Log.d("Contact creation", phoneNum);
+        ContentValues chatValues = new ContentValues();
+        chatValues.put(ROWID, phoneNum);
+        chatValues.put(NAME, contactName);
+        return mDb.insert(CONTACTS, null, chatValues);
+    }
     public long deleteGroupChat(String chatID){
         return mDb.delete(CHATS, ROWID + "=" + chatID, null);
     }
@@ -205,5 +221,21 @@ public class MessageDbAdapter {
                 chatID), null);
         result.moveToFirst();
         return result.getString(0);
+    }
+
+    public void importChatrooms(Map message){
+        Map[] chatrooms = (Map[])message.get(MessageBundle.CHATROOMS);
+        for(Map chatroom : chatrooms){
+            String chatID = (String) message.get(MessageBundle.CHATROOMID);
+            String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);
+            String users = Arrays.toString((Object[])message.get(USERS));
+
+            ContentValues chatValues = new ContentValues();
+            chatValues.put(ROWID, chatID);
+            chatValues.put(CHATNAME, chatName);
+            chatValues.put(USERS, users);
+            chatValues.put(LAST_MESSAGE, chatID);
+            mDb.insert(CHATS, null, chatValues);
+        }
     }
 }
