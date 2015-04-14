@@ -47,6 +47,7 @@ public class MessagingActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dbMessages = MessageDbAdapter.getInstance(this);
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
@@ -59,7 +60,7 @@ public class MessagingActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_action_profile); //user's pic
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setTitle(chatroomID);
+        getSupportActionBar().setTitle(dbMessages.getChatroomName(chatroomID));
         setContentView(R.layout.activity_messaging);
 
         client = (GTFSClient) getApplicationContext();
@@ -69,7 +70,7 @@ public class MessagingActivity extends ActionBarActivity {
         sessionToken = client.getSESSION_ID();
 
         listview = (ListView) findViewById(R.id.messageList);
-        dbMessages = MessageDbAdapter.getInstance(this);
+
         Cursor msgBundles = dbMessages.getChatMessages(chatroomID);
         message = new ArrayList<MessageBundle>();
         final ArrayList<String> timestamp = new ArrayList<String>();
@@ -81,8 +82,6 @@ public class MessagingActivity extends ActionBarActivity {
                 a.putMessage(msgBundles.getString(1)); a.putChatroomID(msgBundles.getString(2));
                 message.add(a);
                 timestamp.add(msgBundles.getString(2));
-                Log.d("phonenum",msgBundles.getString(0));
-                Log.d("txt",msgBundles.getString(1));
             }while(msgBundles.moveToNext());
 
             msgBundles.close();
@@ -101,6 +100,8 @@ public class MessagingActivity extends ActionBarActivity {
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (msg.getText().toString().trim().length() > 0) {
+                    if(sessionToken == null)
+                        sessionToken = client.getSESSION_ID();
                     if(chatroomID == null){
                         MessageBundle createBundle = new MessageBundle(userID, sessionToken,
                                 MessageBundle.messageType.CREATE_ROOM);
@@ -118,15 +119,17 @@ public class MessagingActivity extends ActionBarActivity {
 
                     message.add(textBundle);
 
+                    //TODO: Register receiver only once
+                    IntentFilter receivedIntentFilter = new IntentFilter(ManagerService.UPDATE_UI);
+                    broadcastReceiver = new MessageBroadcastReceiver();
+                    LocalBroadcastManager.getInstance(getApplicationContext())
+                            .registerReceiver(broadcastReceiver, receivedIntentFilter);
+
                     Intent intent = new Intent(MessagingActivity.this, NetworkService.class);
                     intent.putExtra(NetworkService.MESSAGE_KEY,
                             JsonWriter.objectToJson(textBundle.getMessage()));
                     MessagingActivity.this.startService(intent);
 
-                    IntentFilter receivedIntentFilter = new IntentFilter(ManagerService.UPDATE_UI);
-                    broadcastReceiver = new MessageBroadcastReceiver();
-                    LocalBroadcastManager.getInstance(getApplicationContext())
-                            .registerReceiver(broadcastReceiver, receivedIntentFilter);
 
                     msg.setText("");
                     adapter.notifyDataSetChanged();
@@ -173,7 +176,6 @@ public class MessagingActivity extends ActionBarActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("Receiver", "received intent!");
             Map received = (Map) JsonReader.jsonToJava(intent.getStringExtra
                     (NetworkService.MESSAGE_KEY));
             handleMessage(received);

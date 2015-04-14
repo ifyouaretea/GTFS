@@ -140,10 +140,6 @@ public class NetworkService extends IntentService {
                     .getInputStream();
 
             JsonReader jIn = new JsonReader(in, true);
-            Log.d("Socket connected", String.valueOf(
-                    ((GTFSClient) getApplication()).getClient().isConnected()));
-            Log.d("Socket closed", String.valueOf(
-                    ((GTFSClient) getApplication()).getClient().isClosed()));
 
             Map receivedMap = (Map) jIn.readObject();
             String messageType = (String) receivedMap.get(MessageBundle.TYPE);
@@ -157,8 +153,8 @@ public class NetworkService extends IntentService {
                 LocalBroadcastManager.getInstance(getApplicationContext()).
                         sendBroadcast(receivedMessageIntent);
             }
-            //TODO: Remove universal notifications
-            NotificationCompat.Builder mBuilder =
+
+            /*NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle("Message Received")
@@ -170,7 +166,7 @@ public class NetworkService extends IntentService {
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
             mNotificationManager.notify(0, mBuilder.build());
-
+*/
             return receivedMap;
         } catch(JsonIoException jException){
             try {

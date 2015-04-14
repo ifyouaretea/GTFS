@@ -61,6 +61,7 @@ public class MessageBundle {
 
         return messageMap.put(TIMESTAMP, sb.toString());
     }
+
     public String putMessage(String message){
         return messageMap.put(MESSAGE, message);
     }

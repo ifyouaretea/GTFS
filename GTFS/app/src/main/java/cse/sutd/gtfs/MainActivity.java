@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import cse.sutd.gtfs.Adapters.ChatAdapters;
 import cse.sutd.gtfs.Objects.ChatRooms;
@@ -72,6 +73,7 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(i);
             }
         });
+        client.resetNotificationMap();
     }
 
 
@@ -134,5 +136,11 @@ public class MainActivity extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        client.resetNotificationMap();
     }
 }

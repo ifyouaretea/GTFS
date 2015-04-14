@@ -1,11 +1,13 @@
 package cse.sutd.gtfs.messageManagement;
 
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
 import android.util.Log;
@@ -13,9 +15,12 @@ import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import cse.sutd.gtfs.GTFSClient;
+import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
 
@@ -25,6 +30,8 @@ import cse.sutd.gtfs.serverUtils.NetworkService;
 public class ManagerService extends Service{
 
     public static final String UPDATE_UI = "com.gtfs.UPDATE_UI";
+
+    private String userID;
     MessageDbAdapter dbAdapter;
     MessageBroadcastReceiver broadcastReceiver;
 
@@ -47,6 +54,7 @@ public class ManagerService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        userID = ((GTFSClient)getApplication()).getID();
         IntentFilter receivedIntentFilter = new IntentFilter(NetworkService.MESSAGE_RECEIVED);
         broadcastReceiver = new MessageBroadcastReceiver();
 
@@ -64,6 +72,7 @@ public class ManagerService extends Service{
 
         if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)){
             dbAdapter.storeMessage(message);
+
             //TODO: fix possible synchronisation problems
             Log.d("DB message insertion", message.toString());
 
@@ -74,6 +83,9 @@ public class ManagerService extends Service{
             LocalBroadcastManager.getInstance(getApplicationContext())
                     .sendBroadcast(updateUIIntent);
 
+//            if(!message.get(MessageBundle.FROM_PHONE_NUMBER).equals(userID)) {
+                addToNotification(message);
+//            }
         }else if(messageType.equals(MessageBundle.messageType.CREATE_ROOM.toString()) ||
                 messageType.equals(MessageBundle.messageType.ROOM_INVITATION.toString())
                 ){
@@ -89,5 +101,49 @@ public class ManagerService extends Service{
         }
 
         Log.d("Received Message", message.toString());
+    }
+
+    private void addToNotification(Map message){
+        Map<String, ArrayList<String>> notificationMap =
+                ((GTFSClient) getApplication()).getNotificationMap();
+
+        String chatroomID = (String) message.get(MessageBundle.CHATROOMID);
+
+        if(notificationMap.get(chatroomID) == null)
+            notificationMap.put(chatroomID,
+                    new ArrayList<String>());
+
+        notificationMap.get(chatroomID).add((String)message.get(MessageBundle.MESSAGE));
+
+        String title = null;
+        String body = null;
+        if(notificationMap.keySet().size() == 1) {
+            title = dbAdapter.getChatroomName(chatroomID);
+            StringBuilder bodyBuilder = new StringBuilder();
+            for (String s: notificationMap.get(chatroomID))
+                bodyBuilder.append(s + "\n");
+            body = bodyBuilder.toString();
+        }
+        else{
+            title = String.format("Messages from %d chats", notificationMap.keySet().size());
+            StringBuilder bodyBuilder = new StringBuilder();
+            for(String s1: notificationMap.keySet())
+                for(String s2 : notificationMap.get(s1))
+                    bodyBuilder.append(s2 + "\n");
+            body = bodyBuilder.toString();
+        }
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(title)
+                        .setContentText(body)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(body));
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mNotificationManager.notify(0, mBuilder.build());
     }
 }

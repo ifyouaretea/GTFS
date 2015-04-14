@@ -155,8 +155,8 @@ public class MessageDbAdapter {
     }
 
     public Cursor getChats(){
-        return mDb.rawQuery(String.format("SELECT _id, chatName, lastMessage FROM " +
-                "chats"), null);
+        return mDb.rawQuery("SELECT _id, chatName, lastMessage FROM " +
+                "chats", null);
     }
 
     public long createGroupChat(Map message){
@@ -175,5 +175,35 @@ public class MessageDbAdapter {
 
     public long deleteGroupChat(String chatID){
         return mDb.delete(CHATS, ROWID + "=" + chatID, null);
+    }
+
+    /**
+     *
+     * @return an array of the IDs removed
+     */
+    public String[] deleteExpiredChats(){
+        long currentTime = System.currentTimeMillis();
+        Cursor expiredChats = mDb.rawQuery("SELECT _id FROM chats WHERE expiry <= "
+                + currentTime, null);
+        if(expiredChats == null)
+            return null;
+        if (expiredChats.getCount() == 0)
+            return null;
+        expiredChats.moveToFirst();
+
+        String[] expiredArray = new String[expiredChats.getCount()];
+        int count = 0;
+        do{
+            expiredArray[count++] = expiredChats.getString(0);
+            deleteGroupChat(expiredChats.getString(0));
+        }while(expiredChats.moveToNext());
+        return expiredArray;
+    }
+
+    public String getChatroomName(String chatID){
+        Cursor result = mDb.rawQuery(String.format("SELECT chatName FROM chats WHERE _id = '%s'",
+                chatID), null);
+        result.moveToFirst();
+        return result.getString(0);
     }
 }
