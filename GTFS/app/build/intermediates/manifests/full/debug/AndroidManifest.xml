@@ -72,7 +72,13 @@
         </activity>
         <activity
             android:name="cse.sutd.gtfs.NewGroupActivity"
-            android:label="@string/title_activity_new_group" >
+            android:label="@string/title_activity_new_group"
+            android:parentActivityName="cse.sutd.gtfs.MainActivity" >
+        </activity>
+        <activity
+            android:name="cse.sutd.gtfs.ContactsActivity"
+            android:label="@string/title_activity_contacts"
+            android:parentActivityName="cse.sutd.gtfs.MainActivity" >
         </activity>
         <activity
             android:name="com.twitter.sdk.android.core.identity.OAuthActivity"

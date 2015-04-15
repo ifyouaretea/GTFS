@@ -4,8 +4,4 @@
     <stroke
         android:width="@dimen/tw__tweet_container_width"
         android:color="@color/tw__tweet_container_border"/>
-<<<<<<< HEAD
-</shape><!-- From: file:/Users/android/workspace/jenkins/workspace/fabric-android-deploy-to-staging/sdk/kits/tweetui/src/main/res/drawable/tw__bg_tweet.xml --><!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/drawable/tw__bg_tweet.xml -->
-=======
 </shape><!-- From: file:/Users/android/workspace/jenkins/workspace/fabric-android-deploy-to-staging/sdk/kits/tweetui/src/main/res/drawable/tw__bg_tweet.xml --><!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-ui/1.0.7/res/drawable/tw__bg_tweet.xml -->
->>>>>>> origin/master

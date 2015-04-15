@@ -169,8 +169,18 @@ activity#cse.sutd.gtfs.NewGroupActivity
 ADDED from AndroidManifest.xml:67:9
 	android:label
 		ADDED from AndroidManifest.xml:69:13
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:70:13
 	android:name
 		ADDED from AndroidManifest.xml:68:13
+activity#cse.sutd.gtfs.ContactsActivity
+ADDED from AndroidManifest.xml:72:9
+	android:label
+		ADDED from AndroidManifest.xml:74:13
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:75:13
+	android:name
+		ADDED from AndroidManifest.xml:73:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.twitter.sdk.android:twitter:1.3.2:7:5

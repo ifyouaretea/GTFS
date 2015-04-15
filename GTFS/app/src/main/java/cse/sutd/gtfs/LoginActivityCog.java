@@ -46,7 +46,6 @@ public class LoginActivityCog extends Activity {
             Intent intent = new Intent(LoginActivityCog.this, MainActivity.class);
             startActivity(intent);
             LoginActivityCog.this.finish();
-            LoginActivityCog.this.finish();
         } else {
             setContentView(R.layout.activity_login_activity_cog);
             phoneNumbTv = (EditText) findViewById(R.id.ph_et);

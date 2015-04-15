@@ -46,4 +46,5 @@ dependencies {
     compile 'com.cedarsoftware:json-io:3.0.1'
     compile 'com.android.support:support-v4:22.0.0'
     compile files('libs/cognalys.jar')
+    compile files('libs/SwipeLayout.jar')
 }
