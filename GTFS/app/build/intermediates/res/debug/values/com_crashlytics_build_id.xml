@@ -7,8 +7,12 @@
   Do NOT modify, delete, or commit to source control!
 -->
 <<<<<<< HEAD
+<string xmlns:ns0="http://schemas.android.com/tools" name="com.crashlytics.android.build_id" ns0:ignore="UnusedResources,TypographyDashes" translatable="false">b4c0f3b2-d287-4bd7-823f-336b85b3be29</string>
+=======
+<<<<<<< HEAD
 <string xmlns:ns0="http://schemas.android.com/tools" name="com.crashlytics.android.build_id" ns0:ignore="UnusedResources,TypographyDashes" translatable="false">1a7fdb56-cda4-4406-a7c7-6efbd1e39a59</string>
 =======
 <string xmlns:ns0="http://schemas.android.com/tools" name="com.crashlytics.android.build_id" ns0:ignore="UnusedResources,TypographyDashes" translatable="false">e5dabed2-c892-40d6-8a54-8c8e76d8cb34</string>
 >>>>>>> origin/master
+>>>>>>> 59a0af8bf6994cc1507972bf308ece778ba61690
 </resources>
