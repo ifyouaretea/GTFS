@@ -266,8 +266,9 @@ public class MessageDbAdapter {
         return result.getString(0);
     }
     public void importChatrooms(Map message){
-        Map[] chatrooms = (Map[])message.get(MessageBundle.CHATROOMS);
-        for(Map chatroom : chatrooms){
+        Object[] chatrooms = (Object[])message.get(MessageBundle.CHATROOMS);
+        for(Object chatroomO : chatrooms){
+            Map chatroom = (Map) chatroomO;
             String chatID = (String) message.get(MessageBundle.CHATROOMID);
             String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);
             String users = Arrays.toString((Object[])message.get(USERS));
