@@ -61,7 +61,6 @@ public class MessageDbAdapter {
                         "lastMessage integer not null, "+
                         "users string, expiry integer);";
 
-
         private static final String DATABASE_CREATE_CONTACTS =
                 "create table contacts (_id text primary key, "
                         + "name text);";

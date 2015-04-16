@@ -15,6 +15,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cedarsoftware.util.io.JsonWriter;
+
+import cse.sutd.gtfs.serverUtils.MessageBundle;
+import cse.sutd.gtfs.serverUtils.NetworkService;
+
 
 public class NewGroupActivity extends ActionBarActivity {
     private EditText group_name;
@@ -112,3 +117,19 @@ public class NewGroupActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+
+
+
+
+//TODO: integrate messageBundle sending
+MessageBundle createRoomBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
+        MessageBundle.messageType.CREATE_ROOM);
+
+createRoomBundle.putUsers(userArray);
+        createRoomBundle.putChatroomName(chatName);
+        createRoomBundle.putExpiry(unit, duration);
+        Intent i = new Intent(getApplicationContext(), NetworkService.class);
+        i.putExtra(NetworkService.MESSAGE_KEY,
+        JsonWriter.objectToJson(createRoomBundleBundle.getMessage()));
+
+        this.startService(i);
