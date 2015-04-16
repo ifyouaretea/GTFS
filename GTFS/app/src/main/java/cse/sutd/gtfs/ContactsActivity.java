@@ -18,7 +18,6 @@ import android.widget.SearchView;
 import java.util.ArrayList;
 
 import cse.sutd.gtfs.Adapters.ContactAdapter;
-import cse.sutd.gtfs.Objects.ChatRooms;
 import cse.sutd.gtfs.Objects.Contact;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 
@@ -62,7 +61,7 @@ public class ContactsActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                final String item = ((ChatRooms) parent.getItemAtPosition(position)).getId();
+                final String item = ((Contact) parent.getItemAtPosition(position)).getNumber();
                 //TODO: check if chatroom exist
                 Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
                 i.putExtra("toNumber", contacts.get(position).getNumber());
