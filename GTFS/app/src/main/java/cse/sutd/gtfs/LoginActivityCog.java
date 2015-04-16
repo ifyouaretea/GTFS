@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cedarsoftware.util.io.JsonWriter;
 import com.matesnetwork.callverification.Cognalys;
 import com.matesnetwork.interfaces.VerificationListner;
 
@@ -76,6 +78,14 @@ public class LoginActivityCog extends Activity {
                                 startService(new Intent(getApplicationContext(), ManagerService.class));
                                 startService(new Intent(getApplicationContext(), NetworkService.class));
 
+                                Intent importChatrooms = new Intent(getApplicationContext(), NetworkService.class);
+                                MessageBundle importBundle = new MessageBundle(client.getID(),
+                                        client.getSESSION_ID(), MessageBundle.messageType.GET_ROOMS);
+
+                                String getChatroomString = JsonWriter.objectToJson
+                                        (importBundle.getMessage());
+                                importChatrooms.putExtra(NetworkService.MESSAGE_KEY, getChatroomString);
+                                startService(importChatrooms);
                                 LoginActivityCog.this.finish();
 
                             } else {

@@ -76,13 +76,6 @@ public class ManagerService extends Service{
             //TODO: fix possible synchronisation problems
             Log.d("DB message insertion", message.toString());
 
-            Intent updateUIIntent = new Intent(UPDATE_UI);
-            updateUIIntent.putExtra(NetworkService.MESSAGE_KEY,
-                    JsonWriter.objectToJson(message));
-
-            LocalBroadcastManager.getInstance(getApplicationContext())
-                    .sendBroadcast(updateUIIntent);
-
 //            if(!message.get(MessageBundle.FROM_PHONE_NUMBER).equals(userID)) {
                 addToNotification(message);
 //            }
@@ -91,15 +84,19 @@ public class ManagerService extends Service{
                 messageType.equals(MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString())
                 ){
             dbAdapter.createGroupChat(message);
-            Intent updateUIIntent = new Intent(UPDATE_UI);
-            updateUIIntent.putExtra(NetworkService.MESSAGE_KEY,
-                    JsonWriter.objectToJson(message));
-
-            LocalBroadcastManager.getInstance(getApplicationContext())
-                    .sendBroadcast(updateUIIntent);
 
             Log.d("Database chat insertion", message.toString());
-        }
+        }else if(messageType.equals(MessageBundle.messageType.GET_ROOMS.toString()))
+            dbAdapter.importChatrooms(message);
+        else if (messageType.equals(MessageBundle.messageType.GET_USERS.toString()))
+            dbAdapter.importUsers(message);
+
+        Intent updateUIIntent = new Intent(UPDATE_UI);
+        updateUIIntent.putExtra(NetworkService.MESSAGE_KEY,
+                JsonWriter.objectToJson(message));
+
+        LocalBroadcastManager.getInstance(getApplicationContext())
+                .sendBroadcast(updateUIIntent);
 
         Log.d("Received Message", message.toString());
     }
