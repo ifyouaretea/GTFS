@@ -12,8 +12,4 @@
         android:title="@string/pref_header_data_sync" />
 
 </preference-headers>
-<<<<<<< HEAD
 <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/src/main/res/xml/pref_headers.xml -->
-=======
-<!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/src/main/res/xml/pref_headers.xml -->
->>>>>>> 7aa1aa671ca01799f90acef8379dae73ed69c2ce

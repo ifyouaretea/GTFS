@@ -165,8 +165,10 @@ public class MainActivity extends ActionBarActivity {
             String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
             String h1 = phoneNumber.replaceAll("\\s","");
             String h2 = h1.replace(" ","");
-            String numbers = h2.substring(Math.max(0, phoneNumber.length() - 8));
-            phoneNumbers.add(numbers);
+            if (h2.length()>=8) {
+                String numbers = h2.substring(Math.max(0, phoneNumber.length() - 8));
+                phoneNumbers.add(numbers);
+            }
         }
         phones.close();
         String[] phonenumber = new String[phoneNumbers.size()];

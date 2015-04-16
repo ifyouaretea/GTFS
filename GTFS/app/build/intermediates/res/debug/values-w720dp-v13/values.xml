@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<<<<<<< HEAD
     <!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-w720dp-v13/values.xml -->
-=======
-    <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-w720dp-v13/values.xml -->
->>>>>>> 7aa1aa671ca01799f90acef8379dae73ed69c2ce
     <eat-comment/>
     <bool name="abc_action_bar_expanded_action_views_exclusive">false</bool>
 </resources>
