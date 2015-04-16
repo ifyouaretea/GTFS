@@ -15,7 +15,6 @@ import com.cedarsoftware.util.io.JsonWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.Map;
 
 import cse.sutd.gtfs.GTFSClient;
@@ -202,7 +201,7 @@ public class NetworkService extends IntentService {
                 final MessageBundle authBundle = new MessageBundle(userID,
                         ((GTFSClient)getApplicationContext()).getSESSION_ID(),
                         MessageBundle.messageType.AUTH);
-                authBundle.putUsername(((GTFSClient)getApplicationContext()).getPROFILE_NAME());
+                authBundle.putUsername(((GTFSClient)getApplicationContext()).getNAME());
                 send(authBundle.getMessage());
                 Map receivedMessage = receive();
                 Log.d("Authentication", receivedMessage.toString());

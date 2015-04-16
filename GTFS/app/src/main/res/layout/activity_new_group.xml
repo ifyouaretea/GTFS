@@ -11,16 +11,15 @@
         android:layout_height="40dp"
         android:id="@+id/group_name"
         android:maxLength="25"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:hint="Group Name" />
+        android:hint="Group Name"
+        android:layout_below="@+id/timing"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/add_contact"
         android:layout_below="@+id/group_name"
-
         android:layout_alignParentStart="true"
         android:hint="Add Contact" />
 
@@ -31,7 +30,42 @@
         android:id="@+id/countTextView"
         android:layout_above="@+id/add_contact"
         android:layout_alignParentEnd="true"
+        android:textIsSelectable="true"
+        android:layout_below="@+id/timing" />
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/timing"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/switch1">
+
+        <EditText
+            android:layout_width="91dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/time" />
+
+        <Spinner
+            android:id="@+id/timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/time_arrays"
+            android:spinnerMode="dropdown"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true" />
+    </LinearLayout>
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Timed group"
+        android:id="@+id/switch1"
+        android:checked="false"
         android:layout_alignParentTop="true"
-        android:textIsSelectable="true" />
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

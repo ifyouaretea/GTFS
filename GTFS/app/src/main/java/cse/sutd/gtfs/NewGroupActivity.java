@@ -1,24 +1,24 @@
 package cse.sutd.gtfs;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.provider.ContactsContract;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class NewGroupActivity extends ActionBarActivity {
-   private EditText group_name;
+    private EditText group_name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,34 +29,56 @@ public class NewGroupActivity extends ActionBarActivity {
         getSupportActionBar().setTitle("New Group");
         setContentView(R.layout.activity_new_group);
 
-       group_name = (EditText) findViewById(R.id.group_name);
+        group_name = (EditText) findViewById(R.id.group_name);
+        group_name.requestFocus();
         final TextView countTextView = (TextView) findViewById(R.id.countTextView);
         countTextView.setText("25");
-
         EditText add_contact = (EditText) findViewById(R.id.add_contact);
-
-
-        group_name.addTextChangedListener(new TextWatcher()
-        {
+        group_name.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count)
-            {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int aft)
-            {
+            public void beforeTextChanged(CharSequence s, int start, int count, int aft) {
 
             }
 
             @Override
-            public void afterTextChanged(Editable group_name)
-            {
+            public void afterTextChanged(Editable group_name) {
                 // this will show characters remaining
 
                 countTextView.setText(Integer.toString(25 - group_name.toString().length()));
             }
         });
+
+        Switch mySwitch = (Switch) findViewById(R.id.switch1);
+        final LinearLayout timing = (LinearLayout) findViewById(R.id.timing);
+        final EditText time = (EditText) findViewById(R.id.time);
+        //set the switch to ON
+        mySwitch.setChecked(false);
+        //attach a listener to check for changes in state
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+                if (isChecked) {
+                    timing.setVisibility(View.VISIBLE);
+                    time.requestFocus();
+                } else {
+                    timing.setVisibility(View.GONE);
+                }
+            }
+        });
+        //check the current state before we display the screen
+        if (mySwitch.isChecked()) {
+            timing.setVisibility(View.VISIBLE);
+            time.requestFocus();
+        } else {
+            timing.setVisibility(View.GONE);
+        }
+
     }
 
 
@@ -77,15 +99,14 @@ public class NewGroupActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_create_group) {
 
-            if (group_name.getText().toString().trim().length() >0) {
+            if (group_name.getText().toString().trim().length() > 0) {
                 Intent intent = new Intent(NewGroupActivity.this, MainActivity.class);
                 startActivity(intent);
                 NewGroupActivity.this.finish();
+            } else {
+                Toast.makeText(getApplicationContext(), "Please enter group name", Toast.LENGTH_SHORT).show();
             }
-            else{
-                Toast.makeText(getApplicationContext(), "Please enter group name" , Toast.LENGTH_SHORT ).show();
-            }
-         return true;
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

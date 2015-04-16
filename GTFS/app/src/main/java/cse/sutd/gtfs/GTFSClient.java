@@ -115,9 +115,9 @@ public class GTFSClient extends Application{
         this.PROFILE_ID = ID;
     }
 
-    public String getPROFILE_NAME() {return PROFILE_NAME; }
+    public String getNAME() {return PROFILE_NAME; }
 
-    public void setPROFILE_NAME(String PROFILE_NAME) { this.PROFILE_NAME = PROFILE_NAME; }
+    public void setNAME(String PROFILE_NAME) { this.PROFILE_NAME = PROFILE_NAME; }
 
     public String getSESSION_ID() { return SESSION_ID; }
 

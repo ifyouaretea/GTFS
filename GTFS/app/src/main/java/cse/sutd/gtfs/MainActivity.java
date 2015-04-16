@@ -1,11 +1,13 @@
 package cse.sutd.gtfs;
 
 import android.app.SearchManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -19,7 +21,6 @@ import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import cse.sutd.gtfs.Adapters.ChatAdapters;
 import cse.sutd.gtfs.Objects.ChatRooms;
@@ -127,6 +128,8 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_search:
                 return true;
             case R.id.action_contacts:
+                intent = new Intent(this, ContactsActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_chat:
                 return true;
@@ -159,5 +162,12 @@ public class MainActivity extends ActionBarActivity {
     protected void onStart() {
         super.onStart();
         client.resetNotificationMap();
+    }
+
+    public void getNumber(ContentResolver cr){
+        Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,null,null,null);
+        do{
+            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+        }while(phones.moveToNext());
     }
 }
