@@ -198,6 +198,7 @@ public class NetworkService extends IntentService {
                     Thread.sleep(SLEEP_TIME);
                     userID = ((GTFSClient)getApplication()).getID();
                 }
+
                 final MessageBundle authBundle = new MessageBundle(userID,
                         ((GTFSClient)getApplicationContext()).getSESSION_ID(),
                         MessageBundle.messageType.AUTH);

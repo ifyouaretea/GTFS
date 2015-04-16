@@ -36,6 +36,7 @@ public class MessageDbAdapter {
     private static final String NAME = "name";
     private static final String EXPIRY = "expiry";
     private static final String CONTACTS = "contacts";
+    private static final String ISGROUP = "isGroup";
 
     private static final String TAG = "MessageDbAdapter";
 
@@ -48,8 +49,9 @@ public class MessageDbAdapter {
 
         private static final String DATABASE_CREATE_CHATS =
                 "create table chats (_id text primary key, "
-                        + "chatName text not null, lastMessage integer not null, "
-                        + "users string, expiry integer);";
+                        + "isGroup boolean, chatName text, " +
+                        "lastMessage integer not null, "+
+                        "users string, expiry integer);";
 
         private static final String DATABASE_CREATE_CONTACTS =
                 "create table chats (_id text primary key, "
@@ -68,6 +70,7 @@ public class MessageDbAdapter {
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(DATABASE_CREATE_MESSAGES);
             db.execSQL(DATABASE_CREATE_CHATS);
+            db.execSQL(DATABASE_CREATE_CONTACTS);
         }
 
         @Override
@@ -172,8 +175,19 @@ public class MessageDbAdapter {
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
         String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);
         String users = Arrays.toString((Object[])message.get(USERS));
+        Boolean isGroup = null;
+
+        if((message.get(MessageBundle.TYPE)).equals
+                (MessageBundle.messageType.ROOM_INVITATION.toString()))
+            isGroup = true;
+        else if((message.get(MessageBundle.TYPE)).equals
+                (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString()))
+            isGroup = false;
+
         int expiry = (Integer) message.get(MessageBundle.EXPIRY);
+
         ContentValues chatValues = new ContentValues();
+        chatValues.put(ISGROUP, isGroup);
         chatValues.put(ROWID, chatID);
         chatValues.put(CHATNAME, chatName);
         chatValues.put(USERS, users);

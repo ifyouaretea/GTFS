@@ -87,7 +87,8 @@ public class ManagerService extends Service{
                 addToNotification(message);
 //            }
         }else if(messageType.equals(MessageBundle.messageType.CREATE_ROOM.toString()) ||
-                messageType.equals(MessageBundle.messageType.ROOM_INVITATION.toString())
+                messageType.equals(MessageBundle.messageType.ROOM_INVITATION.toString()) ||
+                messageType.equals(MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString())
                 ){
             dbAdapter.createGroupChat(message);
             Intent updateUIIntent = new Intent(UPDATE_UI);

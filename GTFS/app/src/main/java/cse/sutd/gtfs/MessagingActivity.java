@@ -41,7 +41,7 @@ public class MessagingActivity extends ActionBarActivity {
     private MessageDbAdapter dbMessages;
     private ArrayList<MessageBundle> message;
 
-    private String toPhoneNumber;   //idk yet
+    private String toPhoneNumber;   //TODO: idk yet
     private String sessionToken;    //get from client.getSESSIONID();
     private String chatroomID;      //get from previous intent
     @Override
@@ -97,6 +97,7 @@ public class MessagingActivity extends ActionBarActivity {
         listview.setAdapter(adapter);
         msg = (TextView) findViewById(R.id.message);
         send = (Button) findViewById(R.id.sendMessageButton);
+
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (msg.getText().toString().trim().length() > 0) {
@@ -104,7 +105,8 @@ public class MessagingActivity extends ActionBarActivity {
                         sessionToken = client.getSESSION_ID();
                     if(chatroomID == null){
                         MessageBundle createBundle = new MessageBundle(userID, sessionToken,
-                                MessageBundle.messageType.CREATE_ROOM);
+                                MessageBundle.messageType.CREATE_SINGLE_ROOM);
+                        createBundle.putToPhoneNumber(toPhoneNumber);
                         createBundle.putChatroomName(userID + "," + toPhoneNumber);
                     }
                     final MessageBundle textBundle = new MessageBundle(userID, sessionToken,
@@ -114,8 +116,6 @@ public class MessagingActivity extends ActionBarActivity {
                     textBundle.putToPhoneNumber(toPhoneNumber);
                     textBundle.putChatroomID(chatroomID);
                     textBundle.putTimestamp();
-                    Toast.makeText(getApplicationContext(), "TODO: Implement sending",
-                            Toast.LENGTH_LONG).show();
 
                     message.add(textBundle);
 

@@ -15,12 +15,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.cedarsoftware.util.io.JsonReader;
+import com.cedarsoftware.util.io.JsonWriter;
+
 import java.util.ArrayList;
 import java.util.Map;
 
 import cse.sutd.gtfs.Adapters.ChatAdapters;
 import cse.sutd.gtfs.Objects.ChatRooms;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.serverUtils.MessageBundle;
+import cse.sutd.gtfs.serverUtils.NetworkService;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -74,6 +79,18 @@ public class MainActivity extends ActionBarActivity {
             }
         });
         client.resetNotificationMap();
+
+        MessageBundle userRequestBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
+                MessageBundle.messageType.GET_USERS);
+
+        //TODO: put array of users in the userRequestBundle
+
+        userRequestBundle.putUsers();
+        Intent i = new Intent(getApplicationContext(), NetworkService.class);
+        i.putExtra(NetworkService.MESSAGE_KEY,
+                JsonWriter.objectToJson(userRequestBundle.getMessage()));
+
+        this.startService(i);
     }
 
 
