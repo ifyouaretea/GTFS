@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Map;
 
 import cse.sutd.gtfs.serverUtils.MessageBundle;
-import retrofit.http.HEAD;
 
 
 /**
@@ -265,6 +264,14 @@ public class MessageDbAdapter {
     }
     public void importChatrooms(Map message){
         Object[] chatrooms = (Object[])message.get(MessageBundle.CHATROOMS);
+<<<<<<< HEAD
+        for(Object chatroomO : chatrooms){
+            Map chatroom = (Map) chatroomO;
+
+            String chatID = (String) message.get(MessageBundle.CHATROOMID);
+            String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);
+            String users = Arrays.toString((Object[])message.get(USERS));
+=======
         if (chatrooms == null)
             return;
         for(Object chatroomO : chatrooms){
@@ -272,6 +279,7 @@ public class MessageDbAdapter {
             String chatID = (String) chatroom.get(MessageBundle.CHATROOMID);
             String chatName = (String) chatroom.get(MessageBundle.CHATROOM_NAME);
             String users = Arrays.toString((Object[])chatroom.get(USERS));
+>>>>>>> 12a3b333d90c27714d325c3e1aa3e39fbd5be966
 
             ContentValues chatValues = new ContentValues();
             chatValues.put(ROWID, chatID);
