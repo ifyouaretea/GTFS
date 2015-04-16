@@ -165,7 +165,6 @@ public class MainActivity extends ActionBarActivity {
         ArrayList<ArrayList<String>> phoneNumbers = new ArrayList<ArrayList<String>>();
         int i=0;
         while (phones.moveToNext()){
-<<<<<<< HEAD
 //            String name=phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.
                     CommonDataKinds.Phone.NUMBER)).trim();
@@ -187,7 +186,6 @@ public class MainActivity extends ActionBarActivity {
 //        for(int i=0;i<10;i++)
 //            phonenumber[i]=phoneNumbers.get(i);
 
-=======
             if(i>=20){
                 phoneNumbers.add(phoneNumbers10);
                 phoneNumbers10 = new ArrayList<String>();
@@ -210,7 +208,7 @@ public class MainActivity extends ActionBarActivity {
             for (int j=0;j<phoneNumbers10.size();j++)
             phonenumber[k][j] = phoneNumbers.get(k).get(j);
         }
->>>>>>> 7324da95c7cf40cf48101d181a78de22f97256c4
+
         return phonenumber;
     }
 
