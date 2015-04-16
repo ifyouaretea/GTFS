@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
@@ -72,16 +71,19 @@ public class MessagingActivity extends ActionBarActivity {
         message = new ArrayList<MessageBundle>();
         final ArrayList<String> timestamp = new ArrayList<String>();
         if (msgBundles != null) {
-            msgBundles.moveToFirst();
-            do{
-                MessageBundle a = new MessageBundle(msgBundles.getString(0),
-                        sessionToken,MessageBundle.messageType.TEXT);
-                a.putMessage(msgBundles.getString(1)); a.putChatroomID(msgBundles.getString(2));
-                message.add(a);
-                timestamp.add(msgBundles.getString(2));
-            }while(msgBundles.moveToNext());
+            if(msgBundles.getCount()>0) {
+                msgBundles.moveToFirst();
+                do {
+                    MessageBundle a = new MessageBundle(msgBundles.getString(0),
+                            sessionToken, MessageBundle.messageType.TEXT);
+                    a.putMessage(msgBundles.getString(1));
+                    a.putChatroomID(msgBundles.getString(2));
+                    message.add(a);
+                    timestamp.add(msgBundles.getString(2));
+                } while (msgBundles.moveToNext());
 
-            msgBundles.close();
+                msgBundles.close();
+            }
         }
 //        MessageBundle hi = new MessageBundle("1234", "asdsd", MessageBundle.messageType.TEXT);
 //        hi.putMessage("hi Nikhil!"); hi.putToPhoneNumber("3128869026"); hi.putChatroomID("12345");
