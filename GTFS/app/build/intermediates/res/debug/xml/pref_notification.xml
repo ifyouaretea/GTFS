@@ -25,8 +25,4 @@
         android:defaultValue="true" />
 
 </PreferenceScreen>
-<<<<<<< HEAD
 <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/src/main/res/xml/pref_notification.xml -->
-=======
-<!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/src/main/res/xml/pref_notification.xml -->
->>>>>>> 5c7e071a1d22712302b6f201fc834b8b5bf03210

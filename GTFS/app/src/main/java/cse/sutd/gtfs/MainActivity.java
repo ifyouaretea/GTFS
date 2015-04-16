@@ -78,13 +78,15 @@ public class MainActivity extends ActionBarActivity {
 
         MessageBundle userRequestBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
                 MessageBundle.messageType.GET_USERS);
+        String[][] users = getNumbers();
+        for (String[] s : users) {
+            userRequestBundle.putUsers(s);
+            Intent i = new Intent(getApplicationContext(), NetworkService.class);
+            i.putExtra(NetworkService.MESSAGE_KEY,
+                    JsonWriter.objectToJson(userRequestBundle.getMessage()));
 
-        userRequestBundle.putUsers(getNumbers());
-        Intent i = new Intent(getApplicationContext(), NetworkService.class);
-        i.putExtra(NetworkService.MESSAGE_KEY,
-                JsonWriter.objectToJson(userRequestBundle.getMessage()));
-
-        this.startService(i);
+            this.startService(i);
+        }
     }
 
 
@@ -156,25 +158,35 @@ public class MainActivity extends ActionBarActivity {
         super.onStart();
         client.resetNotificationMap();
     }
-    public String[] getNumbers() {
+    public String[][] getNumbers() {
         Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         phones.moveToFirst();
-        ArrayList<String> phoneNumbers = new ArrayList<String>();
+        ArrayList<String> phoneNumbers10 = new ArrayList<String>();
+        ArrayList<ArrayList<String>> phoneNumbers = new ArrayList<ArrayList<String>>();
+        int i=0;
         while (phones.moveToNext()){
-//            String name=phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
-            String h1 = phoneNumber.replaceAll("\\s","");
-            String h2 = h1.replace(" ","");
-            if (h2.length()>=8) {
-                String numbers = h2.substring(Math.max(0, phoneNumber.length() - 8));
-                phoneNumbers.add(numbers);
+            if(i>=20){
+                phoneNumbers.add(phoneNumbers10);
+                phoneNumbers10 = new ArrayList<String>();
+                i=0;
             }
+                String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
+                String h1 = phoneNumber.replaceAll("\\s", "");
+                String h2 = h1.replace(" ", "");
+                if (h2.length() >= 8) {
+                    String numbers = h2.substring(Math.max(0, phoneNumber.length() - 8));
+                    phoneNumbers10.add(numbers);
+                }
+
+            i++;
         }
         phones.close();
-        String[] phonenumber = new String[phoneNumbers.size()];
+        String[][] phonenumber = new String[phoneNumbers.size()][phoneNumbers10.size()];
 
-        for(int i=0;i<phoneNumbers.size();i++)
-            phonenumber[i]=phoneNumbers.get(i);
+        for(int k=0;k<phoneNumbers.size();k++) {
+            for (int j=0;j<phoneNumbers10.size();j++)
+            phonenumber[k][j] = phoneNumbers.get(k).get(j);
+        }
         return phonenumber;
     }
 
