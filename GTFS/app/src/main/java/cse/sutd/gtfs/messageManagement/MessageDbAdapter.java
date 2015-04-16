@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.cedarsoftware.util.io.JsonReader;
+import com.cedarsoftware.util.io.JsonWriter;
+
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
@@ -280,17 +283,17 @@ public class MessageDbAdapter {
     }
 
     public void importUsers(Map message){
-        Map[] users =  (Map[]) message.get(MessageBundle.USERS);
-        for(Map user : users)
-            putContact( (String) user.get(PHONE_NUMBER), (String) user.get(NAME));
+        Object[] users =  (Object[])message.get(MessageBundle.USERS);
+        for(Object  user : users)
+            putContact((String) ((Map)user).get(PHONE_NUMBER), (String) ((Map)user).get(NAME));
     }
 
     public void importNotes(Map message){
         mDb.execSQL("DROP TABLE IF EXISTS notes");
         mDb.execSQL(DATABASE_CREATE_NOTES);
-        Map[] notes = (Map[]) message.get(MessageBundle.NOTES);
-        for(Map note : notes)
-            createNote(note);
+        Object[] notes = (Object[]) message.get(MessageBundle.NOTES);
+        for(Object note : notes)
+            createNote((Map) note);
     }
 
     public long createNote (Map message){
