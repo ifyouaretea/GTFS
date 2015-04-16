@@ -162,19 +162,26 @@ public class MainActivity extends ActionBarActivity {
         ArrayList<String> phoneNumbers = new ArrayList<String>();
         while (phones.moveToNext()){
 //            String name=phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
+            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.
+                    CommonDataKinds.Phone.NUMBER)).trim();
             String h1 = phoneNumber.replaceAll("\\s","");
             String h2 = h1.replace(" ","");
-            if (h2.length()>=8) {
-                String numbers = h2.substring(Math.max(0, phoneNumber.length() - 8));
-                phoneNumbers.add(numbers);
-            }
+            h2 = h2.replace("+65", "");
+            h2 = h2.replaceAll("\\D", "");
+//            if (h2.length()>=8)
+//                phoneNumber = h2.substring(Math.max(0, phoneNumber.length() - 8));
+
+            phoneNumbers.add(h2);
         }
         phones.close();
         String[] phonenumber = new String[phoneNumbers.size()];
-
         for(int i=0;i<phoneNumbers.size();i++)
             phonenumber[i]=phoneNumbers.get(i);
+//
+//        String[] phonenumber = new String[10];
+//        for(int i=0;i<10;i++)
+//            phonenumber[i]=phoneNumbers.get(i);
+
         return phonenumber;
     }
 
