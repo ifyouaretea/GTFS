@@ -99,6 +99,11 @@ public class MessagingActivity extends ActionBarActivity {
         msg = (TextView) findViewById(R.id.message);
         send = (Button) findViewById(R.id.sendMessageButton);
 
+        IntentFilter receivedIntentFilter = new IntentFilter(ManagerService.UPDATE_UI);
+        broadcastReceiver = new MessageBroadcastReceiver();
+        LocalBroadcastManager.getInstance(getApplicationContext())
+                .registerReceiver(broadcastReceiver, receivedIntentFilter);
+
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (msg.getText().toString().trim().length() > 0) {
@@ -119,12 +124,6 @@ public class MessagingActivity extends ActionBarActivity {
                     textBundle.putTimestamp();
 
                     message.add(textBundle);
-
-                    //TODO: Register receiver only once
-                    IntentFilter receivedIntentFilter = new IntentFilter(ManagerService.UPDATE_UI);
-                    broadcastReceiver = new MessageBroadcastReceiver();
-                    LocalBroadcastManager.getInstance(getApplicationContext())
-                            .registerReceiver(broadcastReceiver, receivedIntentFilter);
 
                     Intent intent = new Intent(MessagingActivity.this, NetworkService.class);
                     intent.putExtra(NetworkService.MESSAGE_KEY,

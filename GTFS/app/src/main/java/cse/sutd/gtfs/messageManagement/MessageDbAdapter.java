@@ -29,7 +29,7 @@ public class MessageDbAdapter {
     private static final String CHATID = "chatID";
     private static final String TIMESTAMP = "timestamp";
     private static final String FROM_PHONE_NUMBER = "from_phone_number";
-    private static final String BODY= "body";
+    private static final String PHONE_NUMBER = "phone_number";
     private static final String CHATNAME = "chatName";
     private static final String LAST_MESSAGE = "lastMessage";
     private static final String USERS = "users";
@@ -37,8 +37,16 @@ public class MessageDbAdapter {
     private static final String EXPIRY = "expiry";
     private static final String CONTACTS = "contacts";
     private static final String ISGROUP = "isGroup";
+    private static final String BODY = "body";
+    private static final String NOTE_CREATOR = "noteCreator";
+    private static final String TITLE = "title";
 
     private static final String TAG = "MessageDbAdapter";
+
+    public static final String DATABASE_CREATE_NOTES =
+            "create table notes (_id text primary key, "
+                    + "title text not null, " +
+                    "body text not null, chatID text not null, noteCreator text not null);";
 
     private static MessageDbAdapter instance;
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -53,8 +61,9 @@ public class MessageDbAdapter {
                         "lastMessage integer not null, "+
                         "users string, expiry integer);";
 
+
         private static final String DATABASE_CREATE_CONTACTS =
-                "create table chats (_id text primary key, "
+                "create table contacts (_id text primary key, "
                         + "name text);";
 
 
@@ -71,6 +80,7 @@ public class MessageDbAdapter {
             db.execSQL(DATABASE_CREATE_MESSAGES);
             db.execSQL(DATABASE_CREATE_CHATS);
             db.execSQL(DATABASE_CREATE_CONTACTS);
+            db.execSQL(DATABASE_CREATE_NOTES);
         }
 
         @Override
@@ -78,6 +88,9 @@ public class MessageDbAdapter {
             Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                     + newVersion + ", which will destroy all old data");
             db.execSQL("DROP TABLE IF EXISTS notes");
+            db.execSQL("DROP TABLE IF EXISTS chats");
+            db.execSQL("DROP TABLE IF EXISTS contacts");
+            db.execSQL("DROP TABLE IF EXISTS messages");
             onCreate(db);
         }
     }
@@ -249,7 +262,41 @@ public class MessageDbAdapter {
             chatValues.put(CHATNAME, chatName);
             chatValues.put(USERS, users);
             chatValues.put(LAST_MESSAGE, chatID);
+            chatValues.put(ISGROUP, true);
             mDb.insert(CHATS, null, chatValues);
         }
     }
+
+    public void importUsers(Map message){
+        Map[] users =  (Map[]) message.get(MessageBundle.USERS);
+        for(Map user : users)
+            putContact( (String) user.get(PHONE_NUMBER), (String) user.get(NAME));
+    }
+
+    public void importNotes(Map message){
+        mDb.execSQL("DROP TABLE IF EXISTS notes");
+        mDb.execSQL(DATABASE_CREATE_NOTES);
+        Map[] notes = (Map[]) message.get(MessageBundle.NOTES);
+        for(Map note : notes)
+            createNote(note);
+    }
+
+    public long createNote (Map message){
+        String chatID = (String) message.get(MessageBundle.CHATROOMID);
+        String noteID = (String) message.get(MessageBundle.NOTE_ID);
+        String note_title = (String) message.get(MessageBundle.NOTE_TITLE);
+        String note_text = (String) message.get(MessageBundle.NOTE_TEXT);
+        String note_creator = (String) message.get(MessageBundle.NOTE_CREATOR);
+
+        ContentValues chatValues = new ContentValues();
+        chatValues.put(ROWID, noteID);
+        chatValues.put(CHATID, chatID);
+        chatValues.put(TITLE, note_title);
+        chatValues.put(BODY, note_text);
+        chatValues.put(NOTE_CREATOR, note_creator);
+
+        return mDb.insert(CHATS, null, chatValues);
+    }
+
+
 }

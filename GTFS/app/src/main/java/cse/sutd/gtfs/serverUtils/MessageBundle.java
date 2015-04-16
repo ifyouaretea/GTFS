@@ -1,5 +1,7 @@
 package cse.sutd.gtfs.serverUtils;
 
+import org.w3c.dom.Text;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +28,11 @@ public class MessageBundle {
     public static final String CHATROOMID = "chatroom_id";
     public static final String CHATROOM_NAME = "chatroom_name";
     public static final String MESSAGE = "message";
-    public static final String NOTEID = "noteID";
+    public static final String NOTE_ID = "note_id";
+    public static final String NOTE_TITLE = "note_title";
+    public static final String NOTE_TEXT = "note_text";
+    public static final String NOTE_CREATOR = "note_creator";
+    public static final String NOTES = "notes";
     public static final String TO_PHONE_NUMBER = "to_phone_number";
     public static final String USERS = "users";
     public static final String TIMESTAMP= "timestamp";
@@ -67,7 +73,7 @@ public class MessageBundle {
     }
 
     public String putNoteID(String noteID){
-        return messageMap.put(NOTEID, noteID);
+        return messageMap.put(NOTE_ID, noteID);
     }
 
     public String putToPhoneNumber(String toPhoneNumber){
