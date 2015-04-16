@@ -57,7 +57,7 @@ public class MessageDbAdapter {
 
         private static final String DATABASE_CREATE_CHATS =
                 "create table chats (_id text primary key, "
-                        + "isGroup boolean, chatName text, " +
+                        + "isGroup integer, chatName text, " +
                         "lastMessage integer not null, "+
                         "users string, expiry integer);";
 
@@ -192,14 +192,14 @@ public class MessageDbAdapter {
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
         String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);
         String users = Arrays.toString((Object[])message.get(USERS));
-        Boolean isGroup = null;
+        Integer isGroup = null;
 
         if((message.get(MessageBundle.TYPE)).equals
                 (MessageBundle.messageType.ROOM_INVITATION.toString()))
-            isGroup = true;
+            isGroup = 1;
         else if((message.get(MessageBundle.TYPE)).equals
                 (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString()))
-            isGroup = false;
+            isGroup = 0;
 
         int expiry = (Integer) message.get(MessageBundle.EXPIRY);
 
@@ -276,7 +276,7 @@ public class MessageDbAdapter {
             chatValues.put(CHATNAME, chatName);
             chatValues.put(USERS, users);
             chatValues.put(LAST_MESSAGE, chatID);
-            chatValues.put(ISGROUP, true);
+            chatValues.put(ISGROUP, 1);
             mDb.insert(CHATS, null, chatValues);
         }
     }
