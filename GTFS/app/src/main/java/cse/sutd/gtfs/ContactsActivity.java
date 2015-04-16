@@ -15,11 +15,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.cedarsoftware.util.io.JsonWriter;
+
 import java.util.ArrayList;
 
 import cse.sutd.gtfs.Adapters.ContactAdapter;
 import cse.sutd.gtfs.Objects.Contact;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.serverUtils.MessageBundle;
+import cse.sutd.gtfs.serverUtils.NetworkService;
 
 
 public class ContactsActivity extends ActionBarActivity {
@@ -37,8 +41,8 @@ public class ContactsActivity extends ActionBarActivity {
         GTFSClient client = (GTFSClient) getApplicationContext();
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         final String userID = prefs.getString("userid", null);
-        String sessionToken = client.getSESSION_ID();
-        MessageDbAdapter  dbMessages = MessageDbAdapter.getInstance(this);
+        final String sessionToken = client.getSESSION_ID();
+        final MessageDbAdapter  dbMessages = MessageDbAdapter.getInstance(this);
 
         ListView listview = (ListView) findViewById(R.id.contactList);
         final ArrayList<Contact> contacts = new ArrayList<Contact>();
@@ -61,10 +65,25 @@ public class ContactsActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                final String item = ((Contact) parent.getItemAtPosition(position)).getNumber();
+                final String toPhoneNumber = ((Contact) parent.getItemAtPosition(position)).getNumber();
+                String chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
+                if (chatroomID==null){
+                    MessageBundle createBundle = new MessageBundle(userID, sessionToken,
+                            MessageBundle.messageType.CREATE_SINGLE_ROOM);
+                    createBundle.putToPhoneNumber(toPhoneNumber);
+                    createBundle.putChatroomName(userID + "," + toPhoneNumber);
+
+                    Intent intent = new Intent(ContactsActivity.this, NetworkService.class);
+                    intent.putExtra(NetworkService.MESSAGE_KEY,
+                            JsonWriter.objectToJson(createBundle.getMessage()));
+                    ContactsActivity.this.startService(intent);
+                    while (chatroomID==null){
+                        chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
+                    }
+                }
                 //TODO: check if chatroom exist
                 Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
-                i.putExtra("toNumber", contacts.get(position).getNumber());
+                i.putExtra("ID", chatroomID);
                 startActivity(i);
             }
         });

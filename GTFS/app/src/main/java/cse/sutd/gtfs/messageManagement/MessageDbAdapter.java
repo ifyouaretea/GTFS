@@ -256,7 +256,7 @@ public class MessageDbAdapter {
 
     public String getChatIDForUser(String userID){
         Cursor result = mDb.rawQuery("SELECT _id FROM chats WHERE isGroup = false " +
-                "AND users LIKE %" + userID + "%", null);
+                "AND users LIKE '%" + userID + "%'", null);
         if(result.getCount() != 1)
             return null;
         result.moveToFirst();
