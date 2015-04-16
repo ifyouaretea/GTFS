@@ -54,9 +54,8 @@ public class MessageDbAdapter {
                         "users string, expiry integer);";
 
         private static final String DATABASE_CREATE_CONTACTS =
-                "create table chats (_id text primary key, "
+                "create table contacts (_id text primary key, "
                         + "name text);";
-
 
         private static final String DATABASE_NAME = "data";
 

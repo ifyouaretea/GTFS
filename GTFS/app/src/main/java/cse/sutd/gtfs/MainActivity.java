@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
-import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
 import java.util.ArrayList;
@@ -45,9 +44,6 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle("Chats");
         setContentView(R.layout.activity_main);
-
-
-
         Log.d("user", prefs.getString("userid", null));
         MessageDbAdapter  dbMessages = MessageDbAdapter.getInstance(this);
         Cursor chatrooms = dbMessages.getChats();

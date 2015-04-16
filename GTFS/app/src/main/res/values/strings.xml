@@ -17,4 +17,5 @@
         <item>Weeks</item>
         <item>Months</item>
     </string-array>
+    <string name="title_activity_events">EventsActivity</string>
 </resources>
