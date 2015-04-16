@@ -93,24 +93,24 @@ public class LoginActivityCog extends Activity {
                 "5f66dbb2d2e27560e9ea56a40 ", "768aa61cc5bf48090a4acb713",
                 phoneNumbTv.getText().toString(), new VerificationListner() {
 
-            @Override
-            public void onVerificationStarted() {
-                // TODO Auto-generated method stub
-                Toast.makeText(getApplicationContext(), "Your number has been verified\nThanks!!", Toast.LENGTH_LONG).show();
-            }
+                    @Override
+                    public void onVerificationStarted() {
+                        // TODO Auto-generated method stub
+                        Toast.makeText(getApplicationContext(), "Your number has been verified\nThanks!!", Toast.LENGTH_LONG).show();
+                    }
 
-            @Override
-            public void onVerificationSuccess() {
-                Toast.makeText(getApplicationContext(), "Your number has been verified\nThanks!!", Toast.LENGTH_SHORT).show();
-            }
+                    @Override
+                    public void onVerificationSuccess() {
+                        Toast.makeText(getApplicationContext(), "Your number has been verified\nThanks!!", Toast.LENGTH_SHORT).show();
+                    }
 
-            @Override
-            public void onVerificationFailed(ArrayList<String> errorList) {
-                for (String error : errorList) {
-                    Log.d("abx", "error:" + error);
-                }
-                Toast.makeText(getApplicationContext(), "Something went wrong.\n please try again", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onVerificationFailed(ArrayList<String> errorList) {
+                        for (String error : errorList) {
+                            Log.d("abx", "error:" + error);
+                        }
+                        Toast.makeText(getApplicationContext(), "Something went wrong.\n please try again", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

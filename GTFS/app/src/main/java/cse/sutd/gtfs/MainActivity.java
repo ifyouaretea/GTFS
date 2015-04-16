@@ -1,7 +1,6 @@
 package cse.sutd.gtfs;
 
 import android.app.SearchManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,6 +40,8 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle("Chats");
         setContentView(R.layout.activity_main);
+
+
 
         Log.d("user", prefs.getString("userid", null));
         MessageDbAdapter  dbMessages = MessageDbAdapter.getInstance(this);
@@ -146,11 +147,21 @@ public class MainActivity extends ActionBarActivity {
         super.onStart();
         client.resetNotificationMap();
     }
-
-    public void getNumber(ContentResolver cr){
-        Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,null,null,null);
-        do{
-            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-        }while(phones.moveToNext());
+    //TODO: Send server phone numbers
+    public ArrayList<String> getNumbers() {
+        Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        phones.moveToFirst();
+        ArrayList<String> phoneNumbers = new ArrayList<String>();
+        while (phones.moveToNext()){
+//            String name=phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
+            String h1 = phoneNumber.replaceAll("\\s","");
+            String h2 = h1.replace(" ","");
+            String numbers = h2.substring(Math.max(0, phoneNumber.length() - 8));
+            phoneNumbers.add(numbers);
+        }
+        phones.close();
+        return phoneNumbers;
     }
+
 }
