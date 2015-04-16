@@ -267,19 +267,14 @@ public class MessageDbAdapter {
         return result.getString(0);
     }
     public void importChatrooms(Map message){
-<<<<<<<HEAD
         Object[] chatrooms = (Object[])message.get(MessageBundle.CHATROOMS);
-        for(Object chatroomO : chatrooms){
-            Map chatroom = (Map) chatroomO;
-=======
-        Map[] chatrooms = (Map[])message.get(MessageBundle.CHATROOMS);
         if (chatrooms == null)
             return;
-        for(Map chatroom : chatrooms){
->>>>>>> 4b8c04f10a15a862b39db005f52431aa9cd20781
-            String chatID = (String) message.get(MessageBundle.CHATROOMID);
-            String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);
-            String users = Arrays.toString((Object[])message.get(USERS));
+        for(Object chatroomO : chatrooms){
+            Map chatroom = (Map) chatroomO;
+            String chatID = (String) chatroom.get(MessageBundle.CHATROOMID);
+            String chatName = (String) chatroom.get(MessageBundle.CHATROOM_NAME);
+            String users = Arrays.toString((Object[])chatroom.get(USERS));
 
             ContentValues chatValues = new ContentValues();
             chatValues.put(ROWID, chatID);
