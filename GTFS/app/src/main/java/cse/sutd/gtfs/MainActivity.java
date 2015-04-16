@@ -175,9 +175,8 @@ public class MainActivity extends ActionBarActivity {
             String h2 = h1.replaceAll(" ","");
             h2 = h2.replace("+65", "");
             h2 = h2.replaceAll("\\D", "");
-            if (h2.length()>=8) {
-                String phoneNum = h2.substring(Math.max(0, phoneNumber.length() - 8));
-                phoneNumbers10.add(phoneNum);
+            if (h2.length() >= 8) {
+                phoneNumbers10.add(h2);
                 i++;
             }
 
