@@ -1,10 +1,7 @@
 package cse.sutd.gtfs.serverUtils;
 
 import android.app.IntentService;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -18,25 +15,26 @@ import java.net.Socket;
 import java.util.Map;
 
 import cse.sutd.gtfs.GTFSClient;
-import cse.sutd.gtfs.R;
 
 
 /**
- * Created by tes on 03/04/2015.
+ * NetworkService that handles all of the network communication with the server. NetworkService
+ * extends Android's IntentService to take advantage of IntentService's work queue capabilities
+ * in handling incoming intents.
  */
 public class NetworkService extends IntentService {
 
     public static final String MESSAGE_RECEIVED = "com.gtfs.MESSAGE_RECEIVED";
-    public static final String MESSAGE_KEY = "message";
+    public static final String MESSAGE_KEY = "message"; //key to get the message extra from the intents
     public static final int SLEEP_TIME = 1000;
     private final String hostname = "128.199.73.51";
     private final int hostport = 8091;
 
-    private MessageBundle authMessage;
-    private GTFSClient client;
-
+    /**
+     * ListenerThread continuously attempts to receive messages the server. Only one ListenerThread
+     * should be active at one time
+     */
     private class ListenerThread extends Thread {
-        private ListenerThread singleton;
 
         public void run() {
             while (true) {
@@ -62,6 +60,13 @@ public class NetworkService extends IntentService {
         super("GTFS.NetworkService");
     }
 
+    /**
+     * Called when the service is started. Used to start the ListenerThread if not already listening
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return START_STICKY flag
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
@@ -74,6 +79,11 @@ public class NetworkService extends IntentService {
         return START_STICKY;
     }
 
+    /**
+     * Called when an incoming intent is received. The incoming intent must contain a String extra
+     * containing the Json string to be sent (mapped by the key value MESSAGE_KEY).
+     * @param workIntent The incoming intent
+     */
     @Override
     protected void onHandleIntent(Intent workIntent){
         final Intent receivedIntent = workIntent;
@@ -98,6 +108,11 @@ public class NetworkService extends IntentService {
         }
     }
 
+    /**
+     * Attempts to send the message specified in the parameters.
+     * @param message Message to be sent
+     * @return Whether sending is successful
+     */
     private boolean send(Map message){
         if (message == null)
             return false;
@@ -113,6 +128,7 @@ public class NetworkService extends IntentService {
                     getClient().getOutputStream());
             serverOut.write(message);
             serverOut.flush();
+            Thread.sleep(10);
             Log.d("Message sent out", message.toString());
 
         }catch (Exception e){
@@ -122,6 +138,12 @@ public class NetworkService extends IntentService {
         return true;
     }
 
+    /**
+     *Attempts to receive a single Json message from the server. If it is unable to read from the
+     * socket, it attempts again with a new socket. A received message that has to be handled
+     * outside of the service is broadcast to be received by ManagerService
+     * @return The received Json object, null if receiving was unsuccessful
+     */
     private Map receive(){
         try {
             if (((GTFSClient) getApplication()).getClient() == null) {
@@ -151,20 +173,6 @@ public class NetworkService extends IntentService {
                 LocalBroadcastManager.getInstance(getApplicationContext()).
                         sendBroadcast(receivedMessageIntent);
             }
-
-            /*NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.mipmap.ic_launcher)
-                            .setContentTitle("Message Received")
-                            .setContentText(receivedMap.toString())
-                            .setStyle(new NotificationCompat.BigTextStyle()
-                                    .bigText(receivedMap.toString()));
-
-            NotificationManager mNotificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-            mNotificationManager.notify(0, mBuilder.build());
-*/
             return receivedMap;
         } catch(JsonIoException jException){
             try {
@@ -180,6 +188,9 @@ public class NetworkService extends IntentService {
         return null;
     }
 
+    /**
+     * Attempts to authenticate the client's identity with the server
+     */
     private void authenticate(){
         while(true) {
             try {
@@ -227,6 +238,10 @@ public class NetworkService extends IntentService {
         }
     }
 
+    /**
+     * Convenience method to get authentication status
+     * @return
+     */
     private boolean authenticated(){
         return ((GTFSClient) getApplication()).isAuthenticated();
     }
