@@ -2,6 +2,118 @@
 <items version="2" >
 
     <item
+<<<<<<< HEAD
+        jar="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\exploded-aar\com.twitter.sdk.android\tweet-composer\0.7.3\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="69bf5d59b95eb91b9d17ddb3f0725a4ff499197e">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\classes-3985e92bba889f19d942671a6786f66ae26121de.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\exploded-aar\com.twitter.sdk.android\twitter\1.3.2\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="b556bb43b1b781e5a3f6d164ed8acf86793998be">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\classes-0922a070742274acce127ce002e389112f0eed96.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.2.4\a60a5e993c98c864010053cb901b7eab25306568\gson-2.2.4.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="a60a5e993c98c864010053cb901b7eab25306568">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\gson-2.2.4-18895accff7bf2e63bbc56c16a973f0042d5f728.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\exploded-aar\com.twitter.cobalt\performance-metrics\0.2.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="39a316349636281051561b9abb23fdd6a2b17061">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\classes-43837810e5bce9bf487c58d8fe25e02e4c1c6e88.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\libs\cognalys.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="b37ecae90f421571486ba5cf0be6e910ac79e416">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\cognalys-31f181855c2e485ca0715ae5565b8688405b10bf.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.3.2\d6b7f0093cec6c9faf65dbfd6a6a345d0ed25e27\picasso-2.3.2.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="d6b7f0093cec6c9faf65dbfd6a6a345d0ed25e27">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\picasso-2.3.2-5fd7fd7effd782d45b1ff64169e717f780ee2239.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit\retrofit\1.6.1\efb0a36546aa8857ab8df358b106c1817e03cbee\retrofit-1.6.1.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="efb0a36546aa8857ab8df358b106c1817e03cbee">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\retrofit-1.6.1-901aa5fbbfa4dfe9cbcb92f25e0aaa43e7a9b5ad.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\.gradle\caches\modules-2\files-2.1\com.cedarsoftware\json-io\3.0.1\83c73022f09a68d834c126345f13a196e83caadb\json-io-3.0.1.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="83c73022f09a68d834c126345f13a196e83caadb">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\json-io-3.0.1-ab993b230fab1211b2d3acf75a69129ad2a0ed69.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\exploded-aar\io.fabric.sdk.android\fabric\1.2.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="0a4af6a85230b990eb8690b696d2db9247338611">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\classes-ecabf6d28b2d8249d091150efca340e16b47e898.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\libs\internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\internal_impl-22.0.0-1bab43fea98d385fb43b01a7ebab746949dc007b.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\exploded-aar\com.twitter.sdk.android\twitter-core\1.3.1\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="4258a821d937d5064491b0a1e57fc4228d93b7be">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\classes-cb97b32919ef4adec02ee75d3c8388ec74eb24bc.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\exploded-aar\com.digits.sdk.android\digits\1.3.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="b6d78e6b220579f1e542dc86e217bca45dd573cd">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\classes-d515916afeafbd3f10293bd2e4000fad1b3bf80b.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\classes-e4daeb26d4a1be0fe98133e67c1c46070c8dd1f5.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\exploded-aar\com.twitter.sdk.android\tweet-ui\1.0.7\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="9590fac4b366ffac8877cf5ba7daa3bd58cd5661">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\classes-8b1ff759c5e14ac27cd88269bdc1ca2c1dfe6408.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.0.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\classes-4cbdabe77be6b2a0301a5e4dd4693f30d4b499ee.jar" />
+    </item>
+    <item
+        jar="C:\Users\tes\AppData\Local\Android\android-sdk\extras\android\m2repository\com\android\support\support-annotations\22.0.0\support-annotations-22.0.0.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="C:\Users\tes\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\support-annotations-22.0.0-d404621fe89bfe9736f67433f6e97e145b5de1fc.jar" />
+=======
         jar="C:\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.0.0\support-annotations-22.0.0.jar"
         jumboMode="false"
         revision="22.0.0"
@@ -119,6 +231,7 @@
         revision="22.0.0"
         sha1="a60a5e993c98c864010053cb901b7eab25306568">
         <dex dex="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\gson-2.2.4-70eb1c2b239ea0cc59db667543ba4ad1f683c80e.jar" />
+>>>>>>> origin/master
     </item>
 
 </items>

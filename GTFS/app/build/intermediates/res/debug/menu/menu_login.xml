@@ -4,4 +4,8 @@
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>
+<<<<<<< HEAD
+<!-- From: file:/C:/Users/tes/Documents/GitHub/GTFS/GTFS/app/src/main/res/menu/menu_login.xml -->
+=======
 <!-- From: file:/D:/Francisco%20Furtado/Documents/GitHub/GTFS/GTFS/app/src/main/res/menu/menu_login.xml -->
+>>>>>>> origin/master

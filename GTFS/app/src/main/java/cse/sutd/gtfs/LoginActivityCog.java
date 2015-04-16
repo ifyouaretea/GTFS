@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import cse.sutd.gtfs.messageManagement.ManagerService;
+import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
 
 
@@ -85,6 +86,7 @@ public class LoginActivityCog extends Activity {
                         }
                     });
         }
+
     }
 
     private void verify() {
