@@ -244,6 +244,7 @@ public class MessageDbAdapter {
             expiredArray[count++] = expiredChats.getString(0);
             deleteGroupChat(expiredChats.getString(0));
         }while(expiredChats.moveToNext());
+        expiredChats.close();
         return expiredArray;
     }
 
@@ -251,16 +252,22 @@ public class MessageDbAdapter {
         Cursor result = mDb.rawQuery(String.format("SELECT chatName FROM chats WHERE _id = '%s'",
                 chatID), null);
         result.moveToFirst();
-        return result.getString(0);
+        String returnValue = result.getString(0);
+        result.close();
+        return returnValue;
     }
 
     public String getChatIDForUser(String userID){
-        Cursor result = mDb.rawQuery("SELECT _id FROM chats WHERE isGroup = false " +
+        Cursor result = mDb.rawQuery("SELECT _id FROM chats WHERE isGroup = 0 " +
                 "AND users LIKE '%" + userID + "%'", null);
-        if(result.getCount() != 1)
+        if(result.getCount() != 1) {
+            result.close();
             return null;
+        }
         result.moveToFirst();
-        return result.getString(0);
+        String returnValue = result.getString(0);
+        result.close();
+        return returnValue;
     }
     public void importChatrooms(Map message){
         Object[] chatrooms = (Object[])message.get(MessageBundle.CHATROOMS);

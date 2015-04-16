@@ -77,11 +77,13 @@ public class ContactsActivity extends ActionBarActivity {
                     intent.putExtra(NetworkService.MESSAGE_KEY,
                             JsonWriter.objectToJson(createBundle.getMessage()));
                     ContactsActivity.this.startService(intent);
-                    while (chatroomID==null){
-                        chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
-                    }
+
                 }
+                try {
+                    Thread.sleep(2000);
+                }catch(Exception e){}
                 //TODO: check if chatroom exist
+                chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
                 Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
                 i.putExtra("ID", chatroomID);
                 startActivity(i);
