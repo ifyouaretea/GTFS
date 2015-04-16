@@ -182,6 +182,12 @@ public class MessageDbAdapter {
                 "chats", null);
     }
 
+    public Cursor getContacts(){
+        return mDb.rawQuery("SELECT _id, name FROM " +
+                "contacts", null);
+    }
+
+
     public long createGroupChat(Map message){
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
         String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);

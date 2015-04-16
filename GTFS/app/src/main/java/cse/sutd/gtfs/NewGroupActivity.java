@@ -113,7 +113,6 @@ public class NewGroupActivity extends ActionBarActivity {
             }
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

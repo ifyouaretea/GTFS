@@ -29,14 +29,13 @@ import cse.sutd.gtfs.serverUtils.NetworkService;
 
 public class MainActivity extends ActionBarActivity {
     private GTFSClient client;
-    private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = (GTFSClient) getApplicationContext();
-        prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         editor = prefs.edit();
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -72,7 +71,6 @@ public class MainActivity extends ActionBarActivity {
                 final String item = ((ChatRooms) parent.getItemAtPosition(position)).getId();
                 Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
                 i.putExtra("ID", chatroom.get(position).getId());
-                i.putExtra("sessionToken", client.getSESSION_ID());
                 startActivity(i);
             }
         });
@@ -81,9 +79,7 @@ public class MainActivity extends ActionBarActivity {
         MessageBundle userRequestBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
                 MessageBundle.messageType.GET_USERS);
 
-        //TODO: put array of users in the userRequestBundle
-
-        userRequestBundle.putUsers();
+        userRequestBundle.putUsers(getNumbers());
         Intent i = new Intent(getApplicationContext(), NetworkService.class);
         i.putExtra(NetworkService.MESSAGE_KEY,
                 JsonWriter.objectToJson(userRequestBundle.getMessage()));
@@ -160,8 +156,7 @@ public class MainActivity extends ActionBarActivity {
         super.onStart();
         client.resetNotificationMap();
     }
-    //TODO: Send server phone numbers
-    public ArrayList<String> getNumbers() {
+    public String[] getNumbers() {
         Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         phones.moveToFirst();
         ArrayList<String> phoneNumbers = new ArrayList<String>();
@@ -174,7 +169,11 @@ public class MainActivity extends ActionBarActivity {
             phoneNumbers.add(numbers);
         }
         phones.close();
-        return phoneNumbers;
+        String[] phonenumber = new String[phoneNumbers.size()];
+
+        for(int i=0;i<phoneNumbers.size();i++)
+            phonenumber[i]=phoneNumbers.get(i);
+        return phonenumber;
     }
 
 }

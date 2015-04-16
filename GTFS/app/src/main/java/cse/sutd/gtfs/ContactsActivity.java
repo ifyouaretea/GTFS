@@ -2,15 +2,29 @@ package cse.sutd.gtfs;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.SearchView;
+
+import java.util.ArrayList;
+
+import cse.sutd.gtfs.Adapters.ContactAdapter;
+import cse.sutd.gtfs.Objects.ChatRooms;
+import cse.sutd.gtfs.Objects.Contact;
+import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 
 
 public class ContactsActivity extends ActionBarActivity {
+    private MessageDbAdapter dbMessages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +35,39 @@ public class ContactsActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle("Contacts");
         setContentView(R.layout.activity_contacts);
-    }
 
+        GTFSClient client = (GTFSClient) getApplicationContext();
+        SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
+        final String userID = prefs.getString("userid", null);
+        String sessionToken = client.getSESSION_ID();
+
+        ListView listview = (ListView) findViewById(R.id.contactList);
+        final ArrayList<Contact> contacts = new ArrayList<Contact>();
+        Cursor contactBundles = dbMessages.getContacts();
+        if (contactBundles != null) {
+            contactBundles.moveToFirst();
+            do{
+                Contact a = new Contact(contactBundles.getString(0));
+                contacts.add(a);
+            }while(contactBundles.moveToNext());
+            contactBundles.close();
+        }
+
+        ContactAdapter cntcts = new ContactAdapter(this, contacts);
+        listview.setAdapter(cntcts);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                final String item = ((ChatRooms) parent.getItemAtPosition(position)).getId();
+                //TODO: check if chatroom exist
+                Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
+                i.putExtra("toNumber", contacts.get(position).getNumber());
+                startActivity(i);
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

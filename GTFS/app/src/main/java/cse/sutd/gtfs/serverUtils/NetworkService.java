@@ -33,7 +33,6 @@ public class NetworkService extends IntentService {
     private final int hostport = 8091;
 
     private MessageBundle authMessage;
-    private ListenerThread listener;
     private GTFSClient client;
 
     private class ListenerThread extends Thread {
@@ -67,7 +66,7 @@ public class NetworkService extends IntentService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         if(!((GTFSClient)getApplication()).isListening()) {
-            listener = new ListenerThread();
+            ListenerThread listener = new ListenerThread();
             listener.start();
             ((GTFSClient)getApplication()).setListening(true);
         }
