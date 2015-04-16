@@ -61,7 +61,6 @@ public class MessageDbAdapter {
                         "lastMessage integer not null, "+
                         "users string, expiry integer);";
 
-
         private static final String DATABASE_CREATE_CONTACTS =
                 "create table contacts (_id text primary key, "
                         + "name text);";
@@ -255,6 +254,14 @@ public class MessageDbAdapter {
         return result.getString(0);
     }
 
+    public String getChatIDForUser(String userID){
+        Cursor result = mDb.rawQuery("SELECT _id FROM chats WHERE isGroup = false " +
+                "AND users LIKE %" + userID + "%", null);
+        if(result.getCount() != 1)
+            return null;
+        result.moveToFirst();
+        return result.getString(0);
+    }
     public void importChatrooms(Map message){
         Map[] chatrooms = (Map[])message.get(MessageBundle.CHATROOMS);
         for(Map chatroom : chatrooms){
