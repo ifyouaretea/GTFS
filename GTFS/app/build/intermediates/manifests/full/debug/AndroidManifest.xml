@@ -81,6 +81,10 @@
             android:parentActivityName="cse.sutd.gtfs.MainActivity" >
         </activity>
         <activity
+            android:name="cse.sutd.gtfs.EventsActivity"
+            android:label="@string/title_activity_events" >
+        </activity>
+        <activity
             android:name="com.twitter.sdk.android.core.identity.OAuthActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"

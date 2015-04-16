@@ -33,13 +33,9 @@ import cse.sutd.gtfs.serverUtils.NetworkService;
 
 
 public class MessagingActivity extends ActionBarActivity {
-    private ListView listview;
     private TextView msg;
-    private Button send;
     private GTFSClient client;
     private MessageAdapter adapter;
-    private MessageBroadcastReceiver broadcastReceiver;
-    private MessageDbAdapter dbMessages;
     private ArrayList<MessageBundle> message;
 
     private String toPhoneNumber;   //TODO: idk yet
@@ -48,7 +44,7 @@ public class MessagingActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbMessages = MessageDbAdapter.getInstance(this);
+        MessageDbAdapter dbMessages = MessageDbAdapter.getInstance(this);
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
@@ -70,7 +66,7 @@ public class MessagingActivity extends ActionBarActivity {
 
         sessionToken = client.getSESSION_ID();
 
-        listview = (ListView) findViewById(R.id.messageList);
+        ListView listview = (ListView) findViewById(R.id.messageList);
 
         Cursor msgBundles = dbMessages.getChatMessages(chatroomID);
         message = new ArrayList<MessageBundle>();
@@ -97,19 +93,19 @@ public class MessagingActivity extends ActionBarActivity {
         adapter = new MessageAdapter(this, message, userID);
         listview.setAdapter(adapter);
         msg = (TextView) findViewById(R.id.message);
-        send = (Button) findViewById(R.id.sendMessageButton);
+        Button send = (Button) findViewById(R.id.sendMessageButton);
 
         IntentFilter receivedIntentFilter = new IntentFilter(ManagerService.UPDATE_UI);
-        broadcastReceiver = new MessageBroadcastReceiver();
+        MessageBroadcastReceiver broadcastReceiver = new MessageBroadcastReceiver();
         LocalBroadcastManager.getInstance(getApplicationContext())
                 .registerReceiver(broadcastReceiver, receivedIntentFilter);
 
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (msg.getText().toString().trim().length() > 0) {
-                    if(sessionToken == null)
+                    if (sessionToken == null)
                         sessionToken = client.getSESSION_ID();
-                    if(chatroomID == null){
+                    if (chatroomID == null) {
                         MessageBundle createBundle = new MessageBundle(userID, sessionToken,
                                 MessageBundle.messageType.CREATE_SINGLE_ROOM);
                         createBundle.putToPhoneNumber(toPhoneNumber);

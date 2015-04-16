@@ -420,6 +420,7 @@
     <eat-comment/>
     <string name="title_activity_chat">ChatActivity</string>
     <string name="title_activity_contacts">ContactsActivity</string>
+    <string name="title_activity_events">EventsActivity</string>
     <string name="title_activity_login_activity_cog">LoginActivityCog</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_messaging">MessagingActivity</string>
