@@ -40,16 +40,18 @@ public class ProfileActivity extends ActionBarActivity {
         String username = c.getString(c.getColumnIndex("display_name"));
         c.close();
 
-        EditText prof_name = (EditText) findViewById(R.id.prof_name);
+        final EditText prof_name = (EditText) findViewById(R.id.prof_name);
         prof_name.setText(username);
-        editor.putString("username",username);
-        editor.commit();
 
         Button save = (Button) findViewById(R.id.save);
         save.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        String name = prof_name.getText().toString();
+                        editor.putString("username",name);
+                        editor.commit();
+                        client.setNAME(name);
                         Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
                         startActivity(intent);
                         ProfileActivity.this.finish();

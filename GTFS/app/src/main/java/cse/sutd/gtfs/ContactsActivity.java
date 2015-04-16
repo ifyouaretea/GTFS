@@ -24,7 +24,6 @@ import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 
 
 public class ContactsActivity extends ActionBarActivity {
-    private MessageDbAdapter dbMessages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +39,7 @@ public class ContactsActivity extends ActionBarActivity {
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         final String userID = prefs.getString("userid", null);
         String sessionToken = client.getSESSION_ID();
+        MessageDbAdapter  dbMessages = MessageDbAdapter.getInstance(this);
 
         ListView listview = (ListView) findViewById(R.id.contactList);
         final ArrayList<Contact> contacts = new ArrayList<Contact>();
@@ -51,22 +51,25 @@ public class ContactsActivity extends ActionBarActivity {
                 contacts.add(a);
             }while(contactBundles.moveToNext());
             contactBundles.close();
+
+            ContactAdapter cntcts = new ContactAdapter(this, contacts);
+
+            listview.setAdapter(cntcts);
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, final View view,
+                                        int position, long id) {
+                    final String item = ((ChatRooms) parent.getItemAtPosition(position)).getId();
+                    //TODO: check if chatroom exist
+                    Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
+                    i.putExtra("toNumber", contacts.get(position).getNumber());
+                    startActivity(i);
+                }
+            });
         }
 
-        ContactAdapter cntcts = new ContactAdapter(this, contacts);
-        listview.setAdapter(cntcts);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                final String item = ((ChatRooms) parent.getItemAtPosition(position)).getId();
-                //TODO: check if chatroom exist
-                Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
-                i.putExtra("toNumber", contacts.get(position).getNumber());
-                startActivity(i);
-            }
-        });
     }
 
     @Override
