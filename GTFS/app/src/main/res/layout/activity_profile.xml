@@ -32,8 +32,7 @@ tools:context="cse.sutd.gtfs.ProfileActivity">
         android:editable="false"
         android:background="@drawable/edit_drawable"
         android:layout_alignParentEnd="true"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
+        android:paddingStart="5dp"
         android:layout_above="@+id/save"
         android:layout_below="@+id/prof_name" />
 

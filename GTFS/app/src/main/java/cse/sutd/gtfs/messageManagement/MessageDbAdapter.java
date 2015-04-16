@@ -65,7 +65,6 @@ public class MessageDbAdapter {
                 "create table contacts (_id text primary key, "
                         + "name text);";
 
-
         private static final String DATABASE_NAME = "data";
 
         private static final int DATABASE_VERSION = 2;
