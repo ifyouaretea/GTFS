@@ -2,6 +2,7 @@ package cse.sutd.gtfs.serverUtils;
 
 import org.w3c.dom.Text;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +65,6 @@ public class MessageBundle {
         sb.append(c.get(Calendar.HOUR_OF_DAY) + ":");
         sb.append(c.get(Calendar.MINUTE) + ":");
         sb.append(c.get(Calendar.SECOND));
-
         return messageMap.put(TIMESTAMP, sb.toString());
     }
 
@@ -81,7 +81,7 @@ public class MessageBundle {
     }
 
     public String putUsers(String... users){
-        return messageMap.put(USERS, users.toString());
+        return messageMap.put(USERS, Arrays.toString(users));
     }
 
     public String putChatroomName(String chatroomName){
