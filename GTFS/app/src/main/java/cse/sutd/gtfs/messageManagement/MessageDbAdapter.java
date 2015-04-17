@@ -301,6 +301,8 @@ public class MessageDbAdapter {
 
     public void importUsers(Map message){
         Object[] users =  (Object[])message.get(MessageBundle.USERS);
+        if (users == null)
+            return;
         for(Object  user : users)
             putContact((String) ((Map)user).get(PHONE_NUMBER), (String) ((Map)user).get(NAME));
     }
@@ -309,6 +311,8 @@ public class MessageDbAdapter {
         mDb.execSQL("DROP TABLE IF EXISTS notes");
         mDb.execSQL(DATABASE_CREATE_NOTES);
         Object[] notes = (Object[]) message.get(MessageBundle.NOTES);
+        if (notes == null)
+            return;
         for(Object note : notes)
             createNote((Map) note);
     }
