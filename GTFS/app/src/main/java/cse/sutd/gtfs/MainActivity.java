@@ -179,7 +179,6 @@ public class MainActivity extends ActionBarActivity {
                 phoneNumbers10.add(h2);
                 i++;
             }
-
         }
         phones.close();
         String[][] phonenumber = new String[phoneNumbers.size()][phoneNumbers10.size()];
