@@ -3,6 +3,7 @@ package cse.sutd.gtfs.messageManagement;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -128,13 +129,16 @@ public class MessageDbAdapter {
                 ,chatID, timestamp, from_phone_number, body), null);
 
         //check if a copy of the message is already in the database
-        if (messageExists.getCount() != 0)
+        if (messageExists.getCount() != 0) {
+            messageExists.close();
             return -1;
+        }
 
         Cursor chatExists = mDb.rawQuery(String.format("SELECT _id FROM chats WHERE " +
                 "_id='%s'", chatID), null);
 
         boolean isChatExists = chatExists.getCount() > 0;
+        chatExists.close();
 
         //if chat doesn't exist, create a new entry in the chats table
         //NOTE: THIS SHOULD ONLY BE USED FOR INDIVIDUAL CHATS
@@ -218,7 +222,11 @@ public class MessageDbAdapter {
         ContentValues chatValues = new ContentValues();
         chatValues.put(ROWID, phoneNum);
         chatValues.put(NAME, contactName);
-        return mDb.insert(CONTACTS, null, chatValues);
+        try {
+            return mDb.insert(CONTACTS, null, chatValues);
+        }catch (SQLiteConstraintException e) {
+            return 0;
+        }
     }
     public long deleteGroupChat(String chatID){
         return mDb.delete(CHATS, ROWID + "=" + chatID, null);
@@ -234,8 +242,10 @@ public class MessageDbAdapter {
                 + currentTime, null);
         if(expiredChats == null)
             return null;
-        if (expiredChats.getCount() == 0)
+        if (expiredChats.getCount() == 0) {
+            expiredChats.close();
             return null;
+        }
         expiredChats.moveToFirst();
 
         String[] expiredArray = new String[expiredChats.getCount()];
@@ -244,6 +254,7 @@ public class MessageDbAdapter {
             expiredArray[count++] = expiredChats.getString(0);
             deleteGroupChat(expiredChats.getString(0));
         }while(expiredChats.moveToNext());
+        expiredChats.close();
         return expiredArray;
     }
 
@@ -251,16 +262,21 @@ public class MessageDbAdapter {
         Cursor result = mDb.rawQuery(String.format("SELECT chatName FROM chats WHERE _id = '%s'",
                 chatID), null);
         result.moveToFirst();
-        return result.getString(0);
+        String returnValue = result.getString(0);
+        return returnValue;
     }
 
     public String getChatIDForUser(String userID){
-        Cursor result = mDb.rawQuery("SELECT _id FROM chats WHERE isGroup = false " +
+        Cursor result = mDb.rawQuery("SELECT _id FROM chats WHERE isGroup = 1 " +
                 "AND users LIKE '%" + userID + "%'", null);
-        if(result.getCount() != 1)
+        if(result.getCount() != 1) {
+            result.close();
             return null;
+        }
         result.moveToFirst();
-        return result.getString(0);
+        String returnValue = result.getString(0);
+        result.close();
+        return returnValue;
     }
     public void importChatrooms(Map message){
         Object[] chatrooms = (Object[])message.get(MessageBundle.CHATROOMS);
