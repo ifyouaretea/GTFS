@@ -261,6 +261,8 @@ public class MessageDbAdapter {
     public String getChatroomName(String chatID){
         Cursor result = mDb.rawQuery(String.format("SELECT chatName FROM chats WHERE _id = '%s'",
                 chatID), null);
+        if(result.getCount() < 1)
+            return null;
         result.moveToFirst();
         String returnValue = result.getString(0);
         return returnValue;
