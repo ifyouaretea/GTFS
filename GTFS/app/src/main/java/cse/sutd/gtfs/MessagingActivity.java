@@ -40,6 +40,8 @@ public class MessagingActivity extends ActionBarActivity {
     private String toPhoneNumber;   //TODO: idk yet
     private String sessionToken;    //get from client.getSESSIONID();
     private String chatroomID;      //get from previous intent
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,7 @@ public class MessagingActivity extends ActionBarActivity {
 
         if (extras != null) {
             chatroomID = extras.getString("ID");
+            toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
         }
 
         //TODO: Download chatrooms from server to local DB
@@ -164,12 +167,18 @@ public class MessagingActivity extends ActionBarActivity {
         if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)) {
             adapter.notifyDataSetChanged();
             Log.d("adapter updated", message.toString());
+        }else if (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString().equals(messageType)) {
+            boolean isIntended = false;
+            for(Object user: (Object[]) message.get(MessageBundle.USERS)){
+                if(toPhoneNumber.equals((String) user)){
+                    chatroomID = (String) message.get
+                            ((String) message.get(MessageBundle.CHATROOMID));
+                }
+            }
         }
     }
 
     private class MessageBroadcastReceiver extends BroadcastReceiver {
-        private MessageBroadcastReceiver() {
-        }
 
         @Override
         public void onReceive(Context context, Intent intent) {

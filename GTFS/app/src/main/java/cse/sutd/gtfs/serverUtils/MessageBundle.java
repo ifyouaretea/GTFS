@@ -49,7 +49,7 @@ public class MessageBundle {
         messageMap.put(SESSION_TOKEN, sessionToken);
         messageMap.put(TYPE, type.toString());
         if(type == messageType.CREATE_ROOM || type == messageType.CREATE_SINGLE_ROOM )
-            messageMap.put(EXPIRY, null);
+            messageMap.put(EXPIRY, "0");
         putTimestamp();
     }
 

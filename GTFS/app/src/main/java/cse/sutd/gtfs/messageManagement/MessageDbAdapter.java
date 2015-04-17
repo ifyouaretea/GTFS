@@ -205,7 +205,7 @@ public class MessageDbAdapter {
                 (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString()))
             isGroup = 0;
 
-        int expiry = (Integer) message.get(MessageBundle.EXPIRY);
+        int expiry = Integer.parseInt((String) message.get(MessageBundle.EXPIRY));
 
         ContentValues chatValues = new ContentValues();
         chatValues.put(ISGROUP, isGroup);

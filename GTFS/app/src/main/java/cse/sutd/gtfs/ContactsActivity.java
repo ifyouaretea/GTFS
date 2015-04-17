@@ -86,6 +86,7 @@ public class ContactsActivity extends ActionBarActivity {
                 chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
                 Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
                 i.putExtra("ID", chatroomID);
+                i.putExtra(MessageBundle.TO_PHONE_NUMBER, toPhoneNumber);
                 startActivity(i);
             }
         });
