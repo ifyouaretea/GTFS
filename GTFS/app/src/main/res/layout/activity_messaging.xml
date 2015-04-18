@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:padding="10dip"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="#FAFDF9">
 
     <ListView
         android:id="@+id/messageList"

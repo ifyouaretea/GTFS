@@ -38,34 +38,40 @@ public class MessagingActivity extends ActionBarActivity {
     private TextView msg;
     private GTFSClient client;
     private MessageAdapter adapter;
-    private ArrayList<MessageBundle> message;
+    private ArrayList<MessageBundle> messageList;
+   // private ArrayList<String> timestampList;
 
-    private String toPhoneNumber;   //TODO: idk yet
+    private String toPhoneNumber;
     private String sessionToken;    //get from client.getSESSIONID();
     private String chatroomID;      //get from previous intent
     private int isGroup;
 
+    private MessageDbAdapter dbMessages;
     private ChatRooms chat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MessageDbAdapter dbMessages = MessageDbAdapter.getInstance(this);
+        dbMessages = MessageDbAdapter.getInstance(this);
         Bundle extras = getIntent().getExtras();
 
+        String title = null;
         if (extras != null) {
-            chatroomID = extras.getString("ID");
+            chatroomID = extras.getString(MessageDbAdapter.CHATID);
             toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
-            isGroup = extras.getInt("ISGROUP");
+            isGroup = extras.getInt(MessageDbAdapter.CHATID);
+            title = extras.getString(MessageDbAdapter.CHATNAME);
             chat = new ChatRooms(chatroomID,toPhoneNumber,isGroup);
+            dbMessages.clearRead(chatroomID);
         }
+        if (isGroup == 0)
+            title = dbMessages.getUsername(chatroomID);
 
-        //TODO: Download chatrooms from server to local DB
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_action_profile); //user's pic
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setTitle(dbMessages.getChatroomName(chatroomID));
+        getSupportActionBar().setTitle(title);
         setContentView(R.layout.activity_messaging);
 
         client = (GTFSClient) getApplicationContext();
@@ -76,26 +82,12 @@ public class MessagingActivity extends ActionBarActivity {
 
         ListView listview = (ListView) findViewById(R.id.messageList);
 
-        Cursor msgBundles = dbMessages.getChatMessages(chatroomID);
-        message = new ArrayList<MessageBundle>();
-        final ArrayList<String> timestamp = new ArrayList<String>();
-        if (msgBundles != null) {
-            if(msgBundles.getCount()>0) {
-                msgBundles.moveToFirst();
-                do {
-                    MessageBundle a = new MessageBundle(msgBundles.getString(0),
-                            sessionToken, MessageBundle.messageType.TEXT);
-                    a.putMessage(msgBundles.getString(1));
-                    a.putChatroomID(msgBundles.getString(2));
-                    message.add(a);
-                    timestamp.add(msgBundles.getString(2));
-                } while (msgBundles.moveToNext());
-                msgBundles.close();
-            }
-        }
-
-        adapter = new MessageAdapter(this, message, userID, isGroup);
+        messageList = new ArrayList<>();
+        //timestampList = new ArrayList<>();
+        adapter = new MessageAdapter(this, messageList, userID, isGroup);
+        updateUI();
         listview.setAdapter(adapter);
+
         msg = (TextView) findViewById(R.id.message);
         Button send = (Button) findViewById(R.id.sendMessageButton);
 
@@ -121,7 +113,6 @@ public class MessagingActivity extends ActionBarActivity {
                     textBundle.putMessage(msg.getText().toString());
                     textBundle.putToPhoneNumber(toPhoneNumber);
                     textBundle.putChatroomID(chatroomID);
-                    textBundle.putTimestamp();
 
                     Log.d("Attempting to send", textBundle.getMessage().toString());
                     Intent intent = new Intent(MessagingActivity.this, NetworkService.class);
@@ -129,10 +120,9 @@ public class MessagingActivity extends ActionBarActivity {
                             JsonWriter.objectToJson(textBundle.getMessage()));
                     MessagingActivity.this.startService(intent);
 
-                    message.add(textBundle);
-
-                    msg.setText("");
+                    messageList.add(textBundle);
                     adapter.notifyDataSetChanged();
+                    msg.setText("");
                 }
             }
         });
@@ -165,21 +155,40 @@ public class MessagingActivity extends ActionBarActivity {
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
     }
-    public void handleMessage(Map message) {
+    private void handleMessage(Map message) {
         String messageType = (String) message.get(MessageBundle.TYPE);
-
         if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)) {
-            adapter.notifyDataSetChanged();
+            updateUI();
             Log.d("adapter updated", message.toString());
-        }else if (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString().equals(messageType)) {
+        }else if (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString().equals(messageType)){
             for(Object user: (Object[]) message.get(MessageBundle.USERS)){
                 if(user.equals(toPhoneNumber)){
-                    chatroomID = (String) message.get
-                            (message.get(MessageBundle.CHATROOMID));
+                    chatroomID = (String) message.get(MessageBundle.CHATROOMID);
+                    Log.d("Messaging activity id updated", chatroomID);
                     break;
                 }
             }
         }
+    }
+
+    private void updateUI(){
+        Cursor msgBundles = dbMessages.getChatMessages(chatroomID);
+        if (msgBundles != null) {
+            messageList.clear();
+            if(msgBundles.getCount()>0) {
+                msgBundles.moveToFirst();
+                do {
+                    MessageBundle a = new MessageBundle(msgBundles.getString(0),
+                            sessionToken, MessageBundle.messageType.TEXT);
+                    a.putMessage(msgBundles.getString(1));
+                    a.putTimestamp(msgBundles.getString(2));
+                    messageList.add(a);
+//                    timestampList.add(msgBundles.getString(2));
+                } while (msgBundles.moveToNext());
+                msgBundles.close();
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private class MessageBroadcastReceiver extends BroadcastReceiver {

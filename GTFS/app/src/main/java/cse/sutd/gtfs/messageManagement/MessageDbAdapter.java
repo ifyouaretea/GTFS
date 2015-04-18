@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 
 
@@ -26,23 +27,24 @@ public class MessageDbAdapter {
     DatabaseHelper mDbHelper;
     Context mContext;
 
-    private static final String MESSAGES = "messages";
-    private static final String CHATS= "chats";
-    private static final String ROWID = "_id";
-    private static final String CHATID = "chatID";
-    private static final String TIMESTAMP = "timestamp";
-    private static final String FROM_PHONE_NUMBER = "from_phone_number";
-    private static final String PHONE_NUMBER = "phone_number";
-    private static final String CHATNAME = "chatName";
-    private static final String LAST_MESSAGE = "lastMessage";
-    private static final String USERS = "users";
-    private static final String NAME = "name";
-    private static final String EXPIRY = "expiry";
-    private static final String CONTACTS = "contacts";
-    private static final String ISGROUP = "isGroup";
-    private static final String BODY = "body";
-    private static final String NOTE_CREATOR = "noteCreator";
-    private static final String TITLE = "title";
+    public static final String MESSAGES = "messages";
+    public static final String CHATS= "chats";
+    public static final String ROWID = "_id";
+    public static final String CHATID = "chatID";
+    public static final String TIMESTAMP = "timestamp";
+    public static final String FROM_PHONE_NUMBER = "from_phone_number";
+    public static final String PHONE_NUMBER = "phone_number";
+    public static final String CHATNAME = "chatName";
+    public static final String LAST_MESSAGE = "lastMessage";
+    public static final String READ = "read";
+    public static final String USERS = "users";
+    public static final String NAME = "name";
+    public static final String EXPIRY = "expiry";
+    public static final String CONTACTS = "contacts";
+    public static final String ISGROUP = "isGroup";
+    public static final String BODY = "body";
+    public static final String NOTE_CREATOR = "noteCreator";
+    public static final String TITLE = "title";
 
     private static final String TAG = "MessageDbAdapter";
 
@@ -56,11 +58,12 @@ public class MessageDbAdapter {
         private static final String DATABASE_CREATE_MESSAGES =
                 "create table messages (_id integer primary key, "
                         + "chatID text not null, body text not null," +
-                        "from_phone_number text not null, timestamp text not null);";
+                        "from_phone_number text not null, timestamp text not null, " +
+                        "read integer not null);";
 
         private static final String DATABASE_CREATE_CHATS =
                 "create table chats (_id text primary key, "
-                        + "isGroup integer, chatName text, " +
+                        + "isGroup integer not null, chatName text, " +
                         "lastMessage integer not null, "+
                         "users string, expiry integer);";
 
@@ -118,13 +121,12 @@ public class MessageDbAdapter {
      * 2 if the chat been inserted has not existed previously
      */
     public int storeMessage(Map message){
-        Log.d("path", mDb.getPath());
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
         String messageID = (String) message.get(MessageBundle.MESSAGE_ID);
         String timestamp = (String) message.get(MessageBundle.TIMESTAMP);
         String from_phone_number = (String) message.get(MessageBundle.FROM_PHONE_NUMBER);
         String body = (String) message.get(MessageBundle.MESSAGE);
-
+        body = body.replaceAll("'", "''");
         Log.d("Database store", message.toString());
 
         Cursor messageExists = mDb.rawQuery(String.format("SELECT _id FROM messages WHERE " +
@@ -170,7 +172,12 @@ public class MessageDbAdapter {
         messageValues.put(TIMESTAMP, timestamp);
         messageValues.put(BODY, body);
         messageValues.put(FROM_PHONE_NUMBER, from_phone_number);
-        Log.d("Message Values", messageValues.toString());
+
+        if(from_phone_number.equals(((GTFSClient)mContext.getApplicationContext()).getID()))
+            messageValues.put(READ, 1);
+        else
+            messageValues.put(READ, 0);
+
         //if inserting fails, return -1
         if (mDb.insert(MESSAGES, null, messageValues) < 0)
             return -1;
@@ -226,12 +233,10 @@ public class MessageDbAdapter {
     }
 
     public long putContact(String phoneNum, String contactName){
-        Log.d("Contact creation", phoneNum);
         ContentValues chatValues = new ContentValues();
         chatValues.put(ROWID, phoneNum);
         chatValues.put(NAME, contactName);
         try {
-
             return mDb.insert(CONTACTS, null, chatValues);
         }catch (SQLiteConstraintException e) {
             return 0;
@@ -290,7 +295,7 @@ public class MessageDbAdapter {
     }
 
     public String getChatIDForUser(String userID){
-        Cursor result = mDb.rawQuery("SELECT _id FROM chats WHERE isGroup = 1 " +
+        Cursor result = mDb.rawQuery("SELECT _id FROM chats WHERE isGroup = 0 " +
                 "AND users LIKE '%" + userID + "%'", null);
         if(result.getCount() != 1) {
             result.close();
@@ -302,8 +307,32 @@ public class MessageDbAdapter {
         return returnValue;
     }
 
+    public void clearRead(String chatID){
+        mDb.execSQL(String.format("UPDATE messages SET read=1 WHERE chatID='%s'", chatID));
+    }
 
+    public long getUnreadCount(String chatID){
+        Cursor unreadMessages = mDb.rawQuery(String.format("SELECT read " +
+                "FROM messages WHERE read = 0 AND chatID ='%s'", chatID), null);
+        long returnValue = unreadMessages.getCount();
+        unreadMessages.close();
+        return returnValue;
+    }
 
+    public String getUsername(String chatID){
+        Cursor userCursor = mDb.rawQuery(String.format("SELECT users FROM chats WHERE" +
+                " _id ='%s'", chatID), null);
+        if (userCursor == null)
+            return null;
+        if (userCursor.getCount() < 1){
+            userCursor.close();
+            return null;
+        }
+        userCursor.moveToFirst();
+        String userList = userCursor.getString(0);
+        userList = userList.replaceAll(((GTFSClient) mContext.getApplicationContext()).getID(), "");
+        return userList.replaceAll("\\D", "");
+    }
     public void importChatrooms(Map message){
         Object[] chatrooms = (Object[])message.get(MessageBundle.CHATROOMS);
         for(Object chatroomO : chatrooms){
@@ -344,9 +373,7 @@ public class MessageDbAdapter {
         phones.close();
         for(Object  user : users){
             String phone = (String) ((Map)user).get(PHONE_NUMBER);
-            long pass = putContact(phone, phoneName.get(phone));
-            Log.d("pass",String.valueOf(pass));
-            Log.d("Number/Name",phone+","+phoneName.get(phone));
+            //long pass = putContact(phone, phoneName.get(phone));
         }
     }
 

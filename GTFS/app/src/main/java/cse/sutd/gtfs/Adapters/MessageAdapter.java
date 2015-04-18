@@ -40,10 +40,8 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView;
-        if(user.equalsIgnoreCase((String)message.getMessage().get("from_phone_number"))) { //
+        if(user.equalsIgnoreCase((String)message.getMessage().get("from_phone_number"))) {
             rowView = inflater.inflate(R.layout.message_list_item_right, parent, false);
-            LinearLayout lay = (LinearLayout) rowView.findViewById(R.id.userAndMessage);
-            lay.setBackgroundColor(Color.GREEN);
         }
         else {
             rowView = inflater.inflate(R.layout.message_list_item_left, parent, false);
@@ -66,10 +64,10 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> {
         }
 
         TextView msg = (TextView) rowView.findViewById(R.id.textMessage);
-        msg.setText((String)values.get(position).getMessage().get("message"));
+        msg.setText((String)values.get(position).getMessage().get(MessageBundle.MESSAGE));
 
         TextView time = (TextView) rowView.findViewById(R.id.textTime);
-        time.setText(values.get(position).getTime());
+        time.setText((String)values.get(position).getMessage().get(MessageBundle.TIMESTAMP));
 
         return rowView;
     }

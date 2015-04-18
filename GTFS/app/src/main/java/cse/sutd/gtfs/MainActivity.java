@@ -63,6 +63,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         IntentFilter receivedIntentFilter = new IntentFilter(ManagerService.UPDATE_UI);
+
         MessageBroadcastReceiver broadcastReceiver = new MessageBroadcastReceiver();
         LocalBroadcastManager.getInstance(getApplicationContext())
                 .registerReceiver(broadcastReceiver, receivedIntentFilter);
@@ -97,7 +98,7 @@ public class MainActivity extends ActionBarActivity {
                 ArrayList<ArrayList<String>> phoneNumbers = new ArrayList<ArrayList<String>>();
                 int i = 0;
                 while (phones.moveToNext()) {
-                    if (i >= 20) {
+                    if (i >= 15) {
                         i = 0;
                         phoneNumbers.add(phoneNumbers10);
                         phoneNumbers10 = new ArrayList<String>();
@@ -112,8 +113,8 @@ public class MainActivity extends ActionBarActivity {
                         i++;
                     }
                 }
-                if (phoneNumbers10.size() < 20) {
-                    for (int l = 0; l < (20 - phoneNumbers10.size()); l++) {
+                if (phoneNumbers10.size() < 15) {
+                    for (int l = 0; l < (15 - phoneNumbers10.size()); l++) {
                         phoneNumbers10.add("");
                     }
                 }
@@ -218,20 +219,26 @@ public class MainActivity extends ActionBarActivity {
 
     private void updateUI(){
         Cursor chatrooms = dbMessages.getChats();
-        chatroom = new ArrayList<ChatRooms>();
+        chatroom = new ArrayList<>();
 
         if (chatrooms != null) {
             chatrooms.moveToFirst();
-            while (chatrooms.moveToNext()) {
-                ChatRooms a = new ChatRooms(chatrooms.getString(0),
-                        chatrooms.getString(1), chatrooms.getInt(2));
+            do{
+                String id = chatrooms.getString(0);
+                String name = chatrooms.getString(1);
+                int isGroup = chatrooms.getInt(2);
+                if(isGroup == 0)
+                    name = dbMessages.getChatroomName(id);
+
+                Log.d("MainActivity chatroom name", String.valueOf(name));
+                ChatRooms a = new ChatRooms(id, name, isGroup);
                 chatroom.add(a);
-            }
+            }while(chatrooms.moveToNext());
+
             chatrooms.close();
         }
 
         ChatAdapters adapter = new ChatAdapters(this, chatroom);
-
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -240,7 +247,9 @@ public class MainActivity extends ActionBarActivity {
                                     int position, long id) {
                 final String item = ((ChatRooms) parent.getItemAtPosition(position)).getId();
                 Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
-                i.putExtra("ID", chatroom.get(position).getId());
+                i.putExtra(MessageDbAdapter.CHATID, chatroom.get(position).getId());
+                i.putExtra(MessageDbAdapter.ISGROUP, chatroom.get(position).getIsGroup());
+                i.putExtra(MessageDbAdapter.CHATNAME, chatroom.get(position).getName());
                 startActivity(i);
             }
         });

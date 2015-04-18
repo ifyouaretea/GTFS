@@ -5,6 +5,7 @@ package cse.sutd.gtfs.Adapters;
  */
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,17 +41,24 @@ public class ChatAdapters extends ArrayAdapter<ChatRooms> {
         View rowView = inflater.inflate(R.layout.main_list_item, parent, false);
         TextView chatName = (TextView) rowView.findViewById(R.id.firstLine);
         TextView latestmsg = (TextView) rowView.findViewById(R.id.secondLine);
+        TextView unreadCount = (TextView) rowView.findViewById(R.id.unreadCount);
+
         ImageView avatar = (ImageView) rowView.findViewById(R.id.avatar);
         chatName.setText(values.get(position).getName());
 
         String chatID = values.get(position).getId();
         String latestMessage = dbAdapter.getLatestMessage(chatID);
         if (latestMessage != null) {
-            Log.d("ChatAdapters latestMessage", latestMessage);
             latestmsg.setText(latestMessage);
+            latestmsg.setTypeface(null, Typeface.NORMAL);
+            long readCount = dbAdapter.getUnreadCount(chatID);
+            if(readCount > 0) {
+                latestmsg.setTypeface(null, Typeface.BOLD);
+                unreadCount.setText(String.valueOf(readCount));
+            }
         }
-        avatar.setImageResource(R.drawable.ic_action_dark_profile);
 
+        avatar.setImageResource(R.drawable.ic_action_dark_profile);
         return rowView;
     }
     @Override
