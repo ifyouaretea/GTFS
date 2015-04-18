@@ -5,6 +5,8 @@ package cse.sutd.gtfs.Adapters;
  */
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +16,22 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.ChatRooms;
 import cse.sutd.gtfs.R;
+import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 
 public class ChatAdapters extends ArrayAdapter<ChatRooms> {
 
     private final Context context;
     private final ArrayList<ChatRooms> values;
+    private MessageDbAdapter dbAdapter;
 
     public ChatAdapters(Context context, ArrayList<ChatRooms> values) {
         super(context, R.layout.main_list_item, values);
         this.context = context;
         this.values = values;
+        this.dbAdapter = ((GTFSClient) context.getApplicationContext()).getDatabaseAdapter();
     }
 
     @Override
@@ -35,10 +41,24 @@ public class ChatAdapters extends ArrayAdapter<ChatRooms> {
         View rowView = inflater.inflate(R.layout.main_list_item, parent, false);
         TextView chatName = (TextView) rowView.findViewById(R.id.firstLine);
         TextView latestmsg = (TextView) rowView.findViewById(R.id.secondLine);
+        TextView unreadCount = (TextView) rowView.findViewById(R.id.unreadCount);
+
         ImageView avatar = (ImageView) rowView.findViewById(R.id.avatar);
         chatName.setText(values.get(position).getName());
-        avatar.setImageResource(R.drawable.ic_action_dark_profile);
 
+        String chatID = values.get(position).getId();
+        String latestMessage = dbAdapter.getLatestMessage(chatID);
+        if (latestMessage != null) {
+            latestmsg.setText(latestMessage);
+            latestmsg.setTypeface(null, Typeface.NORMAL);
+            long readCount = dbAdapter.getUnreadCount(chatID);
+            if(readCount > 0) {
+                latestmsg.setTypeface(null, Typeface.BOLD);
+                unreadCount.setText(String.valueOf(readCount));
+            }
+        }
+
+        avatar.setImageResource(R.drawable.ic_action_dark_profile);
         return rowView;
     }
     @Override

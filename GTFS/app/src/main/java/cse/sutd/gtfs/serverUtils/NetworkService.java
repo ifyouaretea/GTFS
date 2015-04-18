@@ -87,6 +87,8 @@ public class NetworkService extends IntentService {
     @Override
     protected void onHandleIntent(Intent workIntent){
         final Intent receivedIntent = workIntent;
+        if (workIntent == null)
+            return;
 
         String jsonString = receivedIntent.getStringExtra(MESSAGE_KEY);
         if(jsonString==null)
@@ -172,6 +174,9 @@ public class NetworkService extends IntentService {
 
                 LocalBroadcastManager.getInstance(getApplicationContext()).
                         sendBroadcast(receivedMessageIntent);
+            }
+            if("4".equals(receivedMap.get(MessageBundle.STATUS))){
+                authenticate();
             }
             return receivedMap;
         } catch(JsonIoException jException){

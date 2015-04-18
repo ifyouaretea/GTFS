@@ -30,6 +30,7 @@ public class MessageBundle {
     public static final String CHATROOMID = "chatroom_id";
     public static final String CHATROOM_NAME = "chatroom_name";
     public static final String MESSAGE = "message";
+    public static final String MESSAGE_ID = "message_id";
     public static final String NOTE_ID = "note_id";
     public static final String NOTE_TITLE = "note_title";
     public static final String NOTE_TEXT = "note_text";
@@ -43,7 +44,7 @@ public class MessageBundle {
     public static final String CHATROOMS = "chatrooms";
     public static final String VALID_STATUS = "1";
 
-    private String time;
+//    private String time;
 
     public MessageBundle(String fromNumber, String sessionToken, messageType type) {
         super();
@@ -52,7 +53,7 @@ public class MessageBundle {
         messageMap.put(SESSION_TOKEN, sessionToken);
         messageMap.put(TYPE, type.toString());
         if(type == messageType.CREATE_ROOM || type == messageType.CREATE_SINGLE_ROOM )
-            messageMap.put(EXPIRY, "0");
+            messageMap.put(EXPIRY, "0"  );
         putTimestamp();
     }
 
@@ -64,14 +65,17 @@ public class MessageBundle {
         return messageMap.put(CHATROOMID, chatRoomID);
     }
 
-    public String putTimestamp(){
+    private String putTimestamp(){
         Calendar c = Calendar.getInstance();
         StringBuilder sb = new StringBuilder();
         sb.append(c.get(Calendar.HOUR_OF_DAY) + ":");
-        sb.append(c.get(Calendar.MINUTE) + ":");
-        sb.append(c.get(Calendar.SECOND));
-        setTime(c);
+        sb.append(c.get(Calendar.MINUTE));
+//        setTime(c);
         return messageMap.put(TIMESTAMP, sb.toString());
+    }
+
+    public String putTimestamp(String timestamp){
+        return messageMap.put(TIMESTAMP, timestamp);
     }
 
     public String putMessage(String message){
@@ -102,11 +106,11 @@ public class MessageBundle {
         return this.messageMap;
     }
 
-    public String getTime() {
-        return time;
-    }
+//    public String getTime() {
+//        return time;
+//    }
 
-    public void setTime(Calendar time) {
-        this.time = (new SimpleDateFormat("HH:mm")).format(time.getTime());
-    }
+//    public void setTime(Calendar time) {
+//        this.time = (new SimpleDateFormat("HH:mm")).format(time.getTime());
+//    }
 }

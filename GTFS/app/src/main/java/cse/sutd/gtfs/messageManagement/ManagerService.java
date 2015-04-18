@@ -43,7 +43,6 @@ public class ManagerService extends Service{
         private MessageBroadcastReceiver(){}
         @Override
         public void onReceive(Context context, Intent intent){
-            Log.d("Broadcast receiver", "received intent!");
             Map received = (Map) JsonReader.jsonToJava(intent.getStringExtra
                     (NetworkService.MESSAGE_KEY));
             handleMessage(received);
@@ -79,9 +78,9 @@ public class ManagerService extends Service{
             //TODO: fix possible synchronisation problems
             Log.d("DB message insertion", message.toString());
 
-//            if(!message.get(MessageBundle.FROM_PHONE_NUMBER).equals(userID)) {
+            if(!message.get(MessageBundle.FROM_PHONE_NUMBER).equals(userID)) {
                 addToNotification(message);
-//            }
+            }
         }else if(messageType.equals(MessageBundle.messageType.CREATE_ROOM.toString()) ||
                 messageType.equals(MessageBundle.messageType.ROOM_INVITATION.toString()) ||
                 messageType.equals(MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString())
@@ -116,8 +115,7 @@ public class ManagerService extends Service{
 
         notificationMap.get(chatroomID).add((String)message.get(MessageBundle.MESSAGE));
 
-        String title = null;
-        String body = null;
+        String title, body;
         if(notificationMap.keySet().size() == 1) {
             title = dbAdapter.getChatroomName(chatroomID);
             StringBuilder bodyBuilder = new StringBuilder();
@@ -133,7 +131,6 @@ public class ManagerService extends Service{
                     bodyBuilder.append(s2 + "\n");
             body = bodyBuilder.toString();
         }
-
 
         Intent openMessagingIntent = new Intent(getApplicationContext(), MessagingActivity.class);
         openMessagingIntent.putExtra("ID", chatroomID);
