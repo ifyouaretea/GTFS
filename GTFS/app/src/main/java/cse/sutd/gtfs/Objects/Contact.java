@@ -9,8 +9,8 @@ public class Contact {
     private String status;
 
 
-    public Contact(String number){
-        this.number = number;
+    public Contact(String number, String name){
+        this.number = number; this.name = name;
     }
 
     public String getNumber() {return number; }

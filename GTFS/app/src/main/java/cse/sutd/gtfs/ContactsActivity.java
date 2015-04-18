@@ -51,7 +51,7 @@ public class ContactsActivity extends ActionBarActivity {
             if(contactBundles.getCount()>0) {
                 contactBundles.moveToFirst();
                 do {
-                    Contact a = new Contact(contactBundles.getString(0));
+                    Contact a = new Contact(contactBundles.getString(0),contactBundles.getString(0));
                     contacts.add(a);
                 } while (contactBundles.moveToNext());
                 contactBundles.close();
@@ -81,7 +81,7 @@ public class ContactsActivity extends ActionBarActivity {
                     ContactsActivity.this.startService(intent);
                 }
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 }catch(Exception e){}
                 //TODO: check if chatroom exist
                 chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);

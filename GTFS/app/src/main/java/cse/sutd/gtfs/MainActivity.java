@@ -175,9 +175,14 @@ public class MainActivity extends ActionBarActivity {
             String h2 = h1.replaceAll(" ","");
             h2 = h2.replace("+65", "");
             h2 = h2.replaceAll("\\D", "");
-            if (h2.length() >= 8) {
+            if (h2.length() >= 8 && !h2.equals(client.getID())) {
                 phoneNumbers10.add(h2);
                 i++;
+            }
+        }
+        if(phoneNumbers10.size()<20){
+            for(int l=0;l<(20-phoneNumbers10.size());l++){
+                phoneNumbers10.add("");
             }
         }
         phones.close();

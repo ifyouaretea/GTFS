@@ -6,10 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import cse.sutd.gtfs.serverUtils.MessageBundle;
@@ -223,6 +225,7 @@ public class MessageDbAdapter {
         chatValues.put(ROWID, phoneNum);
         chatValues.put(NAME, contactName);
         try {
+
             return mDb.insert(CONTACTS, null, chatValues);
         }catch (SQLiteConstraintException e) {
             return 0;
@@ -303,8 +306,27 @@ public class MessageDbAdapter {
         Object[] users =  (Object[])message.get(MessageBundle.USERS);
         if (users == null)
             return;
-        for(Object  user : users)
-            putContact((String) ((Map)user).get(PHONE_NUMBER), (String) ((Map)user).get(NAME));
+        Cursor phones = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        phones.moveToFirst();
+        HashMap<String,String> phoneName = new HashMap<String,String>();
+        while (phones.moveToNext()){
+            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
+            phoneNumber = phoneNumber.replaceAll("\\s","");
+            phoneNumber = phoneNumber.replaceAll(" ","");
+            phoneNumber = phoneNumber.replace("+65", "");
+            phoneNumber = phoneNumber.replaceAll("\\D", "");
+            String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)).trim();
+            if (phoneNumber.length() >= 8) {
+                phoneName.put(phoneNumber,name);
+            }
+        }
+        phones.close();
+        for(Object  user : users){
+            String phone = (String) ((Map)user).get(PHONE_NUMBER);
+            long pass = putContact(phone, phoneName.get(phone));
+            Log.d("pass",String.valueOf(pass));
+            Log.d("Number/Name",phone+","+phoneName.get(phone));
+        }
     }
 
     public void importNotes(Map message){

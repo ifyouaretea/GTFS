@@ -34,7 +34,7 @@ public class ContactAdapter extends ArrayAdapter<Contact>{
         TextView chatName = (TextView) rowView.findViewById(R.id.firstLine);
         TextView latestmsg = (TextView) rowView.findViewById(R.id.secondLine);
         ImageView avatar = (ImageView) rowView.findViewById(R.id.avatar);
-        chatName.setText(values.get(position).getNumber());
+        chatName.setText(values.get(position).getName());
         avatar.setImageResource(R.drawable.ic_action_dark_profile);
 
         return rowView;
