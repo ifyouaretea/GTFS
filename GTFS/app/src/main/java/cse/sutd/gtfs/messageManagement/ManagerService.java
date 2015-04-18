@@ -43,7 +43,6 @@ public class ManagerService extends Service{
         private MessageBroadcastReceiver(){}
         @Override
         public void onReceive(Context context, Intent intent){
-            Log.d("Broadcast receiver", "received intent!");
             Map received = (Map) JsonReader.jsonToJava(intent.getStringExtra
                     (NetworkService.MESSAGE_KEY));
             handleMessage(received);

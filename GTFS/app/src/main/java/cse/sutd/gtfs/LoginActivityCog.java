@@ -37,6 +37,8 @@ public class LoginActivityCog extends Activity {
         final SharedPreferences.Editor editor = prefs.edit();
 
         sessionID = UUID.randomUUID();
+        client.setAuthenticated(false);
+
         client.setSESSION_ID(sessionID.toString());
         Log.d("sessionID", sessionID.toString());
 

@@ -166,7 +166,6 @@ public class MessagingActivity extends ActionBarActivity {
         notificationManager.cancel(0);
     }
     public void handleMessage(Map message) {
-        Log.d("Handle message", "I'm handling a message!");
         String messageType = (String) message.get(MessageBundle.TYPE);
 
         if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)) {
