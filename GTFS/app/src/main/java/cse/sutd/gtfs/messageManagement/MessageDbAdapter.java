@@ -285,9 +285,9 @@ public class MessageDbAdapter {
         for(Object chatroomO : chatrooms){
             Map chatroom = (Map) chatroomO;
 
-            String chatID = (String) message.get(MessageBundle.CHATROOMID);
-            String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);
-            String users = Arrays.toString((Object[])message.get(USERS));
+            String chatID = (String) chatroom.get(MessageBundle.CHATROOMID);
+            String chatName = (String) chatroom.get(MessageBundle.CHATROOM_NAME);
+            String users = Arrays.toString((Object[])chatroom.get(USERS));
 
             ContentValues chatValues = new ContentValues();
             chatValues.put(ROWID, chatID);

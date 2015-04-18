@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
@@ -108,13 +109,14 @@ public class MessagingActivity extends ActionBarActivity {
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (msg.getText().toString().trim().length() > 0) {
+
                     if (sessionToken == null)
                         sessionToken = client.getSESSION_ID();
                     if (chatroomID == null) {
-                        MessageBundle createBundle = new MessageBundle(userID, sessionToken,
-                                MessageBundle.messageType.CREATE_SINGLE_ROOM);
-                        createBundle.putToPhoneNumber(toPhoneNumber);
-                        createBundle.putChatroomName(userID + "," + toPhoneNumber);
+                        Log.d("FAIL FAIL FAIL", "FAIL");
+                        Toast.makeText(MessagingActivity.this,
+                                "Error in sending", Toast.LENGTH_SHORT);
+                        return;
                     }
                     final MessageBundle textBundle = new MessageBundle(userID, sessionToken,
                             MessageBundle.messageType.TEXT);
@@ -124,12 +126,13 @@ public class MessagingActivity extends ActionBarActivity {
                     textBundle.putChatroomID(chatroomID);
                     textBundle.putTimestamp();
 
-                    message.add(textBundle);
-
+                    Log.d("Attempting to send", textBundle.getMessage().toString());
                     Intent intent = new Intent(MessagingActivity.this, NetworkService.class);
                     intent.putExtra(NetworkService.MESSAGE_KEY,
                             JsonWriter.objectToJson(textBundle.getMessage()));
                     MessagingActivity.this.startService(intent);
+
+                    message.add(textBundle);
 
 
                     msg.setText("");
@@ -168,11 +171,11 @@ public class MessagingActivity extends ActionBarActivity {
             adapter.notifyDataSetChanged();
             Log.d("adapter updated", message.toString());
         }else if (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString().equals(messageType)) {
-            boolean isIntended = false;
             for(Object user: (Object[]) message.get(MessageBundle.USERS)){
-                if(toPhoneNumber.equals((String) user)){
+                if(user.equals(toPhoneNumber)){
                     chatroomID = (String) message.get
-                            ((String) message.get(MessageBundle.CHATROOMID));
+                            (message.get(MessageBundle.CHATROOMID));
+                    break;
                 }
             }
         }

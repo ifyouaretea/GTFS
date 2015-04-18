@@ -66,7 +66,9 @@ public class ContactsActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
                 final String toPhoneNumber = ((Contact) parent.getItemAtPosition(position)).getNumber();
+
                 String chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
+
                 if (chatroomID==null){
                     MessageBundle createBundle = new MessageBundle(userID, sessionToken,
                             MessageBundle.messageType.CREATE_SINGLE_ROOM);
@@ -77,7 +79,6 @@ public class ContactsActivity extends ActionBarActivity {
                     intent.putExtra(NetworkService.MESSAGE_KEY,
                             JsonWriter.objectToJson(createBundle.getMessage()));
                     ContactsActivity.this.startService(intent);
-
                 }
                 try {
                     Thread.sleep(2000);
