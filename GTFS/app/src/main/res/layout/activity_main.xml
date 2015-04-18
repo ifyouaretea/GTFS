@@ -11,6 +11,7 @@
         android:id="@+id/chatList"
         android:layout_gravity="center_horizontal"
         android:background="#ffffffff"
+        android:scrollbars="vertical"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="0dp"
         android:layout_alignParentTop="true"

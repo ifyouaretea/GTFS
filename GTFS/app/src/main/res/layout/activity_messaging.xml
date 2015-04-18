@@ -12,6 +12,7 @@
         android:layout_weight="1"
         android:dividerHeight="0dp"
         android:divider="@null"
+        android:scrollbars="vertical"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"/>
 
