@@ -51,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
         private MessageBroadcastReceiver(){}
         @Override
         public void onReceive(Context context, Intent intent){
-            Log.d("Broadcast receiver", "received intent!");
+
             Map received = (Map) JsonReader.jsonToJava(intent.getStringExtra
                     (NetworkService.MESSAGE_KEY));
            updateUI();
@@ -81,38 +81,8 @@ public class MainActivity extends ActionBarActivity {
         dbMessages = MessageDbAdapter.getInstance(this);
         listview = (ListView) findViewById(R.id.chatList);
 
-<<<<<<< HEAD
         updateUI();
 
-=======
-        if (chatrooms != null) {
-            chatrooms.moveToFirst();
-            while (chatrooms.moveToNext()) {
-                ChatRooms a = new ChatRooms(chatrooms.getString(0),
-                        chatrooms.getString(1), chatrooms.getString(2), chatrooms.getInt(3));
-                chatroom.add(a);
-                Log.d("chatroom", chatrooms.getString(0));
-            }
-            chatrooms.close();
-        }
-        final ListView listview = (ListView) findViewById(R.id.chatList);
-
-        final ChatAdapters adapter = new ChatAdapters(this, chatroom);
-        listview.setAdapter(adapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                final String item = ((ChatRooms) parent.getItemAtPosition(position)).getId();
-                Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
-                i.putExtra("ID", chatroom.get(position).getId());
-                i.putExtra("NAME", chatroom.get(position).getName());
-                i.putExtra("ISGROUP", chatroom.get(position).getIsGroup());
-                startActivity(i);
-            }
-        });
->>>>>>> d1565c4add0c6bd63966e46076e9399f936db106
         client.resetNotificationMap();
 
         MessageBundle userRequestBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
@@ -254,14 +224,14 @@ public class MainActivity extends ActionBarActivity {
             chatrooms.moveToFirst();
             while (chatrooms.moveToNext()) {
                 ChatRooms a = new ChatRooms(chatrooms.getString(0),
-                        chatrooms.getString(1), chatrooms.getString(2));
+                        chatrooms.getString(1), chatrooms.getInt(2));
                 chatroom.add(a);
-                Log.d("chatroom", chatrooms.getString(0));
             }
             chatrooms.close();
         }
 
         ChatAdapters adapter = new ChatAdapters(this, chatroom);
+
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

@@ -185,13 +185,8 @@ public class MessageDbAdapter {
     }
 
     public Cursor getChats(){
-<<<<<<< HEAD
-        return mDb.rawQuery("SELECT _id, chatName, lastMessage FROM " +
+        return mDb.rawQuery("SELECT _id, chatName, isGroup FROM " +
                 "chats ORDER BY lastMessage DESC", null);
-=======
-        return mDb.rawQuery("SELECT _id, chatName, lastMessage, isGroup FROM " +
-                "chats", null);
->>>>>>> d1565c4add0c6bd63966e46076e9399f936db106
     }
 
     public Cursor getContacts(){
@@ -282,6 +277,18 @@ public class MessageDbAdapter {
         return returnValue;
     }
 
+    public String[] getChatroomNameGroup(String chatID){
+        Cursor result = mDb.rawQuery(String.format("SELECT chatName, isGroup FROM " +
+                        "chats WHERE _id = '%s'",chatID), null);
+        if(result.getCount() < 1)
+            return null;
+        result.moveToFirst();
+        String[] returnValue = new String[2];
+        returnValue[0] = result.getString(0);
+        returnValue[1] = result.getString(1);
+        return returnValue;
+    }
+
     public String getChatIDForUser(String userID){
         Cursor result = mDb.rawQuery("SELECT _id FROM chats WHERE isGroup = 1 " +
                 "AND users LIKE '%" + userID + "%'", null);
@@ -294,6 +301,8 @@ public class MessageDbAdapter {
         result.close();
         return returnValue;
     }
+
+
 
     public void importChatrooms(Map message){
         Object[] chatrooms = (Object[])message.get(MessageBundle.CHATROOMS);
@@ -368,5 +377,22 @@ public class MessageDbAdapter {
         return mDb.insert(CHATS, null, chatValues);
     }
 
+    public String getLatestMessage(String chatID){
+        Cursor result = mDb.rawQuery(String.format("SELECT messages.body FROM messages INNER JOIN "
+                        +"chats ON chats.lastMessage = messages._id WHERE chats._id ='%s'",
+                chatID), null);
+        if (result == null)
+            return null;
 
+        result.moveToFirst();
+
+        if(result.getCount() > 0) {
+            String returnValue = result.getString(0);
+            result.close();
+            return returnValue;
+        }
+
+        result.close();
+        return null;
+    }
 }
