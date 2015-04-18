@@ -37,7 +37,6 @@ public class LoginActivityCog extends Activity {
         final SharedPreferences.Editor editor = prefs.edit();
 
         sessionID = UUID.randomUUID();
-        client.setAuthenticated(false);
 
         client.setSESSION_ID(sessionID.toString());
         Log.d("sessionID", sessionID.toString());
@@ -47,6 +46,10 @@ public class LoginActivityCog extends Activity {
         if (userID != null) {
             client.setID(userID);
             client.setNAME(prefs.getString("username", null));
+
+            startService(new Intent(getApplicationContext(), ManagerService.class));
+            startService(new Intent(getApplicationContext(), NetworkService.class));
+
             Intent intent = new Intent(LoginActivityCog.this, MainActivity.class);
             startActivity(intent);
             LoginActivityCog.this.finish();
