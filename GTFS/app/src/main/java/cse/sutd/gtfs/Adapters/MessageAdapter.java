@@ -60,8 +60,10 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> {
                         contact = contactName.getString(1);
                     }
                     contactName.close();
+                    userName.setText(contact);
+                }else{
+                    userName.setText(user);
                 }
-                userName.setText(contact);
             }
         }
 

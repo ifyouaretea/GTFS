@@ -18,4 +18,5 @@
         <item>Months</item>
     </string-array>
     <string name="title_activity_events">EventsActivity</string>
+    <string name="title_activity_add_contact_to_group">AddContactToGroup</string>
 </resources>

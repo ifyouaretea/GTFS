@@ -7,6 +7,7 @@ public class Contact {
     private String number;
     private String name;
     private String status;
+    private boolean isSelected;
 
 
     public Contact(String number, String name){
@@ -24,4 +25,12 @@ public class Contact {
     public String getStatus() {return status;    }
 
     public void setStatus(String status) {this.status = status;    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
 }

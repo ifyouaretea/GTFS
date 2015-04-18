@@ -28,6 +28,7 @@ import java.util.Map;
 
 import cse.sutd.gtfs.Adapters.MessageAdapter;
 import cse.sutd.gtfs.Objects.ChatRooms;
+import cse.sutd.gtfs.Objects.Contact;
 import cse.sutd.gtfs.messageManagement.ManagerService;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
@@ -43,6 +44,7 @@ public class MessagingActivity extends ActionBarActivity {
     private String toPhoneNumber;   //TODO: idk yet
     private String sessionToken;    //get from client.getSESSIONID();
     private String chatroomID;      //get from previous intent
+    private String chatroomName;
     private int isGroup;
 
     private ChatRooms chat;
@@ -56,8 +58,17 @@ public class MessagingActivity extends ActionBarActivity {
         if (extras != null) {
             chatroomID = extras.getString("ID");
             toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
+            Cursor contactList = dbMessages.getContacts();
+            final ArrayList<Contact> contacts = new ArrayList<Contact>();
+            if (contactList != null) {
+                contactList.moveToFirst();
+                while (contactList.moveToNext()) {
+                    contacts.add(new Contact(contactList.getString(0), contactList.getString(1)));
+                }
+                contactList.close();
+            }
             isGroup = extras.getInt("ISGROUP");
-            chat = new ChatRooms(chatroomID,toPhoneNumber,isGroup);
+            chat = new ChatRooms(chatroomID,chatroomName,isGroup);
         }
 
         //TODO: Download chatrooms from server to local DB
@@ -119,7 +130,6 @@ public class MessagingActivity extends ActionBarActivity {
                             MessageBundle.messageType.TEXT);
 
                     textBundle.putMessage(msg.getText().toString());
-                    textBundle.putToPhoneNumber(toPhoneNumber);
                     textBundle.putChatroomID(chatroomID);
                     textBundle.putTimestamp();
 

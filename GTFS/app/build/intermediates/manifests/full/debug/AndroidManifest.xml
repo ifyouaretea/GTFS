@@ -85,6 +85,10 @@
             android:name="cse.sutd.gtfs.EventsActivity"
             android:label="@string/title_activity_events" >
         </activity>
+        <activity
+            android:name="cse.sutd.gtfs.AddContactToGroup"
+            android:label="@string/title_activity_add_contact_to_group" >
+        </activity>
     </application>
 
 </manifest>

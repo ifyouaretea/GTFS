@@ -51,12 +51,14 @@ public class ContactsActivity extends ActionBarActivity {
             if(contactBundles.getCount()>0) {
                 contactBundles.moveToFirst();
                 do {
-                    Contact a = new Contact(contactBundles.getString(0),contactBundles.getString(0));
+                    Contact a = new Contact(contactBundles.getString(0),contactBundles.getString(1));
                     contacts.add(a);
                 } while (contactBundles.moveToNext());
-                contactBundles.close();
+
             }
+            contactBundles.close();
         }
+
         ContactAdapter cntcts = new ContactAdapter(this, contacts);
 
         listview.setAdapter(cntcts);
@@ -73,6 +75,7 @@ public class ContactsActivity extends ActionBarActivity {
                     MessageBundle createBundle = new MessageBundle(userID, sessionToken,
                             MessageBundle.messageType.CREATE_SINGLE_ROOM);
                     createBundle.putToPhoneNumber(toPhoneNumber);
+                    //TODO: setChatroomName
                     createBundle.putChatroomName(userID + "," + toPhoneNumber);
 
                     Intent intent = new Intent(ContactsActivity.this, NetworkService.class);
@@ -91,7 +94,6 @@ public class ContactsActivity extends ActionBarActivity {
                 startActivity(i);
             }
         });
-
     }
 
     @Override

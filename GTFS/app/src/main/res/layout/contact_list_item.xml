@@ -12,7 +12,9 @@
         android:layout_alignParentLeft="true"
         android:layout_marginRight="6dip"
         android:src="@drawable/ic_action_dark_profile"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_alignBottom="@+id/secondLine"
+        android:layout_alignParentTop="true" />
 
     <TextView
         android:id="@+id/firstLine"

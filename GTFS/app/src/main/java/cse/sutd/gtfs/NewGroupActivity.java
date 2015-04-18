@@ -1,13 +1,18 @@
 package cse.sutd.gtfs;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -15,13 +20,27 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import cse.sutd.gtfs.Adapters.ContactAdapter;
+import cse.sutd.gtfs.Objects.Contact;
+import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+
 
 public class NewGroupActivity extends ActionBarActivity {
     private EditText group_name;
+    private GTFSClient client;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        client = (GTFSClient) getApplicationContext();
+        SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
+        editor = prefs.edit();
+
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
@@ -33,7 +52,6 @@ public class NewGroupActivity extends ActionBarActivity {
         group_name.requestFocus();
         final TextView countTextView = (TextView) findViewById(R.id.countTextView);
         countTextView.setText("25");
-        EditText add_contact = (EditText) findViewById(R.id.add_contact);
         group_name.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -41,16 +59,35 @@ public class NewGroupActivity extends ActionBarActivity {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int aft) {
-
             }
 
             @Override
             public void afterTextChanged(Editable group_name) {
-                // this will show characters remaining
-
                 countTextView.setText(Integer.toString(25 - group_name.toString().length()));
             }
         });
+        Button add_contact = (Button) findViewById(R.id.addContact);
+        add_contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NewGroupActivity.this, AddContactToGroup.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        MessageDbAdapter dbMessages = MessageDbAdapter.getInstance(this);
+        Cursor contactList = dbMessages.getContacts();
+        final ArrayList<Contact> contacts = new ArrayList<Contact>();
+        if (contactList != null) {
+            contactList.moveToFirst();
+            while (contactList.moveToNext()) {
+                contacts.add(new Contact(contactList.getString(0), contactList.getString(1)));
+            }
+            contactList.close();
+        }
+
+        final ArrayList<Contact> filteredContacts = new ArrayList<Contact>();
+        final ContactAdapter cntcts = new ContactAdapter(this, filteredContacts);
 
         Switch mySwitch = (Switch) findViewById(R.id.switch1);
         final LinearLayout timing = (LinearLayout) findViewById(R.id.timing);
@@ -79,8 +116,8 @@ public class NewGroupActivity extends ActionBarActivity {
             timing.setVisibility(View.GONE);
         }
 
-    }
 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,6 +146,23 @@ public class NewGroupActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (0) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    ArrayList<String> selectedContacts = data.getStringArrayListExtra("selectedContacts");
+                    for(String s:selectedContacts ){
+                        Log.d("recei", s);
+                    }
+                    // TODO Update your TextView.
+                }
+                break;
+            }
+        }
     }
 }
 
