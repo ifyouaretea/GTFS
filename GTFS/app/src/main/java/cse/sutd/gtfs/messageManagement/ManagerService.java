@@ -1,6 +1,7 @@
 package cse.sutd.gtfs.messageManagement;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cse.sutd.gtfs.GTFSClient;
+import cse.sutd.gtfs.MainActivity;
 import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
@@ -136,6 +138,9 @@ public class ManagerService extends Service{
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle(title)
                         .setContentText(body)
+                        .setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0,
+                                new Intent(getApplicationContext(), MainActivity.class),
+                                PendingIntent.FLAG_ONE_SHOT))
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(body));
 
