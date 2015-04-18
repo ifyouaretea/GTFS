@@ -30,11 +30,11 @@ public class ContactAdapter extends ArrayAdapter<Contact>{
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.main_list_item, parent, false);
-        TextView chatName = (TextView) rowView.findViewById(R.id.firstLine);
+        View rowView = inflater.inflate(R.layout.contact_list_item, parent, false);
+        TextView contactName = (TextView) rowView.findViewById(R.id.firstLine);
         TextView latestmsg = (TextView) rowView.findViewById(R.id.secondLine);
         ImageView avatar = (ImageView) rowView.findViewById(R.id.avatar);
-        chatName.setText(values.get(position).getName());
+        contactName.setText(values.get(position).getName());
         avatar.setImageResource(R.drawable.ic_action_dark_profile);
 
         return rowView;

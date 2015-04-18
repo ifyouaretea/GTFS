@@ -19,6 +19,11 @@ import android.widget.SearchView;
 import com.cedarsoftware.util.io.JsonWriter;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import cse.sutd.gtfs.Adapters.ChatAdapters;
 import cse.sutd.gtfs.Objects.ChatRooms;
@@ -30,6 +35,7 @@ import cse.sutd.gtfs.serverUtils.NetworkService;
 public class MainActivity extends ActionBarActivity {
     private GTFSClient client;
     private SharedPreferences.Editor editor;
+    private static final ExecutorService exec = new ScheduledThreadPoolExecutor(100);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +50,18 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setTitle("Chats");
         setContentView(R.layout.activity_main);
         Log.d("user", prefs.getString("userid", null));
-        MessageDbAdapter  dbMessages = MessageDbAdapter.getInstance(this);
+        MessageDbAdapter dbMessages = MessageDbAdapter.getInstance(this);
         Cursor chatrooms = dbMessages.getChats();
 
         final ArrayList<ChatRooms> chatroom = new ArrayList<ChatRooms>();
 
         if (chatrooms != null) {
             chatrooms.moveToFirst();
-            while(chatrooms.moveToNext()) {
+            while (chatrooms.moveToNext()) {
                 ChatRooms a = new ChatRooms(chatrooms.getString(0),
-                chatrooms.getString(1),chatrooms.getString(2));
+                        chatrooms.getString(1), chatrooms.getString(2));
                 chatroom.add(a);
-                Log.d("chatroom",chatrooms.getString(0));
+                Log.d("chatroom", chatrooms.getString(0));
             }
             chatrooms.close();
         }
@@ -78,15 +84,60 @@ public class MainActivity extends ActionBarActivity {
 
         MessageBundle userRequestBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
                 MessageBundle.messageType.GET_USERS);
-        String[][] users = getNumbers();
-        for (String[] s : users) {
-            userRequestBundle.putUsers(s);
-            Intent i = new Intent(getApplicationContext(), NetworkService.class);
-            i.putExtra(NetworkService.MESSAGE_KEY,
-                    JsonWriter.objectToJson(userRequestBundle.getMessage()));
 
-            this.startService(i);
-        }
+        Callable<String[][]> task = new Callable<String[][]>() {
+            public String[][] call() {
+
+                Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+                phones.moveToFirst();
+                ArrayList<String> phoneNumbers10 = new ArrayList<String>();
+                ArrayList<ArrayList<String>> phoneNumbers = new ArrayList<ArrayList<String>>();
+                int i = 0;
+                while (phones.moveToNext()) {
+                    if (i >= 20) {
+                        i = 0;
+                        phoneNumbers.add(phoneNumbers10);
+                        phoneNumbers10 = new ArrayList<String>();
+                    }
+                    String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
+                    String h1 = phoneNumber.replaceAll("\\s", "");
+                    String h2 = h1.replaceAll(" ", "");
+                    h2 = h2.replace("+65", "");
+                    h2 = h2.replaceAll("\\D", "");
+                    if (h2.length() >= 8 && !h2.equals(client.getID())) {
+                        phoneNumbers10.add(h2);
+                        i++;
+                    }
+                }
+                if (phoneNumbers10.size() < 20) {
+                    for (int l = 0; l < (20 - phoneNumbers10.size()); l++) {
+                        phoneNumbers10.add("");
+                    }
+                }
+                phones.close();
+                String[][] phonenumber = new String[phoneNumbers.size()][phoneNumbers10.size()];
+                for (int j = 0; j < phoneNumbers.size(); j++)
+                    for (int k = 0; k < phoneNumbers10.size(); k++)
+                        phonenumber[j][k] = phoneNumbers.get(j).get(k);
+                return phonenumber;
+            }
+        };
+        String[][] users;
+        Future<String[][]> backtothefuture = exec.submit(task);
+        try {
+            backtothefuture.get(1, TimeUnit.MINUTES);
+
+            users = backtothefuture.get();
+            for (String[] s : users) {
+                userRequestBundle.putUsers(s);
+                Intent i = new Intent(getApplicationContext(), NetworkService.class);
+                i.putExtra(NetworkService.MESSAGE_KEY,
+                        JsonWriter.objectToJson(userRequestBundle.getMessage()));
+
+                this.startService(i);
+            }
+        }catch(Exception e){}
+
     }
 
 
@@ -158,40 +209,6 @@ public class MainActivity extends ActionBarActivity {
         super.onStart();
         client.resetNotificationMap();
     }
-    public String[][] getNumbers() {
-        Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        phones.moveToFirst();
-        ArrayList<String> phoneNumbers10 = new ArrayList<String>();
-        ArrayList<ArrayList<String>> phoneNumbers = new ArrayList<ArrayList<String>>();
-        int i=0;
-        while (phones.moveToNext()){
-            if(i>=20) {
-                i=0;
-                phoneNumbers.add(phoneNumbers10);
-                phoneNumbers10 = new ArrayList<String>();
-            }
-            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
-            String h1 = phoneNumber.replaceAll("\\s","");
-            String h2 = h1.replaceAll(" ","");
-            h2 = h2.replace("+65", "");
-            h2 = h2.replaceAll("\\D", "");
-            if (h2.length() >= 8 && !h2.equals(client.getID())) {
-                phoneNumbers10.add(h2);
-                i++;
-            }
-        }
-        if(phoneNumbers10.size()<20){
-            for(int l=0;l<(20-phoneNumbers10.size());l++){
-                phoneNumbers10.add("");
-            }
-        }
-        phones.close();
-        String[][] phonenumber = new String[phoneNumbers.size()][phoneNumbers10.size()];
-        for(int j=0;j<phoneNumbers.size();j++)
-            for(int k=0;k<phoneNumbers10.size();k++)
-                phonenumber[j][k]=phoneNumbers.get(j).get(k);
 
-        return phonenumber;
-    }
 
 }
