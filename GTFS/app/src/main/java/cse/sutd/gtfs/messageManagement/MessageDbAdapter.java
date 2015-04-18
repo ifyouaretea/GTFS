@@ -283,6 +283,7 @@ public class MessageDbAdapter {
         result.close();
         return returnValue;
     }
+
     public void importChatrooms(Map message){
         Object[] chatrooms = (Object[])message.get(MessageBundle.CHATROOMS);
         for(Object chatroomO : chatrooms){
