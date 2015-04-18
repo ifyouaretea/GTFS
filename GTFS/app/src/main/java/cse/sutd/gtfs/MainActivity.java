@@ -1,5 +1,6 @@
 package cse.sutd.gtfs;
 
+import android.app.NotificationManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -208,6 +209,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onStart() {
         super.onStart();
         client.resetNotificationMap();
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(0);
     }
 
 
