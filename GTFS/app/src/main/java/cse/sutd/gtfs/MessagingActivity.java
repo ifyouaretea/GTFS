@@ -1,5 +1,6 @@
 package cse.sutd.gtfs;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -158,6 +159,12 @@ public class MessagingActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(0);
+    }
     public void handleMessage(Map message) {
         Log.d("Handle message", "I'm handling a message!");
         String messageType = (String) message.get(MessageBundle.TYPE);

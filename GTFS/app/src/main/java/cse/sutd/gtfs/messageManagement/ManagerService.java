@@ -22,6 +22,7 @@ import java.util.Map;
 
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.MainActivity;
+import cse.sutd.gtfs.MessagingActivity;
 import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
@@ -133,14 +134,19 @@ public class ManagerService extends Service{
             body = bodyBuilder.toString();
         }
 
+
+        Intent openMessagingIntent = new Intent(getApplicationContext(), MessagingActivity.class);
+        openMessagingIntent.putExtra("ID", chatroomID);
+        openMessagingIntent.putExtra(MessageBundle.TO_PHONE_NUMBER,
+                (String) message.get(MessageBundle.FROM_PHONE_NUMBER));
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle(title)
                         .setContentText(body)
                         .setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0,
-                                new Intent(getApplicationContext(), MainActivity.class),
-                                PendingIntent.FLAG_ONE_SHOT))
+                                openMessagingIntent, PendingIntent.FLAG_ONE_SHOT))
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(body));
 
