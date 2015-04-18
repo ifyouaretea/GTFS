@@ -20,8 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            style="@android:style/TextAppearance.Holo.Large"
-            android:visibility="visible" />
+            style="@android:style/TextAppearance.Holo.Large"/>
         <TextView
             android:id="@+id/textMessage"
             android:text="nooooo hello doo"

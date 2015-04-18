@@ -7,11 +7,19 @@ public class ChatRooms {
     private String id;
     private String name;
     private String lastmsg;
+    private int isGroup;
 
-    public ChatRooms(String id,String name, String lastmsg){
+    public ChatRooms(String id,String name, String lastmsg, int isGroup){
         this.id=id;
         this.name=name;
         this.lastmsg=lastmsg;
+        this.isGroup = isGroup;
+    }
+
+    public ChatRooms(String id,String name, int isGroup){
+        this.id=id;
+        this.name=name;
+        this.isGroup = isGroup;
     }
 
     public String getId() {
@@ -37,4 +45,8 @@ public class ChatRooms {
     public void setLastmsg(String lastmsg) {
         this.lastmsg = lastmsg;
     }
+
+    public int getIsGroup() {return isGroup;   }
+
+    public void setIsGroup(int isGroup) { this.isGroup = isGroup;   }
 }

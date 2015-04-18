@@ -2,13 +2,6 @@
 <items version="2" >
 
     <item
-        jar="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\libs\SwipeLayout.jar"
-        jumboMode="false"
-        revision="22.0.0"
-        sha1="c092dd2f2bdea6c04c5bf4122db66cb3495a3c35">
-        <dex dex="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\SwipeLayout-28b995409d790390c0da7408ddfa368d15b8ea70.jar" />
-    </item>
-    <item
         jar="C:\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.0.0\support-annotations-22.0.0.jar"
         jumboMode="false"
         revision="22.0.0"
@@ -30,6 +23,20 @@
         <dex dex="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\classes-ce0e92f2fc3f80a521361345b856e921e656c2b9.jar" />
     </item>
     <item
+        jar="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\classes-00738d51edd88945ead1f4f4f4aa37f80f7ebd1f.jar" />
+    </item>
+    <item
+        jar="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\libs\SwipeLayout.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="c092dd2f2bdea6c04c5bf4122db66cb3495a3c35">
+        <dex dex="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\SwipeLayout-28b995409d790390c0da7408ddfa368d15b8ea70.jar" />
+    </item>
+    <item
         jar="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\libs\cognalys.jar"
         jumboMode="false"
         revision="22.0.0"
@@ -42,13 +49,6 @@
         revision="22.0.0"
         sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
         <dex dex="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\internal_impl-22.0.0-f77f3ff22e087a2e2c5434150a02f65d0b71f2f1.jar" />
-    </item>
-    <item
-        jar="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\classes.jar"
-        jumboMode="false"
-        revision="22.0.0"
-        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
-        <dex dex="D:\Francisco Furtado\Documents\GitHub\GTFS\GTFS\app\build\intermediates\pre-dexed\debug\classes-00738d51edd88945ead1f4f4f4aa37f80f7ebd1f.jar" />
     </item>
 
 </items>
