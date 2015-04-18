@@ -184,13 +184,18 @@ public class MessageDbAdapter {
     }
 
     public Cursor getChats(){
-        return mDb.rawQuery("SELECT _id, chatName, lastMessage FROM " +
+        return mDb.rawQuery("SELECT _id, chatName, lastMessage, isGroup FROM " +
                 "chats", null);
     }
 
     public Cursor getContacts(){
         return mDb.rawQuery("SELECT _id, name FROM " +
                 "contacts", null);
+    }
+
+    public Cursor getContact(String phoneNumber){
+        return mDb.rawQuery("SELECT _id, name FROM " +
+                "contacts WHERE _id = '"+phoneNumber+"'", null);
     }
 
 

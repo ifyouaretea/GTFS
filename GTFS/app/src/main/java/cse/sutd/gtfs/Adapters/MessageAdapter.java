@@ -1,6 +1,7 @@
 package cse.sutd.gtfs.Adapters;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cse.sutd.gtfs.R;
+import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 
 /**
@@ -22,12 +24,14 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> {
     private final Context context;
     private final ArrayList<MessageBundle> values;
     private final String user;
+    private final int isGroup;
 
-    public MessageAdapter(Context context, ArrayList<MessageBundle> values, String user) {
+    public MessageAdapter(Context context, ArrayList<MessageBundle> values, String user, int isGroup) {
         super(context, R.layout.message_list_item_left, values);
         this.context = context;
         this.values = values;
         this.user = user;
+        this.isGroup = isGroup;
     }
 
     @Override
@@ -41,11 +45,31 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> {
             LinearLayout lay = (LinearLayout) rowView.findViewById(R.id.userAndMessage);
             lay.setBackgroundColor(Color.GREEN);
         }
-        else
+        else {
             rowView = inflater.inflate(R.layout.message_list_item_left, parent, false);
+            TextView userName = (TextView) rowView.findViewById(R.id.textUser);
+            if(isGroup==0){
+                userName.setVisibility(View.GONE);
+            }else{
+                MessageDbAdapter dbMessages = MessageDbAdapter.getInstance(context);
+                Cursor contactName = dbMessages.getContact(user);
+                String contact = null;
+                if (contactName != null) {
+                    contactName.moveToFirst();
+                    while (contactName.moveToNext()) {
+                        contact = contactName.getString(1);
+                    }
+                    contactName.close();
+                }
+                userName.setText(contact);
+            }
+        }
+
         TextView msg = (TextView) rowView.findViewById(R.id.textMessage);
-        TextView user = (TextView) rowView.findViewById(R.id.textUser);
         msg.setText((String)values.get(position).getMessage().get("message"));
+
+        TextView time = (TextView) rowView.findViewById(R.id.textTime);
+        time.setText(values.get(position).getTime());
 
         return rowView;
     }

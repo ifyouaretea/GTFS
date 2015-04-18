@@ -1,7 +1,6 @@
 package cse.sutd.gtfs.serverUtils;
 
-import org.w3c.dom.Text;
-
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -12,6 +11,8 @@ import java.util.concurrent.TimeUnit;
  * Created by Glen on 02/04/2015.
  */
 public class MessageBundle {
+
+
 
     //Predefined message types
     public static enum messageType{
@@ -42,6 +43,8 @@ public class MessageBundle {
     public static final String CHATROOMS = "chatrooms";
     public static final String VALID_STATUS = "1";
 
+    private String time;
+
     public MessageBundle(String fromNumber, String sessionToken, messageType type) {
         super();
         messageMap = new HashMap<>();
@@ -67,6 +70,7 @@ public class MessageBundle {
         sb.append(c.get(Calendar.HOUR_OF_DAY) + ":");
         sb.append(c.get(Calendar.MINUTE) + ":");
         sb.append(c.get(Calendar.SECOND));
+        setTime(c);
         return messageMap.put(TIMESTAMP, sb.toString());
     }
 
@@ -96,5 +100,13 @@ public class MessageBundle {
     }
     public Map getMessage(){
         return this.messageMap;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(Calendar time) {
+        this.time = (new SimpleDateFormat("HH:mm")).format(time.getTime());
     }
 }

@@ -60,7 +60,7 @@ public class MainActivity extends ActionBarActivity {
             chatrooms.moveToFirst();
             while (chatrooms.moveToNext()) {
                 ChatRooms a = new ChatRooms(chatrooms.getString(0),
-                        chatrooms.getString(1), chatrooms.getString(2));
+                        chatrooms.getString(1), chatrooms.getString(2), chatrooms.getInt(3));
                 chatroom.add(a);
                 Log.d("chatroom", chatrooms.getString(0));
             }
@@ -78,6 +78,8 @@ public class MainActivity extends ActionBarActivity {
                 final String item = ((ChatRooms) parent.getItemAtPosition(position)).getId();
                 Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
                 i.putExtra("ID", chatroom.get(position).getId());
+                i.putExtra("NAME", chatroom.get(position).getName());
+                i.putExtra("ISGROUP", chatroom.get(position).getIsGroup());
                 startActivity(i);
             }
         });

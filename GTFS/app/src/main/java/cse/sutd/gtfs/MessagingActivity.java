@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import cse.sutd.gtfs.Adapters.MessageAdapter;
+import cse.sutd.gtfs.Objects.ChatRooms;
 import cse.sutd.gtfs.messageManagement.ManagerService;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
@@ -41,7 +42,9 @@ public class MessagingActivity extends ActionBarActivity {
     private String toPhoneNumber;   //TODO: idk yet
     private String sessionToken;    //get from client.getSESSIONID();
     private String chatroomID;      //get from previous intent
+    private int isGroup;
 
+    private ChatRooms chat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +55,11 @@ public class MessagingActivity extends ActionBarActivity {
         if (extras != null) {
             chatroomID = extras.getString("ID");
             toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
+            isGroup = extras.getInt("ISGROUP");
+            chat = new ChatRooms(chatroomID,toPhoneNumber,isGroup);
         }
 
         //TODO: Download chatrooms from server to local DB
-
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_action_profile); //user's pic
@@ -85,18 +89,11 @@ public class MessagingActivity extends ActionBarActivity {
                     message.add(a);
                     timestamp.add(msgBundles.getString(2));
                 } while (msgBundles.moveToNext());
-
                 msgBundles.close();
             }
         }
-//        MessageBundle hi = new MessageBundle("1234", "asdsd", MessageBundle.messageType.TEXT);
-//        hi.putMessage("hi Nikhil!"); hi.putToPhoneNumber("3128869026"); hi.putChatroomID("12345");
-//        MessageBundle hi1 = new MessageBundle("3128869026", "asdsd", MessageBundle.messageType.TEXT);
-//        hi1.putMessage("Beer Tonight! On?"); hi1.putToPhoneNumber("1234"); hi1.putChatroomID("12345");
 
-//        message.add(hi); message.add(hi1);
-
-        adapter = new MessageAdapter(this, message, userID);
+        adapter = new MessageAdapter(this, message, userID, isGroup);
         listview.setAdapter(adapter);
         msg = (TextView) findViewById(R.id.message);
         Button send = (Button) findViewById(R.id.sendMessageButton);
@@ -109,7 +106,6 @@ public class MessagingActivity extends ActionBarActivity {
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (msg.getText().toString().trim().length() > 0) {
-
                     if (sessionToken == null)
                         sessionToken = client.getSESSION_ID();
                     if (chatroomID == null) {
@@ -133,7 +129,6 @@ public class MessagingActivity extends ActionBarActivity {
                     MessagingActivity.this.startService(intent);
 
                     message.add(textBundle);
-
 
                     msg.setText("");
                     adapter.notifyDataSetChanged();
