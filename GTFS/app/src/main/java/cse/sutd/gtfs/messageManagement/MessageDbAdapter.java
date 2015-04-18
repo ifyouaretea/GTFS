@@ -54,7 +54,7 @@ public class MessageDbAdapter {
     private static MessageDbAdapter instance;
     private static class DatabaseHelper extends SQLiteOpenHelper {
         private static final String DATABASE_CREATE_MESSAGES =
-                "create table messages (_id integer primary key autoincrement, "
+                "create table messages (_id integer primary key, "
                         + "chatID text not null, body text not null," +
                         "from_phone_number text not null, timestamp text not null);";
 
@@ -120,6 +120,7 @@ public class MessageDbAdapter {
     public int storeMessage(Map message){
         Log.d("path", mDb.getPath());
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
+        String messageID = (String) message.get(MessageBundle.MESSAGE_ID);
         String timestamp = (String) message.get(MessageBundle.TIMESTAMP);
         String from_phone_number = (String) message.get(MessageBundle.FROM_PHONE_NUMBER);
         String body = (String) message.get(MessageBundle.MESSAGE);
@@ -151,21 +152,21 @@ public class MessageDbAdapter {
         if(!isChatExists){
             chatValues.put(ROWID, chatID);
             chatValues.put(CHATNAME, from_phone_number);
-            chatValues.put(LAST_MESSAGE, String.valueOf(System.currentTimeMillis()));
+            chatValues.put(LAST_MESSAGE, chatID);
             Log.d("Chat Values", chatValues.toString());
             mDb.insert(CHATS, null, chatValues);
         }else{
             String updateSQL =
                     "UPDATE chats SET " + LAST_MESSAGE + " = '" +
-                            String.valueOf(System.currentTimeMillis()) +
+                            messageID +
                             "' WHERE _id = '"+ chatID + "'";
 
             mDb.execSQL(updateSQL);
-            //mDb.update(CHATS, chatValues, "_id =" + chatID, null);
         }
 
         ContentValues messageValues = new ContentValues();
         messageValues.put(CHATID, chatID);
+        messageValues.put(ROWID, messageID);
         messageValues.put(TIMESTAMP, timestamp);
         messageValues.put(BODY, body);
         messageValues.put(FROM_PHONE_NUMBER, from_phone_number);
@@ -185,7 +186,7 @@ public class MessageDbAdapter {
 
     public Cursor getChats(){
         return mDb.rawQuery("SELECT _id, chatName, lastMessage FROM " +
-                "chats", null);
+                "chats ORDER BY lastMessage DESC", null);
     }
 
     public Cursor getContacts(){

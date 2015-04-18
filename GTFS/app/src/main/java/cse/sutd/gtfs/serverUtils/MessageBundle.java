@@ -29,6 +29,7 @@ public class MessageBundle {
     public static final String CHATROOMID = "chatroom_id";
     public static final String CHATROOM_NAME = "chatroom_name";
     public static final String MESSAGE = "message";
+    public static final String MESSAGE_ID = "message_id";
     public static final String NOTE_ID = "note_id";
     public static final String NOTE_TITLE = "note_title";
     public static final String NOTE_TEXT = "note_text";
@@ -49,7 +50,7 @@ public class MessageBundle {
         messageMap.put(SESSION_TOKEN, sessionToken);
         messageMap.put(TYPE, type.toString());
         if(type == messageType.CREATE_ROOM || type == messageType.CREATE_SINGLE_ROOM )
-            messageMap.put(EXPIRY, "0");
+            messageMap.put(EXPIRY, "0"  );
         putTimestamp();
     }
 
