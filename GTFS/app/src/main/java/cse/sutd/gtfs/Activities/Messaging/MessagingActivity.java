@@ -26,6 +26,7 @@ import com.cedarsoftware.util.io.JsonWriter;
 import java.util.ArrayList;
 import java.util.Map;
 
+import cse.sutd.gtfs.Activities.Notes.NoteListActivity;
 import cse.sutd.gtfs.Adapters.MessageAdapter;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.ChatRoom;
@@ -152,6 +153,11 @@ public class MessagingActivity extends ActionBarActivity {
         switch(item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
+                return true;
+            case R.id.open_notes:
+                Intent openNotes = new Intent(this, NoteListActivity.class);
+                openNotes.putExtra(NoteListActivity.CHAT_ID_KEY, chatroomID);
+                startActivity(openNotes);
                 return true;
         }
 

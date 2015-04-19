@@ -1,7 +1,11 @@
 package cse.sutd.gtfs.Activities.Notes;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,15 +19,21 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cedarsoftware.util.io.JsonWriter;
+
 import java.util.ArrayList;
 
 import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
+import cse.sutd.gtfs.Activities.ProfileActivity;
 import cse.sutd.gtfs.Adapters.NoteAdapter;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.ChatRoom;
 import cse.sutd.gtfs.Objects.Note;
 import cse.sutd.gtfs.R;
+import cse.sutd.gtfs.messageManagement.ManagerService;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.serverUtils.MessageBundle;
+import cse.sutd.gtfs.serverUtils.NetworkService;
 
 public class NoteListActivity extends ActionBarActivity {
 
@@ -32,6 +42,7 @@ public class NoteListActivity extends ActionBarActivity {
     private MessageDbAdapter dbAdapter;
     private GTFSClient client;
     private ArrayList<Note> noteList;
+    NoteAdapter noteListAdapter;
 
     public static final String CHAT_ID_KEY = "chatID";
     @Override
@@ -44,22 +55,19 @@ public class NoteListActivity extends ActionBarActivity {
             chatID = extras.getString(CHAT_ID_KEY);
         }
         client = (GTFSClient) getApplication();
-        dbAdapter = client.getDatabaseAdapter();
-
-        Cursor detailsCursor = dbAdapter.getNoteIDTitleBody(chatID);
         noteList = new ArrayList<>();
-        if(detailsCursor == null)
-            return;
-        if (detailsCursor.getCount() < 1) {
-            detailsCursor.close();
-            return;
-        }
-        do {
-            noteList.add(new Note(detailsCursor.getString(0), detailsCursor.getString(1),
-                    detailsCursor.getString(2)));
-        }while (!detailsCursor.moveToNext());
+        listView = (ListView) findViewById(R.id.noteList);
 
-        NoteAdapter noteListAdapter = new NoteAdapter(this, noteList);
+        dbAdapter = client.getDatabaseAdapter();
+        noteListAdapter = new NoteAdapter(this, noteList);
+
+        fetchNotesFromServer();
+
+        IntentFilter receivedIntentFilter = new IntentFilter(ManagerService.UPDATE_UI);
+        MessageBroadcastReceiver broadcastReceiver = new MessageBroadcastReceiver();
+        LocalBroadcastManager.getInstance(getApplicationContext())
+                .registerReceiver(broadcastReceiver, receivedIntentFilter);
+
         listView.setAdapter(noteListAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -72,7 +80,41 @@ public class NoteListActivity extends ActionBarActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        fetchNotesFromServer();
+    }
 
+    private void fetchNotesFromServer(){
+        MessageBundle createNoteBundle = new MessageBundle(client.getID(),
+                client.getSESSION_ID(),MessageBundle.messageType.GET_NOTES);
+        createNoteBundle.putChatroomID(chatID);
+
+        String jsonMessage = JsonWriter.objectToJson(createNoteBundle.getMessage());
+        Intent sendMessageIntent = new Intent(this, NetworkService.class);
+        sendMessageIntent.putExtra(NetworkService.MESSAGE_KEY, jsonMessage);
+        this.startService(sendMessageIntent);
+        updateUI();
+    }
+
+    private void updateUI(){
+        noteList.clear();
+        Cursor detailsCursor = dbAdapter.getNoteIDTitleBody(chatID);
+
+        if(detailsCursor == null)
+            return;
+        if (detailsCursor.getCount() < 1) {
+            detailsCursor.close();
+            return;
+        }
+        detailsCursor.moveToFirst();
+        do {
+            noteList.add(new Note(detailsCursor.getString(0), detailsCursor.getString(1),
+                    detailsCursor.getString(2)));
+        }while (detailsCursor.moveToNext());
+        noteListAdapter.notifyDataSetChanged();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -88,10 +130,24 @@ public class NoteListActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.create_note:
+                Intent intent = new Intent(this, CreateNoteActivity.class);
+                intent.putExtra(CHAT_ID_KEY, chatID);
+                startActivity(intent);
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
+
+    private class MessageBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateUI();
+        }
+    }
+
 }

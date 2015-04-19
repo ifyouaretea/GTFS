@@ -46,13 +46,14 @@ public class MessageDbAdapter {
     public static final String BODY = "body";
     public static final String NOTE_CREATOR = "noteCreator";
     public static final String TITLE = "title";
+    public static final String NOTES = "notes";
 
     private static final String TAG = "MessageDbAdapter";
 
     public static final String DATABASE_CREATE_NOTES =
             "create table notes (_id text primary key, "
                     + "title text not null, " +
-                    "body text not null, chatID text not null, noteCreator text not null);";
+                    "body text not null, chatID text not null, noteCreator text);";
 
     private static MessageDbAdapter instance;
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -474,25 +475,26 @@ public class MessageDbAdapter {
         Object[] notes = (Object[]) message.get(MessageBundle.NOTES);
         if (notes == null)
             return;
+        String chatID = (String) message.get(MessageBundle.CHATROOMID);
         for(Object note : notes)
-            createNote((Map) note);
+            createNote(chatID, (Map) note);
     }
 
-    public long createNote (Map message){
-        String chatID = (String) message.get(MessageBundle.CHATROOMID);
+    public long createNote (String chatID, Map message){
+        Log.d("Note insertion", message.toString());
         String noteID = (String) message.get(MessageBundle.NOTE_ID);
         String note_title = (String) message.get(MessageBundle.NOTE_TITLE);
         String note_text = (String) message.get(MessageBundle.NOTE_TEXT);
         String note_creator = (String) message.get(MessageBundle.NOTE_CREATOR);
 
-        ContentValues chatValues = new ContentValues();
-        chatValues.put(ROWID, noteID);
-        chatValues.put(CHATID, chatID);
-        chatValues.put(TITLE, note_title);
-        chatValues.put(BODY, note_text);
-        chatValues.put(NOTE_CREATOR, note_creator);
+        ContentValues noteValues = new ContentValues();
+        noteValues.put(ROWID, noteID);
+        noteValues.put(CHATID, chatID);
+        noteValues.put(TITLE, note_title);
+        noteValues.put(BODY, note_text);
+        noteValues.put(NOTE_CREATOR, note_creator);
 
-        return mDb.insert(CHATS, null, chatValues);
+        return mDb.insert(NOTES, null, noteValues);
     }
 
     public String getLatestMessage(String chatID){

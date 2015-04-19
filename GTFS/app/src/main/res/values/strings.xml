@@ -24,5 +24,6 @@
     <string name="title_activity_add_contact_to_group">AddContactToGroup</string>
     <string name="title_activity_note">NoteActivity</string>
     <string name="title_activity_note_list">NoteListActivity</string>
+    <string name="title_activity_create_note">CreateNoteActivity</string>
 
 </resources>

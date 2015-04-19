@@ -13,30 +13,28 @@ import com.cedarsoftware.util.io.JsonWriter;
 
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.R;
-import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
 
+public class CreateNoteActivity extends ActionBarActivity {
 
-public class EditNoteActivity extends ActionBarActivity {
-
-    private MessageDbAdapter dbAdapter;
     private Button confirmButton;
-    private EditText bodyEdit;
+    private EditText titleCreate;
+    private EditText bodyCreate;
     private GTFSClient client;
-    private String noteID;
+    private String chatroomID;
 
-    public static final String NOTE_ID_KEY = "noteID";
+    public static final String CHAT_ID_KEY = "chatID";
     /**
      * Required extras:
-     * String noteID: id of the note this belongs to
+     * String chatID: id of the chat the new note belongs to
      *
      * @param savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_note);
+        setContentView(R.layout.activity_create_note);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -44,42 +42,39 @@ public class EditNoteActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         Bundle extras = getIntent().getExtras();
-
-        if(extras != null) {
-            noteID = extras.getString(NOTE_ID_KEY);
+        if(extras != null){
+            chatroomID = extras.getString(CHAT_ID_KEY);
         }
-
         client = (GTFSClient) getApplication();
-        dbAdapter = client.getDatabaseAdapter();
 
-        String[] titleBody = dbAdapter.getNoteTitleBody(noteID);
-
-        getSupportActionBar().setTitle(titleBody[0]);
-        bodyEdit = (EditText) findViewById(R.id.editBody);
-        bodyEdit.setText(titleBody[1]);
+        bodyCreate = (EditText) findViewById(R.id.create_body);
+        titleCreate = (EditText) findViewById(R.id.create_title);
 
         confirmButton = (Button) findViewById(R.id.confirm);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MessageBundle editNoteBundle = new MessageBundle(client.getID(),
-                        client.getSESSION_ID(),MessageBundle.messageType.EDIT_NOTE);
-                editNoteBundle.putNoteID(noteID);
-                editNoteBundle.putNoteText(bodyEdit.getText().toString());
+                MessageBundle createNoteBundle = new MessageBundle(client.getID(),
+                        client.getSESSION_ID(),MessageBundle.messageType.CREATE_NOTE);
+                createNoteBundle.putNoteText(bodyCreate.getText().toString());
+                createNoteBundle.putNoteTitle(titleCreate.getText().toString());
+                createNoteBundle.putChatroomID(chatroomID);
 
-                String jsonMessage = JsonWriter.objectToJson(editNoteBundle.getMessage());
-                Intent sendMessageIntent = new Intent(EditNoteActivity.this, NetworkService.class);
+                String jsonMessage = JsonWriter.objectToJson(createNoteBundle.getMessage());
+                Intent sendMessageIntent = new Intent(CreateNoteActivity.this, NetworkService.class);
                 sendMessageIntent.putExtra(NetworkService.MESSAGE_KEY, jsonMessage);
-                EditNoteActivity.this.startService(sendMessageIntent);
-                EditNoteActivity.this.finish();
+                CreateNoteActivity.this.startService(sendMessageIntent);
+                CreateNoteActivity.this.finish();
             }
         });
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_note, menu);
+        getMenuInflater().inflate(R.menu.menu_create_note, menu);
         return true;
     }
 

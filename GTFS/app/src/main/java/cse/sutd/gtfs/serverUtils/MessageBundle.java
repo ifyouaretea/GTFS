@@ -18,7 +18,7 @@ public class MessageBundle {
     public static enum messageType{
         AUTH, TEXT,TEXT_RECEIVED, TYPING, CREATE_SINGLE_ROOM, CREATE_ROOM,ROOM_INVITATION,
         SINGLE_ROOM_INVITATION,ACCEPT_INVITATION, LEAVE, GROUP_EXPIRED, GET_USERS,
-        FETCH_NOTE, EDIT_NOTE, GET_ROOMS;
+        FETCH_NOTE, EDIT_NOTE, GET_ROOMS, CREATE_NOTE, GET_NOTES;
     }
 
     private Map<String, String> messageMap;
@@ -106,6 +106,11 @@ public class MessageBundle {
     public String putNoteText(String noteText){
         return messageMap.put(NOTE_TEXT, noteText);
     }
+
+    public String putNoteTitle(String noteTitle){
+        return messageMap.put(NOTE_TITLE, noteTitle);
+    }
+
     public Map getMessage(){
         return this.messageMap;
     }

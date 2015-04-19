@@ -92,6 +92,9 @@ public class ManagerService extends Service{
         else if (messageType.equals(MessageBundle.messageType.GET_USERS.toString()))
             dbAdapter.importUsers(message);
 
+        else if (messageType.equals(MessageBundle.messageType.GET_NOTES.toString()))
+            dbAdapter.importNotes(message);
+
         Intent updateUIIntent = new Intent(UPDATE_UI);
         updateUIIntent.putExtra(NetworkService.MESSAGE_KEY,
                 JsonWriter.objectToJson(message));
