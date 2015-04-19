@@ -1,4 +1,4 @@
-package cse.sutd.gtfs;
+package cse.sutd.gtfs.Activities.Messaging;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -27,8 +27,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import cse.sutd.gtfs.Adapters.MessageAdapter;
-import cse.sutd.gtfs.Objects.ChatRooms;
-import cse.sutd.gtfs.Objects.Contact;
+import cse.sutd.gtfs.GTFSClient;
+import cse.sutd.gtfs.Objects.ChatRoom;
+import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.ManagerService;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
@@ -48,7 +49,7 @@ public class MessagingActivity extends ActionBarActivity {
     private int isGroup;
 
     private MessageDbAdapter dbMessages;
-    private ChatRooms chat;
+    private ChatRoom chat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class MessagingActivity extends ActionBarActivity {
 
             isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
             title = extras.getString(MessageDbAdapter.CHATNAME);
-            chat = new ChatRooms(chatroomID,toPhoneNumber,isGroup);
+            chat = new ChatRoom(chatroomID,toPhoneNumber,isGroup);
             dbMessages.clearRead(chatroomID);
         }
 
@@ -123,7 +124,6 @@ public class MessagingActivity extends ActionBarActivity {
                     textBundle.putMessage(msg.getText().toString());
                     textBundle.putChatroomID(chatroomID);
 
-                    Log.d("Attempting to send", textBundle.getMessage().toString());
                     Intent intent = new Intent(MessagingActivity.this, NetworkService.class);
                     intent.putExtra(NetworkService.MESSAGE_KEY,
                             JsonWriter.objectToJson(textBundle.getMessage()));

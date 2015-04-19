@@ -3,20 +3,20 @@ package cse.sutd.gtfs.Objects;
 /**
  * Created by Francisco Furtado on 10/04/2015.
  */
-public class ChatRooms {
+public class ChatRoom {
     private String id;
     private String name;
     private String lastmsg;
     private int isGroup;
 
-    public ChatRooms(String id,String name, String lastmsg, int isGroup){
+    public ChatRoom(String id, String name, String lastmsg, int isGroup){
         this.id=id;
         this.name=name;
         this.lastmsg=lastmsg;
         this.isGroup = isGroup;
     }
 
-    public ChatRooms(String id,String name, int isGroup){
+    public ChatRoom(String id, String name, int isGroup){
         this.id=id;
         this.name=name;
         this.isGroup = isGroup;

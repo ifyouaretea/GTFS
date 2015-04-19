@@ -514,16 +514,26 @@ public class MessageDbAdapter {
         return null;
     }
 
-    @Deprecated
-    public String[] getChatroomNameGroup(String chatID){
-        Cursor result = mDb.rawQuery(String.format("SELECT chatName, isGroup FROM " +
-                "chats WHERE _id = '%s'",chatID), null);
-        if(result.getCount() < 1)
+    public String[] getNoteTitleBody(String noteID){
+        Cursor titleBody = mDb.rawQuery(String.format(
+                "SELECT title, body FROM notes WHERE _id  = '%s'", noteID), null);
+        if (titleBody == null)
             return null;
-        result.moveToFirst();
+        if (titleBody.getCount() < 1){
+            titleBody.close();
+            return null;
+        }
+        titleBody.moveToFirst();
         String[] returnValue = new String[2];
-        returnValue[0] = result.getString(0);
-        returnValue[1] = result.getString(1);
+
+        returnValue[0] = titleBody.getString(0);
+        returnValue[1] = titleBody.getString(1);
+        titleBody.close();
         return returnValue;
+    }
+
+    public Cursor getNoteIDTitleBody(String chatID){
+        return mDb.rawQuery(String.format("SELECT _id, title, body FROM notes WHERE chatID = '%s'",
+                chatID), null);
     }
 }

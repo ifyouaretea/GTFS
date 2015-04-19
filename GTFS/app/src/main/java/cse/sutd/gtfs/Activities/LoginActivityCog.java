@@ -1,4 +1,4 @@
-package cse.sutd.gtfs;
+package cse.sutd.gtfs.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,7 +19,9 @@ import com.matesnetwork.interfaces.VerificationListner;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import cse.sutd.gtfs.messageManagement.ManagerService;
+import cse.sutd.gtfs.Activities.Messaging.MainActivity;
+import cse.sutd.gtfs.GTFSClient;
+import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
 

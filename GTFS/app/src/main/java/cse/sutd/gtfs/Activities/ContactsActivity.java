@@ -1,4 +1,4 @@
-package cse.sutd.gtfs;
+package cse.sutd.gtfs.Activities;
 
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -20,19 +20,20 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
-import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
 import cse.sutd.gtfs.Adapters.ContactAdapter;
+import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.Contact;
+import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.ManagerService;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;

@@ -1,4 +1,4 @@
-package cse.sutd.gtfs;
+package cse.sutd.gtfs.Activities;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -19,6 +19,8 @@ import android.text.TextUtils;
 
 
 import java.util.List;
+
+import cse.sutd.gtfs.R;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On

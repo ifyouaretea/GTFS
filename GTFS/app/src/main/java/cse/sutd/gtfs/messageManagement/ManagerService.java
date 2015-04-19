@@ -17,12 +17,10 @@ import com.cedarsoftware.util.io.JsonWriter;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import cse.sutd.gtfs.GTFSClient;
-import cse.sutd.gtfs.MainActivity;
-import cse.sutd.gtfs.MessagingActivity;
+import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
 import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;

@@ -102,6 +102,10 @@ public class MessageBundle {
         return messageMap.put(EXPIRY, String.valueOf(System.currentTimeMillis() +
                 timeUnit.toMillis(duration)));
     }
+
+    public String putNoteText(String noteText){
+        return messageMap.put(NOTE_TEXT, noteText);
+    }
     public Map getMessage(){
         return this.messageMap;
     }

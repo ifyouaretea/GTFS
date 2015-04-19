@@ -1,4 +1,4 @@
-package cse.sutd.gtfs;
+package cse.sutd.gtfs.Activities.Messaging;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,7 +23,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import cse.sutd.gtfs.Adapters.ContactAdapter;
+import cse.sutd.gtfs.AddContactToGroup;
+import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.Contact;
+import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 
 
