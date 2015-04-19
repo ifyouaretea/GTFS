@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -19,7 +20,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.cedarsoftware.util.io.JsonWriter;
+
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import cse.sutd.gtfs.Activities.ContactsActivity;
 import cse.sutd.gtfs.Activities.ProfileActivity;
@@ -30,6 +38,8 @@ import cse.sutd.gtfs.Objects.ChatRoom;
 import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.ManagerService;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.serverUtils.MessageBundle;
+import cse.sutd.gtfs.serverUtils.NetworkService;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -38,6 +48,7 @@ public class MainActivity extends ActionBarActivity {
     private ArrayList<ChatRoom> chatroom;
     private MessageDbAdapter dbMessages;
     private ListView listview;
+    private static final ExecutorService exec = new ScheduledThreadPoolExecutor(100);
 
     private class MessageBroadcastReceiver extends BroadcastReceiver {
         private MessageBroadcastReceiver(){}
@@ -147,6 +158,59 @@ public class MainActivity extends ActionBarActivity {
         client.resetNotificationMap();
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
+        requestContacts();
+    }
+
+    private void requestContacts(){
+        MessageBundle userRequestBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
+                MessageBundle.messageType.GET_USERS);
+
+        Callable<String[][]> task = new Callable<String[][]>() {
+            public String[][] call() {
+                Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+                phones.moveToFirst();
+                ArrayList<ArrayList<String>> phoneNumbers = new ArrayList<>();
+                final int USER_LIMIT = 15;
+                do{
+                    ArrayList<String> numberSubList = new ArrayList<>();
+                    for(int i = 0; i < USER_LIMIT; i++) {
+                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
+                        String h1 = phoneNumber.replaceAll("\\s", "");
+                        String h2 = h1.replaceAll(" ", "");
+                        h2 = h2.replace("+65", "");
+                        h2 = h2.replaceAll("\\D", "");
+                        if (h2.length() >= 8 && !h2.equals(client.getID()))
+                            numberSubList.add(h2);
+                        if(!phones.moveToNext())
+                            break;
+                    }
+                    phoneNumbers.add(numberSubList);
+                }while (!phones.isAfterLast());
+
+                phones.close();
+                String[][] phonenumber = new String[phoneNumbers.size()][USER_LIMIT];
+
+                for (int j = 0; j < phoneNumbers.size(); j++)
+                    for (int k = 0; k < phoneNumbers.get(j).size(); k++)
+                        phonenumber[j][k] = phoneNumbers.get(j).get(k);
+                return phonenumber;
+            }
+        };
+
+        String[][] users;
+        Future<String[][]> backtothefuture = exec.submit(task);
+        try {
+            backtothefuture.get(1, TimeUnit.MINUTES);
+
+            users = backtothefuture.get();
+            for (String[] s : users) {
+                userRequestBundle.putUsers(s);
+                Intent i = new Intent(getApplicationContext(), NetworkService.class);
+                i.putExtra(NetworkService.MESSAGE_KEY,
+                        JsonWriter.objectToJson(userRequestBundle.getMessage()));
+                this.startService(i);
+            }
+        }catch(Exception e){}
     }
 
     private void updateUI(){
