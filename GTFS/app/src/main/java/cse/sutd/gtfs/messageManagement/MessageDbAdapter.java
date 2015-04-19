@@ -462,10 +462,15 @@ public class MessageDbAdapter {
         phones.close();*/
 
         for(Object  user : users){
+<<<<<<< HEAD
+            String phone = (String) ((Map)user).get(PHONE_NUMBER);
+            long pass = putContact(phone, phoneName.get(phone));
+=======
             String username = (String) ((Map)user).get(MessageBundle.USERNAME);
             String phoneNumber = (String) ((Map)user).get(PHONE_NUMBER);
             putContact(phoneNumber, username);
 //            putContact(phone, phoneName.get(phone));
+>>>>>>> 99720bbe866a0bc16eaab8aebf014ae1c31fdd47
         }
     }
 

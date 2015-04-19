@@ -1,6 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+<<<<<<< HEAD
+    xmlns:tools="http://schemas.android.com/tools" tools:context="cse.sutd.gtfs.NewGroupActivity">
+    <item android:id="@+id/action_create_group" android:title="NEXT"
+=======
     xmlns:tools="http://schemas.android.com/tools" tools:context="cse.sutd.gtfs.Activities.Messaging.NewGroupActivity">
     <item android:id="@+id/action_create_group" android:title="CREATE"
+>>>>>>> 99720bbe866a0bc16eaab8aebf014ae1c31fdd47
         android:orderInCategory="100" app:showAsAction="always" />
 </menu>

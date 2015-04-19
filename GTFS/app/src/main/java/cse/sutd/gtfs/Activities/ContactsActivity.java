@@ -51,7 +51,11 @@ public class ContactsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD:GTFS/app/src/main/java/cse/sutd/gtfs/ContactsActivity.java
+
+=======
         client = (GTFSClient) getApplicationContext();
+>>>>>>> 99720bbe866a0bc16eaab8aebf014ae1c31fdd47:GTFS/app/src/main/java/cse/sutd/gtfs/Activities/ContactsActivity.java
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher); //user's pic
