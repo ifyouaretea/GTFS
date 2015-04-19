@@ -6,12 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 import cse.sutd.gtfs.GTFSClient;
@@ -462,15 +460,9 @@ public class MessageDbAdapter {
         phones.close();*/
 
         for(Object  user : users){
-<<<<<<< HEAD
-            String phone = (String) ((Map)user).get(PHONE_NUMBER);
-            long pass = putContact(phone, phoneName.get(phone));
-=======
             String username = (String) ((Map)user).get(MessageBundle.USERNAME);
             String phoneNumber = (String) ((Map)user).get(PHONE_NUMBER);
             putContact(phoneNumber, username);
-//            putContact(phone, phoneName.get(phone));
->>>>>>> 99720bbe866a0bc16eaab8aebf014ae1c31fdd47
         }
     }
 

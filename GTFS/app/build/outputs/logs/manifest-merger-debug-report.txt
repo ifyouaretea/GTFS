@@ -86,13 +86,13 @@ ADDED from AndroidManifest.xml:35:9
 		ADDED from AndroidManifest.xml:37:13
 	android:name
 		ADDED from AndroidManifest.xml:36:13
-activity#cse.sutd.gtfs.MainActivity
+activity#cse.sutd.gtfs.Activities.Messaging.MainActivity
 ADDED from AndroidManifest.xml:39:9
 	android:label
 		ADDED from AndroidManifest.xml:41:13
 	android:name
 		ADDED from AndroidManifest.xml:40:13
-activity#cse.sutd.gtfs.SettingsActivity
+activity#cse.sutd.gtfs.Activities.SettingsActivity
 ADDED from AndroidManifest.xml:43:9
 	android:label
 		ADDED from AndroidManifest.xml:45:13
@@ -100,7 +100,7 @@ ADDED from AndroidManifest.xml:43:9
 		ADDED from AndroidManifest.xml:46:13
 	android:name
 		ADDED from AndroidManifest.xml:44:13
-activity#cse.sutd.gtfs.MessagingActivity
+activity#cse.sutd.gtfs.Activities.Messaging.MessagingActivity
 ADDED from AndroidManifest.xml:49:9
 	android:label
 		ADDED from AndroidManifest.xml:51:13
@@ -108,7 +108,7 @@ ADDED from AndroidManifest.xml:49:9
 		ADDED from AndroidManifest.xml:52:13
 	android:name
 		ADDED from AndroidManifest.xml:50:13
-activity#cse.sutd.gtfs.ProfileActivity
+activity#cse.sutd.gtfs.Activities.ProfileActivity
 ADDED from AndroidManifest.xml:54:9
 	android:label
 		ADDED from AndroidManifest.xml:56:13
@@ -116,7 +116,7 @@ ADDED from AndroidManifest.xml:54:9
 		ADDED from AndroidManifest.xml:57:13
 	android:name
 		ADDED from AndroidManifest.xml:55:13
-activity#cse.sutd.gtfs.LoginActivityCog
+activity#cse.sutd.gtfs.Activities.LoginActivityCog
 ADDED from AndroidManifest.xml:59:9
 	android:label
 		ADDED from AndroidManifest.xml:61:13
@@ -132,7 +132,7 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:65:17
 	android:name
 		ADDED from AndroidManifest.xml:65:27
-activity#cse.sutd.gtfs.NewGroupActivity
+activity#cse.sutd.gtfs.Activities.Messaging.NewGroupActivity
 ADDED from AndroidManifest.xml:68:9
 	android:label
 		ADDED from AndroidManifest.xml:70:13
@@ -140,7 +140,7 @@ ADDED from AndroidManifest.xml:68:9
 		ADDED from AndroidManifest.xml:71:13
 	android:name
 		ADDED from AndroidManifest.xml:69:13
-activity#cse.sutd.gtfs.ContactsActivity
+activity#cse.sutd.gtfs.Activities.ContactsActivity
 ADDED from AndroidManifest.xml:73:9
 	android:label
 		ADDED from AndroidManifest.xml:75:13
@@ -148,7 +148,7 @@ ADDED from AndroidManifest.xml:73:9
 		ADDED from AndroidManifest.xml:76:13
 	android:name
 		ADDED from AndroidManifest.xml:74:13
-activity#cse.sutd.gtfs.EventsActivity
+activity#cse.sutd.gtfs.Activities.EventsActivity
 ADDED from AndroidManifest.xml:78:9
 	android:label
 		ADDED from AndroidManifest.xml:80:13
@@ -160,6 +160,24 @@ ADDED from AndroidManifest.xml:82:9
 		ADDED from AndroidManifest.xml:84:13
 	android:name
 		ADDED from AndroidManifest.xml:83:13
+activity#cse.sutd.gtfs.Activities.Notes.EditNoteActivity
+ADDED from AndroidManifest.xml:86:9
+	android:label
+		ADDED from AndroidManifest.xml:88:13
+	android:name
+		ADDED from AndroidManifest.xml:87:13
+activity#cse.sutd.gtfs.Activities.Notes.NoteListActivity
+ADDED from AndroidManifest.xml:90:9
+	android:label
+		ADDED from AndroidManifest.xml:92:13
+	android:name
+		ADDED from AndroidManifest.xml:91:13
+activity#cse.sutd.gtfs.Activities.Notes.CreateNoteActivity
+ADDED from AndroidManifest.xml:94:9
+	android:label
+		ADDED from AndroidManifest.xml:96:13
+	android:name
+		ADDED from AndroidManifest.xml:95:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:22.0.0:20:5

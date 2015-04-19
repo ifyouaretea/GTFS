@@ -9,7 +9,6 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -18,18 +17,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-<<<<<<< HEAD:GTFS/app/src/main/java/cse/sutd/gtfs/NewGroupActivity.java
-=======
-import java.util.ArrayList;
-
-import cse.sutd.gtfs.Adapters.ContactAdapter;
 import cse.sutd.gtfs.AddContactToGroup;
 import cse.sutd.gtfs.GTFSClient;
-import cse.sutd.gtfs.Objects.Contact;
 import cse.sutd.gtfs.R;
-import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
-
->>>>>>> 99720bbe866a0bc16eaab8aebf014ae1c31fdd47:GTFS/app/src/main/java/cse/sutd/gtfs/Activities/Messaging/NewGroupActivity.java
 
 public class NewGroupActivity extends ActionBarActivity {
 
@@ -77,20 +67,7 @@ public class NewGroupActivity extends ActionBarActivity {
         });
         timedGroup = (Switch) findViewById(R.id.switch1);
         timer = (Spinner) findViewById(R.id.timer);
-        Button add_contact = (Button) findViewById(R.id.addContact);
-        add_contact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(NewGroupActivity.this, AddContactToGroup.class);
-                intent.putExtra("timed",timedGroup.isChecked());
-                if(timedGroup.isChecked()) {
-                    intent.putExtra("time",time.getText());
-                    intent.putExtra("unit",String.valueOf(timer.getSelectedItem()));
-                }
-                intent.putExtra("groupName",group_name.getText());
-                startActivity(intent);
-            }
-        });
+
 
         final LinearLayout timing = (LinearLayout) findViewById(R.id.timing);
         time = (EditText) findViewById(R.id.time);

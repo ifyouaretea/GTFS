@@ -43,27 +43,27 @@
             android:value="590e1a8a24152769bb618444413d56832cf0eb7c" />
 
         <activity
-            android:name="cse.sutd.gtfs.MainActivity"
+            android:name="cse.sutd.gtfs.Activities.Messaging.MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
         <activity
-            android:name="cse.sutd.gtfs.SettingsActivity"
+            android:name="cse.sutd.gtfs.Activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="cse.sutd.gtfs.MainActivity" >
+            android:parentActivityName="cse.sutd.gtfs.Activities.Messaging.MainActivity" >
 >
         </activity>
         <activity
-            android:name="cse.sutd.gtfs.MessagingActivity"
+            android:name="cse.sutd.gtfs.Activities.Messaging.MessagingActivity"
             android:label="@string/title_activity_messaging"
-            android:parentActivityName="cse.sutd.gtfs.MainActivity" >
+            android:parentActivityName="cse.sutd.gtfs.Activities.Messaging.MainActivity" >
         </activity>
         <activity
-            android:name="cse.sutd.gtfs.ProfileActivity"
+            android:name="cse.sutd.gtfs.Activities.ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:parentActivityName="cse.sutd.gtfs.MainActivity" >
+            android:parentActivityName="cse.sutd.gtfs.Activities.Messaging.MainActivity" >
         </activity>
         <activity
-            android:name="cse.sutd.gtfs.LoginActivityCog"
+            android:name="cse.sutd.gtfs.Activities.LoginActivityCog"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -72,22 +72,34 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="cse.sutd.gtfs.NewGroupActivity"
+            android:name="cse.sutd.gtfs.Activities.Messaging.NewGroupActivity"
             android:label="@string/title_activity_new_group"
-            android:parentActivityName="cse.sutd.gtfs.MainActivity" >
+            android:parentActivityName="cse.sutd.gtfs.Activities.Messaging.MainActivity" >
         </activity>
         <activity
-            android:name="cse.sutd.gtfs.ContactsActivity"
+            android:name="cse.sutd.gtfs.Activities.ContactsActivity"
             android:label="@string/title_activity_contacts"
-            android:parentActivityName="cse.sutd.gtfs.MainActivity" >
+            android:parentActivityName="cse.sutd.gtfs.Activities.Messaging.MainActivity" >
         </activity>
         <activity
-            android:name="cse.sutd.gtfs.EventsActivity"
+            android:name="cse.sutd.gtfs.Activities.EventsActivity"
             android:label="@string/title_activity_events" >
         </activity>
         <activity
             android:name="cse.sutd.gtfs.AddContactToGroup"
             android:label="@string/title_activity_add_contact_to_group" >
+        </activity>
+        <activity
+            android:name="cse.sutd.gtfs.Activities.Notes.EditNoteActivity"
+            android:label="@string/title_activity_note" >
+        </activity>
+        <activity
+            android:name="cse.sutd.gtfs.Activities.Notes.NoteListActivity"
+            android:label="@string/title_activity_note_list" >
+        </activity>
+        <activity
+            android:name="cse.sutd.gtfs.Activities.Notes.CreateNoteActivity"
+            android:label="@string/title_activity_create_note" >
         </activity>
     </application>
 

@@ -51,11 +51,9 @@ public class ContactsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD:GTFS/app/src/main/java/cse/sutd/gtfs/ContactsActivity.java
 
-=======
         client = (GTFSClient) getApplicationContext();
->>>>>>> 99720bbe866a0bc16eaab8aebf014ae1c31fdd47:GTFS/app/src/main/java/cse/sutd/gtfs/Activities/ContactsActivity.java
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher); //user's pic
@@ -70,7 +68,7 @@ public class ContactsActivity extends ActionBarActivity {
         LocalBroadcastManager.getInstance(getApplicationContext())
                 .registerReceiver(broadcastReceiver, receivedIntentFilter);
 
-        GTFSClient client = (GTFSClient) getApplicationContext();
+
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         final String userID = prefs.getString("userid", null);
         final String sessionToken = client.getSESSION_ID();

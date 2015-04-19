@@ -28,13 +28,10 @@ import java.util.Map;
 
 import cse.sutd.gtfs.Activities.Notes.NoteListActivity;
 import cse.sutd.gtfs.Adapters.MessageAdapter;
-<<<<<<< HEAD:GTFS/app/src/main/java/cse/sutd/gtfs/MessagingActivity.java
-import cse.sutd.gtfs.Objects.ChatRooms;
-=======
+
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.ChatRoom;
 import cse.sutd.gtfs.R;
->>>>>>> 99720bbe866a0bc16eaab8aebf014ae1c31fdd47:GTFS/app/src/main/java/cse/sutd/gtfs/Activities/Messaging/MessagingActivity.java
 import cse.sutd.gtfs.messageManagement.ManagerService;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
@@ -66,14 +63,12 @@ public class MessagingActivity extends ActionBarActivity {
 
         if (extras != null) {
             toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
-<<<<<<< HEAD:GTFS/app/src/main/java/cse/sutd/gtfs/MessagingActivity.java
-=======
+
             if(toPhoneNumber != null)
                 chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
             else
                 chatroomID = extras.getString(MessageDbAdapter.CHATID);
 
->>>>>>> 99720bbe866a0bc16eaab8aebf014ae1c31fdd47:GTFS/app/src/main/java/cse/sutd/gtfs/Activities/Messaging/MessagingActivity.java
             isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
             title = extras.getString(MessageDbAdapter.CHATNAME);
             chat = new ChatRoom(chatroomID,toPhoneNumber,isGroup);
