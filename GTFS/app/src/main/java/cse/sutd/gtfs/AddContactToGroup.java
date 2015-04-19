@@ -1,8 +1,8 @@
 package cse.sutd.gtfs;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -27,16 +28,33 @@ import cse.sutd.gtfs.Objects.Contact;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 
 
-public class AddContactToGroup extends ActionBarActivity implements View.OnClickListener {
+public class AddContactToGroup extends ActionBarActivity {
+    private GTFSClient client;
+    private SharedPreferences.Editor editor;
+    private MessageDbAdapter dbMessages;
+
     private AddContactGroupAdapter addToGroup;
+    private ArrayList<Contact> selected;
+    private String[] extras;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_contact_to_group);
-        ArrayList<Contact> selected = new ArrayList<Contact>();
+        client = (GTFSClient) getApplicationContext();
+        SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
+        editor = prefs.edit();
 
-        final MessageDbAdapter dbMessages = MessageDbAdapter.getInstance(this);
-        final ArrayList<Contact> contacts = new ArrayList<Contact>();
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setTitle("Add Contacts");
+        setContentView(R.layout.activity_add_contact_to_group);
+
+        Intent intent = getIntent();
+        extras = intent.getStringArrayExtra("extras");
+
+        dbMessages = MessageDbAdapter.getInstance(this);
+        final ArrayList<Contact> contacts = new ArrayList<>();
         Cursor contactBundles = dbMessages.getContacts();
         if (contactBundles != null) {
             if (contactBundles.getCount() > 0) {
@@ -63,7 +81,6 @@ public class AddContactToGroup extends ActionBarActivity implements View.OnClick
         });
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
@@ -86,35 +103,32 @@ public class AddContactToGroup extends ActionBarActivity implements View.OnClick
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_done) {
-            StringBuffer responseText = new StringBuffer();
-            responseText.append("The following were selected...n");
-
-            ArrayList<Contact> contacts = addToGroup.values;
-            ArrayList<Contact> selected = new ArrayList<Contact>();
-            for(int i=0;i<contacts.size();i++){
-                Contact contact = contacts.get(i);
-                if(contact.isSelected()){
-                    selected.add(contact);
+        switch(item.getItemId()){
+            case R.id.action_done:
+                selected = new ArrayList<>();
+                ArrayList<Contact> list = addToGroup.values;
+                if (list.size()>0) {
+                    for (Contact cc : list) {
+                        if (cc.isSelected()) {
+                            selected.add(cc);
+                        }
+                    }
+//                    MessageBundle createBundle = new MessageBundle(client.getID(), client.getSESSION_ID(), MessageBundle.messageType.CREATE_ROOM);
+//                    createBundle.putToPhoneNumber(toPhoneNumber);
+//                    //TODO: setChatroomName
+//                    createBundle.putChatroomName(userID + "," + toPhoneNumber);
+//
+//                    Intent intent = new Intent(ContactsActivity.this, NetworkService.class);
+//                    intent.putExtra(NetworkService.MESSAGE_KEY,
+//                            JsonWriter.objectToJson(createBundle.getMessage()));
+//                    ContactsActivity.this.startService(intent);
+                }else{
+                    Toast.makeText(getApplicationContext(), "Please add contacts!", Toast.LENGTH_SHORT).show();
                 }
-            }
-            String[] selectedContacts = new String[selected.size()];
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("selectedContacts", selectedContacts);
-            setResult(Activity.RESULT_OK, resultIntent);
-            finish();
-            return true;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 
     private class AddContactGroupAdapter extends ArrayAdapter<Contact> {
@@ -136,12 +150,11 @@ public class AddContactToGroup extends ActionBarActivity implements View.OnClick
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View rowView = inflater.inflate(R.layout.add_contact_group_item, parent, false);
 
-            holder = new ViewHolder();
+            ViewHolder holder = new ViewHolder();
             holder.name = (TextView) rowView.findViewById(R.id.contactName);
             holder.status = (TextView) rowView.findViewById(R.id.status);
             holder.box = (CheckBox) rowView.findViewById(R.id.checkBox1);

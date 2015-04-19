@@ -28,7 +28,6 @@ import java.util.Map;
 
 import cse.sutd.gtfs.Adapters.MessageAdapter;
 import cse.sutd.gtfs.Objects.ChatRooms;
-import cse.sutd.gtfs.Objects.Contact;
 import cse.sutd.gtfs.messageManagement.ManagerService;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
@@ -61,24 +60,10 @@ public class MessagingActivity extends ActionBarActivity {
         if (extras != null) {
             chatroomID = extras.getString(MessageDbAdapter.CHATID);
             toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
-<<<<<<< HEAD
-            Cursor contactList = dbMessages.getContacts();
-            final ArrayList<Contact> contacts = new ArrayList<Contact>();
-            if (contactList != null) {
-                contactList.moveToFirst();
-                while (contactList.moveToNext()) {
-                    contacts.add(new Contact(contactList.getString(0), contactList.getString(1)));
-                }
-                contactList.close();
-            }
-            isGroup = extras.getInt("ISGROUP");
-            chat = new ChatRooms(chatroomID,chatroomName,isGroup);
-=======
-            isGroup = extras.getInt(MessageDbAdapter.CHATID);
+            isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
             title = extras.getString(MessageDbAdapter.CHATNAME);
             chat = new ChatRooms(chatroomID,toPhoneNumber,isGroup);
             dbMessages.clearRead(chatroomID);
->>>>>>> ce41bd0f575345b9ab37c69327a443fa504b29ba
         }
         if (isGroup == 0)
             title = dbMessages.getUsername(chatroomID);
@@ -179,7 +164,7 @@ public class MessagingActivity extends ActionBarActivity {
             for(Object user: (Object[]) message.get(MessageBundle.USERS)){
                 if(user.equals(toPhoneNumber)){
                     chatroomID = (String) message.get(MessageBundle.CHATROOMID);
-                    Log.d("Messaging activity id updated", chatroomID);
+                    Log.d("Messaging id updated", chatroomID);
                     break;
                 }
             }

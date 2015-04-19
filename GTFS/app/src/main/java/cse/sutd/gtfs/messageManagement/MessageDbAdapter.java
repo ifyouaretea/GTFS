@@ -373,7 +373,7 @@ public class MessageDbAdapter {
         phones.close();
         for(Object  user : users){
             String phone = (String) ((Map)user).get(PHONE_NUMBER);
-            //long pass = putContact(phone, phoneName.get(phone));
+            long pass = putContact(phone, phoneName.get(phone));
         }
     }
 

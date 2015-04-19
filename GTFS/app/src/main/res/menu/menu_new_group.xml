@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context="cse.sutd.gtfs.NewGroupActivity">
-    <item android:id="@+id/action_create_group" android:title="CREATE"
+    <item android:id="@+id/action_create_group" android:title="NEXT"
         android:orderInCategory="100" app:showAsAction="always" />
 </menu>
