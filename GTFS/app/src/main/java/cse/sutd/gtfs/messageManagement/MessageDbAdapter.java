@@ -37,6 +37,7 @@ public class MessageDbAdapter {
     public static final String CHATNAME = "chatName";
     public static final String LAST_MESSAGE = "lastMessage";
     public static final String READ = "read";
+    public static final String ROOM_USERS = "room_users";
     public static final String USERS = "users";
     public static final String NAME = "name";
     public static final String EXPIRY = "expiry";
@@ -45,13 +46,14 @@ public class MessageDbAdapter {
     public static final String BODY = "body";
     public static final String NOTE_CREATOR = "noteCreator";
     public static final String TITLE = "title";
+    public static final String NOTES = "notes";
 
     private static final String TAG = "MessageDbAdapter";
 
     public static final String DATABASE_CREATE_NOTES =
             "create table notes (_id text primary key, "
                     + "title text not null, " +
-                    "body text not null, chatID text not null, noteCreator text not null);";
+                    "body text not null, chatID text not null, noteCreator text);";
 
     private static MessageDbAdapter instance;
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -69,7 +71,7 @@ public class MessageDbAdapter {
 
         private static final String DATABASE_CREATE_CONTACTS =
                 "create table contacts (_id text primary key, "
-                        + "name text);";
+                        + "name text not null, chatID text);";
 
         private static final String DATABASE_NAME = "data";
 
@@ -121,6 +123,7 @@ public class MessageDbAdapter {
      * 2 if the chat been inserted has not existed previously
      */
     public int storeMessage(Map message){
+
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
         String messageID = (String) message.get(MessageBundle.MESSAGE_ID);
         String timestamp = (String) message.get(MessageBundle.TIMESTAMP);
@@ -139,29 +142,12 @@ public class MessageDbAdapter {
             return -1;
         }
 
-        Cursor chatExists = mDb.rawQuery(String.format("SELECT _id FROM chats WHERE " +
-                "_id='%s'", chatID), null);
-
-        boolean isChatExists = chatExists.getCount() > 0;
-        chatExists.close();
-
-        //if chat doesn't exist, create a new entry in the chats table
-        //NOTE: THIS SHOULD ONLY BE USED FOR INDIVIDUAL CHATS
-        //new group chats must be handled by the invitation callback function
-        //createGroupChat() and should be called appropriately when the message type
-        //is evaluated
-        ContentValues chatValues= new ContentValues();
-        if(!isChatExists){
-            chatValues.put(ROWID, chatID);
-            chatValues.put(CHATNAME, from_phone_number);
-            chatValues.put(LAST_MESSAGE, chatID);
-            Log.d("Chat Values", chatValues.toString());
-            mDb.insert(CHATS, null, chatValues);
-        }else{
+        boolean chatCreated = createSingleChat(message);
+        if(!chatCreated) {
             String updateSQL =
                     "UPDATE chats SET " + LAST_MESSAGE + " = '" +
                             messageID +
-                            "' WHERE _id = '"+ chatID + "'";
+                            "' WHERE _id = '" + chatID + "'";
 
             mDb.execSQL(updateSQL);
         }
@@ -183,7 +169,48 @@ public class MessageDbAdapter {
             return -1;
 
         //if inserting succeeds, return 2 if the chat is new, 1 if it's not new
-        return isChatExists ? 1 : 2;
+        return chatCreated ? 2 : 1;
+    }
+
+    public boolean createSingleChat(Map message){
+        String chatID = (String) message.get(MessageBundle.CHATROOMID);
+        String from_phone_number = (String) message.get(MessageBundle.FROM_PHONE_NUMBER);
+
+        Cursor chatExists = mDb.rawQuery(String.format("SELECT _id FROM chats WHERE " +
+                "_id='%s'", chatID), null);
+
+        boolean isChatExists = chatExists.getCount() > 0;
+        chatExists.close();
+
+        if(isChatExists)
+            return false;
+
+        ContentValues chatValues= new ContentValues();
+
+        chatValues.put(ROWID, chatID);
+        chatValues.put(CHATNAME, from_phone_number);
+        chatValues.put(LAST_MESSAGE, chatID);
+        chatValues.put(ISGROUP, 0);
+        if (mDb.insert(CHATS, null, chatValues) <= 0)
+            return false;
+
+        Object[] users = (Object[]) message.get(ROOM_USERS);
+        String ownID = ((GTFSClient) mContext).getID();
+        String otherUser = null;
+
+        for(Object user: users)
+            if (!ownID.equals(user)) {
+                otherUser = (String) user;
+                break;
+            }
+
+        try {
+            mDb.execSQL(String.format("UPDATE contacts SET chat='%s' WHERE _id='%s'",
+                    chatID, otherUser));
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public Cursor getChatMessages(String chatID){
@@ -210,15 +237,10 @@ public class MessageDbAdapter {
     public long createGroupChat(Map message){
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
         String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);
-        String users = Arrays.toString((Object[])message.get(USERS));
+        String users = Arrays.toString((Object[])message.get(ROOM_USERS));
         Integer isGroup = null;
 
-        if((message.get(MessageBundle.TYPE)).equals
-                (MessageBundle.messageType.ROOM_INVITATION.toString()))
-            isGroup = 1;
-        else if((message.get(MessageBundle.TYPE)).equals
-                (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString()))
-            isGroup = 0;
+        isGroup = 1;
 
         int expiry = Integer.parseInt((String) message.get(MessageBundle.EXPIRY));
 
@@ -233,15 +255,28 @@ public class MessageDbAdapter {
     }
 
     public long putContact(String phoneNum, String contactName){
+        Cursor searchChats = mDb.rawQuery("SELECT _id from chats WHERE users LIKE " +
+                "'%" + phoneNum + "%'", null);
+
+        String chatID = null;
+        if(searchChats != null)
+            if(searchChats.getCount() > 0){
+                searchChats.moveToFirst();
+                chatID = searchChats.getString(0);
+                searchChats.close();
+            }
+
         ContentValues chatValues = new ContentValues();
         chatValues.put(ROWID, phoneNum);
         chatValues.put(NAME, contactName);
+        chatValues.put(CHATID, chatID);
         try {
             return mDb.insert(CONTACTS, null, chatValues);
         }catch (SQLiteConstraintException e) {
             return 0;
         }
     }
+
     public long deleteGroupChat(String chatID){
         return mDb.delete(CHATS, ROWID + "=" + chatID, null);
     }
@@ -282,21 +317,25 @@ public class MessageDbAdapter {
         return returnValue;
     }
 
-    public String[] getChatroomNameGroup(String chatID){
-        Cursor result = mDb.rawQuery(String.format("SELECT chatName, isGroup FROM " +
-                        "chats WHERE _id = '%s'",chatID), null);
-        if(result.getCount() < 1)
-            return null;
-        result.moveToFirst();
-        String[] returnValue = new String[2];
-        returnValue[0] = result.getString(0);
-        returnValue[1] = result.getString(1);
-        return returnValue;
-    }
 
-    public String getChatIDForUser(String userID){
+
+/*    public String getChatIDForUser(String userID){
         Cursor result = mDb.rawQuery("SELECT _id FROM chats WHERE isGroup = 0 " +
                 "AND users LIKE '%" + userID + "%'", null);
+        if(result.getCount() != 1) {
+            result.close();
+            return null;
+        }
+        result.moveToFirst();
+        String returnValue = result.getString(0);
+        result.close();
+        return returnValue;
+    }*/
+
+    public String getChatIDForUser(String userID){
+        Cursor result = mDb.rawQuery("SELECT chatID FROM contacts WHERE _id = " +
+                "'" + userID + "'", null);
+
         if(result.getCount() != 1) {
             result.close();
             return null;
@@ -318,7 +357,7 @@ public class MessageDbAdapter {
         unreadMessages.close();
         return returnValue;
     }
-
+/*
     public String getUsername(String chatID){
         Cursor userCursor = mDb.rawQuery(String.format("SELECT users FROM chats WHERE" +
                 " _id ='%s'", chatID), null);
@@ -329,25 +368,75 @@ public class MessageDbAdapter {
             return null;
         }
         userCursor.moveToFirst();
+
         String userList = userCursor.getString(0);
         userList = userList.replaceAll(((GTFSClient) mContext.getApplicationContext()).getID(), "");
-        return userList.replaceAll("\\D", "");
+        String phoneNumber = userList.replaceAll("\\D", "");
+        userCursor.close();
+
+        Cursor usernameCursor = mDb.rawQuery(String.format("SELECT name FROM contacts WHERE" +
+                " _id ='%s'", phoneNumber), null);
+        if (usernameCursor == null)
+            return null;
+        if (usernameCursor.getCount() < 1){
+            usernameCursor.close();
+            return null;
+        }
+        usernameCursor.moveToFirst();
+        String username = usernameCursor.getString(0);
+        usernameCursor.close();
+        return username;
+    }*/
+
+
+    public String getUsername(String chatID){
+        Cursor userCursor = mDb.rawQuery(String.format("SELECT name FROM contacts WHERE" +
+                " chatID ='%s'", chatID), null);
+        if (userCursor == null)
+            return null;
+        if (userCursor.getCount() < 1){
+            userCursor.close();
+            return null;
+        }
+        userCursor.moveToFirst();
+        String username = userCursor.getString(0);
+        userCursor.close();
+        return username;
     }
+
+    public String getUsernameFromNumber(String phoneNumber){
+        Cursor userCursor = mDb.rawQuery(String.format("SELECT name FROM contacts WHERE" +
+                " _id ='%s'", phoneNumber), null);
+        if (userCursor == null)
+            return null;
+        if (userCursor.getCount() < 1){
+            userCursor.close();
+            return null;
+        }
+        userCursor.moveToFirst();
+        String username = userCursor.getString(0);
+        userCursor.close();
+        return username;
+    }
+
     public void importChatrooms(Map message){
         Object[] chatrooms = (Object[])message.get(MessageBundle.CHATROOMS);
         for(Object chatroomO : chatrooms){
             Map chatroom = (Map) chatroomO;
 
+            Log.d("Importing chatroom", chatroom.toString());
             String chatID = (String) chatroom.get(MessageBundle.CHATROOMID);
             String chatName = (String) chatroom.get(MessageBundle.CHATROOM_NAME);
-            String users = Arrays.toString((Object[])chatroom.get(USERS));
+            String users = Arrays.toString((Object[])chatroom.get(ROOM_USERS));
+            int isGroup = (Boolean) chatroom.get("group") ? 1 : 0;
 
             ContentValues chatValues = new ContentValues();
             chatValues.put(ROWID, chatID);
             chatValues.put(CHATNAME, chatName);
             chatValues.put(USERS, users);
             chatValues.put(LAST_MESSAGE, chatID);
-            chatValues.put(ISGROUP, 1);
+
+            chatValues.put(ISGROUP, isGroup);
             mDb.insert(CHATS, null, chatValues);
         }
     }
@@ -356,24 +445,32 @@ public class MessageDbAdapter {
         Object[] users =  (Object[])message.get(MessageBundle.USERS);
         if (users == null)
             return;
+/*
         Cursor phones = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         phones.moveToFirst();
-        HashMap<String,String> phoneName = new HashMap<String,String>();
-        while (phones.moveToNext()){
+        HashMap<String,String> phoneName = new HashMap<>();
+        do{
             String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
-            phoneNumber = phoneNumber.replaceAll("\\s","");
-            phoneNumber = phoneNumber.replaceAll(" ","");
             phoneNumber = phoneNumber.replace("+65", "");
             phoneNumber = phoneNumber.replaceAll("\\D", "");
             String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)).trim();
             if (phoneNumber.length() >= 8) {
                 phoneName.put(phoneNumber,name);
             }
-        }
-        phones.close();
+        }while(phones.moveToNext());
+
+        phones.close();*/
+
         for(Object  user : users){
+<<<<<<< HEAD
             String phone = (String) ((Map)user).get(PHONE_NUMBER);
             long pass = putContact(phone, phoneName.get(phone));
+=======
+            String username = (String) ((Map)user).get(MessageBundle.USERNAME);
+            String phoneNumber = (String) ((Map)user).get(PHONE_NUMBER);
+            putContact(phoneNumber, username);
+//            putContact(phone, phoneName.get(phone));
+>>>>>>> 99720bbe866a0bc16eaab8aebf014ae1c31fdd47
         }
     }
 
@@ -383,25 +480,26 @@ public class MessageDbAdapter {
         Object[] notes = (Object[]) message.get(MessageBundle.NOTES);
         if (notes == null)
             return;
+        String chatID = (String) message.get(MessageBundle.CHATROOMID);
         for(Object note : notes)
-            createNote((Map) note);
+            createNote(chatID, (Map) note);
     }
 
-    public long createNote (Map message){
-        String chatID = (String) message.get(MessageBundle.CHATROOMID);
+    public long createNote (String chatID, Map message){
+        Log.d("Note insertion", message.toString());
         String noteID = (String) message.get(MessageBundle.NOTE_ID);
         String note_title = (String) message.get(MessageBundle.NOTE_TITLE);
         String note_text = (String) message.get(MessageBundle.NOTE_TEXT);
         String note_creator = (String) message.get(MessageBundle.NOTE_CREATOR);
 
-        ContentValues chatValues = new ContentValues();
-        chatValues.put(ROWID, noteID);
-        chatValues.put(CHATID, chatID);
-        chatValues.put(TITLE, note_title);
-        chatValues.put(BODY, note_text);
-        chatValues.put(NOTE_CREATOR, note_creator);
+        ContentValues noteValues = new ContentValues();
+        noteValues.put(ROWID, noteID);
+        noteValues.put(CHATID, chatID);
+        noteValues.put(TITLE, note_title);
+        noteValues.put(BODY, note_text);
+        noteValues.put(NOTE_CREATOR, note_creator);
 
-        return mDb.insert(CHATS, null, chatValues);
+        return mDb.insert(NOTES, null, noteValues);
     }
 
     public String getLatestMessage(String chatID){
@@ -421,5 +519,28 @@ public class MessageDbAdapter {
 
         result.close();
         return null;
+    }
+
+    public String[] getNoteTitleBody(String noteID){
+        Cursor titleBody = mDb.rawQuery(String.format(
+                "SELECT title, body FROM notes WHERE _id  = '%s'", noteID), null);
+        if (titleBody == null)
+            return null;
+        if (titleBody.getCount() < 1){
+            titleBody.close();
+            return null;
+        }
+        titleBody.moveToFirst();
+        String[] returnValue = new String[2];
+
+        returnValue[0] = titleBody.getString(0);
+        returnValue[1] = titleBody.getString(1);
+        titleBody.close();
+        return returnValue;
+    }
+
+    public Cursor getNoteIDTitleBody(String chatID){
+        return mDb.rawQuery(String.format("SELECT _id, title, body FROM notes WHERE chatID = '%s'",
+                chatID), null);
     }
 }

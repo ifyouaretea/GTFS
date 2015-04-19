@@ -1,4 +1,4 @@
-package cse.sutd.gtfs;
+package cse.sutd.gtfs.Activities;
 
 import android.app.TaskStackBuilder;
 import android.content.Intent;
@@ -13,6 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import cse.sutd.gtfs.Activities.Messaging.MainActivity;
+import cse.sutd.gtfs.GTFSClient;
+import cse.sutd.gtfs.R;
 
 
 public class ProfileActivity extends ActionBarActivity {

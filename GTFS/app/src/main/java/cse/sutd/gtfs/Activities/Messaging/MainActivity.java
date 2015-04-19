@@ -1,4 +1,4 @@
-package cse.sutd.gtfs;
+package cse.sutd.gtfs.Activities.Messaging;
 
 import android.app.NotificationManager;
 import android.app.SearchManager;
@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -20,30 +19,23 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
-import com.cedarsoftware.util.io.JsonReader;
-import com.cedarsoftware.util.io.JsonWriter;
-
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
-import cse.sutd.gtfs.Adapters.ChatAdapters;
-import cse.sutd.gtfs.Objects.ChatRooms;
+import cse.sutd.gtfs.Activities.ContactsActivity;
+import cse.sutd.gtfs.Activities.ProfileActivity;
+import cse.sutd.gtfs.Activities.SettingsActivity;
+import cse.sutd.gtfs.Adapters.ChatAdapter;
+import cse.sutd.gtfs.GTFSClient;
+import cse.sutd.gtfs.Objects.ChatRoom;
+import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.ManagerService;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
-import cse.sutd.gtfs.serverUtils.MessageBundle;
-import cse.sutd.gtfs.serverUtils.NetworkService;
 
 
 public class MainActivity extends ActionBarActivity {
     private GTFSClient client;
     private SharedPreferences.Editor editor;
-    private static final ExecutorService exec = new ScheduledThreadPoolExecutor(100);
-    private ArrayList<ChatRooms> chatroom;
+    private ArrayList<ChatRoom> chatroom;
     private MessageDbAdapter dbMessages;
     private ListView listview;
 
@@ -51,9 +43,6 @@ public class MainActivity extends ActionBarActivity {
         private MessageBroadcastReceiver(){}
         @Override
         public void onReceive(Context context, Intent intent){
-
-            Map received = (Map) JsonReader.jsonToJava(intent.getStringExtra
-                    (NetworkService.MESSAGE_KEY));
            updateUI();
         }
     }
@@ -85,57 +74,6 @@ public class MainActivity extends ActionBarActivity {
         updateUI();
 
         client.resetNotificationMap();
-
-        MessageBundle userRequestBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
-                MessageBundle.messageType.GET_USERS);
-
-        Callable<String[][]> task = new Callable<String[][]>() {
-            public String[][] call() {
-                Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-                phones.moveToFirst();
-                ArrayList<ArrayList<String>> phoneNumbers = new ArrayList<>();
-                final int USER_LIMIT = 15;
-                do{
-                    ArrayList<String> numberSubList = new ArrayList<>();
-                    for(int i = 0; i < USER_LIMIT; i++) {
-                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
-                        String h1 = phoneNumber.replaceAll("\\s", "");
-                        String h2 = h1.replaceAll(" ", "");
-                        h2 = h2.replace("+65", "");
-                        h2 = h2.replaceAll("\\D", "");
-                        if (h2.length() >= 8 && !h2.equals(client.getID()))
-                            numberSubList.add(h2);
-                        if(!phones.moveToNext())
-                            break;
-                    }
-                    phoneNumbers.add(numberSubList);
-                }while (!phones.isAfterLast());
-
-                phones.close();
-                String[][] phonenumber = new String[phoneNumbers.size()][USER_LIMIT];
-
-                for (int j = 0; j < phoneNumbers.size(); j++)
-                    for (int k = 0; k < phoneNumbers.get(j).size(); k++)
-                        phonenumber[j][k] = phoneNumbers.get(j).get(k);
-                return phonenumber;
-            }
-        };
-        String[][] users;
-        Future<String[][]> backtothefuture = exec.submit(task);
-        try {
-            backtothefuture.get(1, TimeUnit.MINUTES);
-
-            users = backtothefuture.get();
-            for (String[] s : users) {
-                userRequestBundle.putUsers(s);
-                Intent i = new Intent(getApplicationContext(), NetworkService.class);
-                i.putExtra(NetworkService.MESSAGE_KEY,
-                        JsonWriter.objectToJson(userRequestBundle.getMessage()));
-
-                this.startService(i);
-            }
-        }catch(Exception e){}
-
     }
 
 
@@ -223,10 +161,9 @@ public class MainActivity extends ActionBarActivity {
                     String name = chatrooms.getString(1);
                     int isGroup = chatrooms.getInt(2);
                     if (isGroup == 0)
-                        name = dbMessages.getChatroomName(id);
+                        name = dbMessages.getUsername(id);
 
-                    Log.d("MainActivity chatroom name", String.valueOf(name));
-                    ChatRooms a = new ChatRooms(id, name, isGroup);
+                    ChatRoom a = new ChatRoom(id, name, isGroup);
                     chatroom.add(a);
                 } while (chatrooms.moveToNext());
 
@@ -234,15 +171,15 @@ public class MainActivity extends ActionBarActivity {
             }
         }
 
-        ChatAdapters adapter = new ChatAdapters(this, chatroom);
+        ChatAdapter adapter = new ChatAdapter(this, chatroom);
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                final String item = ((ChatRooms) parent.getItemAtPosition(position)).getId();
-                Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
+                final String item = ((ChatRoom) parent.getItemAtPosition(position)).getId();
+                Intent i = new Intent(MainActivity.this, MessagingActivity.class);
                 i.putExtra(MessageDbAdapter.CHATID, chatroom.get(position).getId());
                 i.putExtra(MessageDbAdapter.ISGROUP, chatroom.get(position).getIsGroup());
                 i.putExtra(MessageDbAdapter.CHATNAME, chatroom.get(position).getName());

@@ -73,7 +73,8 @@ public class GTFSClient extends Application{
             e.printStackTrace();
         }
         notificationMap = new HashMap<>();
-
+        startService(new Intent(getApplicationContext(), ManagerService.class));
+        startService(new Intent(getApplicationContext(), NetworkService.class));
 //        final TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
 //        Fabric.with(this, new TwitterCore(authConfig), new Digits());
     }

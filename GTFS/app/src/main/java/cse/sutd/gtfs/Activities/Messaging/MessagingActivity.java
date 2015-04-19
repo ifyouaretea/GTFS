@@ -1,4 +1,4 @@
-package cse.sutd.gtfs;
+package cse.sutd.gtfs.Activities.Messaging;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -26,8 +26,15 @@ import com.cedarsoftware.util.io.JsonWriter;
 import java.util.ArrayList;
 import java.util.Map;
 
+import cse.sutd.gtfs.Activities.Notes.NoteListActivity;
 import cse.sutd.gtfs.Adapters.MessageAdapter;
+<<<<<<< HEAD:GTFS/app/src/main/java/cse/sutd/gtfs/MessagingActivity.java
 import cse.sutd.gtfs.Objects.ChatRooms;
+=======
+import cse.sutd.gtfs.GTFSClient;
+import cse.sutd.gtfs.Objects.ChatRoom;
+import cse.sutd.gtfs.R;
+>>>>>>> 99720bbe866a0bc16eaab8aebf014ae1c31fdd47:GTFS/app/src/main/java/cse/sutd/gtfs/Activities/Messaging/MessagingActivity.java
 import cse.sutd.gtfs.messageManagement.ManagerService;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
@@ -39,7 +46,6 @@ public class MessagingActivity extends ActionBarActivity {
     private GTFSClient client;
     private MessageAdapter adapter;
     private ArrayList<MessageBundle> messageList;
-   // private ArrayList<String> timestampList;
 
     private String toPhoneNumber;
     private String sessionToken;    //get from client.getSESSIONID();
@@ -48,7 +54,7 @@ public class MessagingActivity extends ActionBarActivity {
     private int isGroup;
 
     private MessageDbAdapter dbMessages;
-    private ChatRooms chat;
+    private ChatRoom chat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,16 +63,29 @@ public class MessagingActivity extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
 
         String title = null;
+
         if (extras != null) {
-            chatroomID = extras.getString(MessageDbAdapter.CHATID);
             toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
+<<<<<<< HEAD:GTFS/app/src/main/java/cse/sutd/gtfs/MessagingActivity.java
+=======
+            if(toPhoneNumber != null)
+                chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
+            else
+                chatroomID = extras.getString(MessageDbAdapter.CHATID);
+
+>>>>>>> 99720bbe866a0bc16eaab8aebf014ae1c31fdd47:GTFS/app/src/main/java/cse/sutd/gtfs/Activities/Messaging/MessagingActivity.java
             isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
             title = extras.getString(MessageDbAdapter.CHATNAME);
-            chat = new ChatRooms(chatroomID,toPhoneNumber,isGroup);
+            chat = new ChatRoom(chatroomID,toPhoneNumber,isGroup);
             dbMessages.clearRead(chatroomID);
         }
-        if (isGroup == 0)
-            title = dbMessages.getUsername(chatroomID);
+
+        if (isGroup == 0) {
+            if (chatroomID != null)
+                title = dbMessages.getUsername(chatroomID);
+            else
+                title = dbMessages.getUsernameFromNumber(toPhoneNumber);
+        }
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,7 +103,6 @@ public class MessagingActivity extends ActionBarActivity {
         ListView listview = (ListView) findViewById(R.id.messageList);
 
         messageList = new ArrayList<>();
-        //timestampList = new ArrayList<>();
         adapter = new MessageAdapter(this, messageList, userID, isGroup);
         updateUI();
         listview.setAdapter(adapter);
@@ -114,7 +132,6 @@ public class MessagingActivity extends ActionBarActivity {
                     textBundle.putMessage(msg.getText().toString());
                     textBundle.putChatroomID(chatroomID);
 
-                    Log.d("Attempting to send", textBundle.getMessage().toString());
                     Intent intent = new Intent(MessagingActivity.this, NetworkService.class);
                     intent.putExtra(NetworkService.MESSAGE_KEY,
                             JsonWriter.objectToJson(textBundle.getMessage()));
@@ -143,6 +160,11 @@ public class MessagingActivity extends ActionBarActivity {
         switch(item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
+                return true;
+            case R.id.open_notes:
+                Intent openNotes = new Intent(this, NoteListActivity.class);
+                openNotes.putExtra(NoteListActivity.CHAT_ID_KEY, chatroomID);
+                startActivity(openNotes);
                 return true;
         }
 

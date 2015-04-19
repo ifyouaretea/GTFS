@@ -6,7 +6,6 @@ package cse.sutd.gtfs.Adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +16,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cse.sutd.gtfs.GTFSClient;
-import cse.sutd.gtfs.Objects.ChatRooms;
+import cse.sutd.gtfs.Objects.ChatRoom;
 import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 
-public class ChatAdapters extends ArrayAdapter<ChatRooms> {
+public class ChatAdapter extends ArrayAdapter<ChatRoom> {
 
     private final Context context;
-    private final ArrayList<ChatRooms> values;
+    private final ArrayList<ChatRoom> values;
     private MessageDbAdapter dbAdapter;
 
-    public ChatAdapters(Context context, ArrayList<ChatRooms> values) {
+    public ChatAdapter(Context context, ArrayList<ChatRoom> values) {
         super(context, R.layout.main_list_item, values);
         this.context = context;
         this.values = values;

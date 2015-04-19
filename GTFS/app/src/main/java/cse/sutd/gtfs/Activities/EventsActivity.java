@@ -1,9 +1,11 @@
-package cse.sutd.gtfs;
+package cse.sutd.gtfs.Activities;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import cse.sutd.gtfs.R;
 
 
 public class EventsActivity extends ActionBarActivity {

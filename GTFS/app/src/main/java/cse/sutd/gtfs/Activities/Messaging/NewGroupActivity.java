@@ -1,4 +1,4 @@
-package cse.sutd.gtfs;
+package cse.sutd.gtfs.Activities.Messaging;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +18,18 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+<<<<<<< HEAD:GTFS/app/src/main/java/cse/sutd/gtfs/NewGroupActivity.java
+=======
+import java.util.ArrayList;
+
+import cse.sutd.gtfs.Adapters.ContactAdapter;
+import cse.sutd.gtfs.AddContactToGroup;
+import cse.sutd.gtfs.GTFSClient;
+import cse.sutd.gtfs.Objects.Contact;
+import cse.sutd.gtfs.R;
+import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+
+>>>>>>> 99720bbe866a0bc16eaab8aebf014ae1c31fdd47:GTFS/app/src/main/java/cse/sutd/gtfs/Activities/Messaging/NewGroupActivity.java
 
 public class NewGroupActivity extends ActionBarActivity {
 
