@@ -40,7 +40,6 @@ public class MessagingActivity extends ActionBarActivity {
     private GTFSClient client;
     private MessageAdapter adapter;
     private ArrayList<MessageBundle> messageList;
-   // private ArrayList<String> timestampList;
 
     private String toPhoneNumber;
     private String sessionToken;    //get from client.getSESSIONID();
@@ -58,30 +57,26 @@ public class MessagingActivity extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
 
         String title = null;
+
         if (extras != null) {
-            chatroomID = extras.getString(MessageDbAdapter.CHATID);
             toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
-<<<<<<< HEAD
-            Cursor contactList = dbMessages.getContacts();
-            final ArrayList<Contact> contacts = new ArrayList<Contact>();
-            if (contactList != null) {
-                contactList.moveToFirst();
-                while (contactList.moveToNext()) {
-                    contacts.add(new Contact(contactList.getString(0), contactList.getString(1)));
-                }
-                contactList.close();
-            }
-            isGroup = extras.getInt("ISGROUP");
-            chat = new ChatRooms(chatroomID,chatroomName,isGroup);
-=======
-            isGroup = extras.getInt(MessageDbAdapter.CHATID);
+            if(toPhoneNumber != null)
+                chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
+            else
+                chatroomID = extras.getString(MessageDbAdapter.CHATID);
+
+            isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
             title = extras.getString(MessageDbAdapter.CHATNAME);
             chat = new ChatRooms(chatroomID,toPhoneNumber,isGroup);
             dbMessages.clearRead(chatroomID);
->>>>>>> ce41bd0f575345b9ab37c69327a443fa504b29ba
         }
-        if (isGroup == 0)
-            title = dbMessages.getUsername(chatroomID);
+
+        if (isGroup == 0) {
+            if (chatroomID != null)
+                title = dbMessages.getUsername(chatroomID);
+            else
+                title = dbMessages.getUsernameFromNumber(toPhoneNumber);
+        }
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -99,7 +94,6 @@ public class MessagingActivity extends ActionBarActivity {
         ListView listview = (ListView) findViewById(R.id.messageList);
 
         messageList = new ArrayList<>();
-        //timestampList = new ArrayList<>();
         adapter = new MessageAdapter(this, messageList, userID, isGroup);
         updateUI();
         listview.setAdapter(adapter);

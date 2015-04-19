@@ -116,9 +116,10 @@ public class NetworkService extends IntentService {
      * @return Whether sending is successful
      */
     private boolean send(Map message){
-        if (message == null)
+        if (message == null) {
+            Log.d("network service", "attempted to send null");
             return false;
-
+        }
         try {
             if(((GTFSClient)getApplication()).getClient() == null){
                 ((GTFSClient)getApplication()).setClient(new Socket(hostname, hostport));
@@ -130,7 +131,7 @@ public class NetworkService extends IntentService {
                     getClient().getOutputStream());
             serverOut.write(message);
             serverOut.flush();
-            Thread.sleep(10);
+            Thread.sleep(50);
             Log.d("Message sent out", message.toString());
 
         }catch (Exception e){

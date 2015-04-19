@@ -81,15 +81,16 @@ public class ManagerService extends Service{
             if(!message.get(MessageBundle.FROM_PHONE_NUMBER).equals(userID)) {
                 addToNotification(message);
             }
-        }else if(messageType.equals(MessageBundle.messageType.CREATE_ROOM.toString()) ||
-                messageType.equals(MessageBundle.messageType.ROOM_INVITATION.toString()) ||
-                messageType.equals(MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString())
-                ){
+        }else if(
+                messageType.equals(MessageBundle.messageType.ROOM_INVITATION.toString()) )
             dbAdapter.createGroupChat(message);
 
-            Log.d("Database chat insertion", message.toString());
-        }else if(messageType.equals(MessageBundle.messageType.GET_ROOMS.toString()))
+        else if(messageType.equals(MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString()))
+            dbAdapter.createSingleChat(message);
+
+        else if(messageType.equals(MessageBundle.messageType.GET_ROOMS.toString()))
             dbAdapter.importChatrooms(message);
+
         else if (messageType.equals(MessageBundle.messageType.GET_USERS.toString()))
             dbAdapter.importUsers(message);
 
@@ -99,8 +100,6 @@ public class ManagerService extends Service{
 
         LocalBroadcastManager.getInstance(getApplicationContext())
                 .sendBroadcast(updateUIIntent);
-
-        Log.d("Received Message", message.toString());
     }
 
     private void addToNotification(Map message){

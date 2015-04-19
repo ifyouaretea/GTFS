@@ -47,9 +47,6 @@ public class LoginActivityCog extends Activity {
             client.setID(userID);
             client.setNAME(prefs.getString("username", null));
 
-            startService(new Intent(getApplicationContext(), ManagerService.class));
-            startService(new Intent(getApplicationContext(), NetworkService.class));
-
             Intent intent = new Intent(LoginActivityCog.this, MainActivity.class);
             startActivity(intent);
             LoginActivityCog.this.finish();
@@ -79,9 +76,6 @@ public class LoginActivityCog extends Activity {
 
                                 Log.d("userid", number);
                                 startActivity(intent);
-
-                                startService(new Intent(getApplicationContext(), ManagerService.class));
-                                startService(new Intent(getApplicationContext(), NetworkService.class));
 
                                 Intent importChatrooms = new Intent(getApplicationContext(), NetworkService.class);
                                 MessageBundle importBundle = new MessageBundle(client.getID(),
