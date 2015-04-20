@@ -9,8 +9,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
@@ -45,6 +50,7 @@ public class MessageDbAdapter {
     public static final String NOTE_CREATOR = "noteCreator";
     public static final String TITLE = "title";
     public static final String NOTES = "notes";
+    public static final String TAGS = "tags";
 
     private static final String TAG = "MessageDbAdapter";
 
@@ -59,7 +65,7 @@ public class MessageDbAdapter {
                 "create table messages (_id integer primary key, "
                         + "chatID text not null, body text not null," +
                         "from_phone_number text not null, timestamp text not null, " +
-                        "read integer not null);";
+                        "read integer not null, tags text);";
 
         private static final String DATABASE_CREATE_CHATS =
                 "create table chats (_id text primary key, "
@@ -127,6 +133,8 @@ public class MessageDbAdapter {
         String timestamp = (String) message.get(MessageBundle.TIMESTAMP);
         String from_phone_number = (String) message.get(MessageBundle.FROM_PHONE_NUMBER);
         String body = (String) message.get(MessageBundle.MESSAGE);
+        String tags = (String) message.get(MessageBundle.TAGS);
+
         body = body.replaceAll("'", "''");
         Log.d("Database store", message.toString());
 
@@ -156,7 +164,7 @@ public class MessageDbAdapter {
         messageValues.put(TIMESTAMP, timestamp);
         messageValues.put(BODY, body);
         messageValues.put(FROM_PHONE_NUMBER, from_phone_number);
-
+        messageValues.put(TAGS, tags);
         if(from_phone_number.equals(((GTFSClient)mContext.getApplicationContext()).getID()))
             messageValues.put(READ, 1);
         else
@@ -196,6 +204,8 @@ public class MessageDbAdapter {
         String ownID = ((GTFSClient) mContext).getID();
         String otherUser = null;
 
+        if(users == null)
+            return false;
         for(Object user: users)
             if (!ownID.equals(user)) {
                 otherUser = (String) user;
@@ -213,7 +223,7 @@ public class MessageDbAdapter {
 
     public Cursor getChatMessages(String chatID){
         return mDb.rawQuery(String.format("SELECT from_phone_number, body, " +
-                "timestamp FROM messages WHERE chatID ='%s' ORDER BY _id", chatID), null);
+                "timestamp, tags FROM messages WHERE chatID ='%s' ORDER BY _id", chatID), null);
     }
 
     public Cursor getChats(){
@@ -306,13 +316,39 @@ public class MessageDbAdapter {
     }
 
     public String getChatroomName(String chatID){
-        Cursor result = mDb.rawQuery(String.format("SELECT chatName FROM chats WHERE _id = '%s'",
+        Cursor result = mDb.rawQuery(String.format("SELECT chatName, isGroup" +
+                        " FROM chats WHERE _id = '%s'",
                 chatID), null);
-        if(result.getCount() < 1)
+        if (result == null)
             return null;
+
+        if(result.getCount() < 1) {
+            result.close();
+            return null;
+        }
+
         result.moveToFirst();
         String returnValue = result.getString(0);
-        return returnValue;
+        boolean isGroup = result.getInt(1) == 1 ? true : false;
+        result.close();
+        if (isGroup)
+            return returnValue;
+        else{
+            Cursor usernameResult = mDb.rawQuery(String.format("SELECT name" +
+                            " FROM contacts WHERE chatID = '%s'",
+                    chatID), null);
+            if (usernameResult== null)
+                return null;
+
+            if(usernameResult.getCount() < 1) {
+                usernameResult.close();
+                return null;
+            }
+            usernameResult.moveToFirst();
+            returnValue = usernameResult.getString(0);
+            usernameResult.close();
+            return returnValue;
+        }
     }
 
     public String getChatroomID(String chatName){
@@ -544,5 +580,31 @@ public class MessageDbAdapter {
     public Cursor getNoteIDTitleBody(String chatID){
         return mDb.rawQuery(String.format("SELECT _id, title, body FROM notes WHERE chatID = '%s'",
                 chatID), null);
+    }
+
+    public List<String> getTagsForChat(String chatID){
+        Cursor allChatTags = mDb.rawQuery("SELECT tags FROM messages WHERE chatID = '%s' AND" +
+                "tags IS NOT NULL", null);
+        if(allChatTags == null)
+            return null;
+        if(allChatTags.getCount() < 1) {
+            allChatTags.close();
+            return null;
+        }
+        allChatTags.moveToFirst();
+        Set<String> rawTags = new HashSet<>();
+        String tag;
+        do{
+            tag = allChatTags.getString(0);
+            if(!rawTags.contains(tag))
+                rawTags.add(tag);
+        }while(allChatTags.moveToNext());
+
+        List<String> tags = new LinkedList<>();
+        for(String tagArray: rawTags){
+            for (String t: tagArray.replaceAll("\\[", "").replaceAll("\\]", "").split(","))
+                tags.add(t);
+        }
+        return tags;
     }
 }

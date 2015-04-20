@@ -1,8 +1,14 @@
 package cse.sutd.gtfs.serverUtils;
 
+<<<<<<< HEAD
+=======
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+>>>>>>> 10d386922f0e6b98db5cd6f98a6beac8f9ab46ab
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -10,8 +16,6 @@ import java.util.concurrent.TimeUnit;
  * Created by Glen on 02/04/2015.
  */
 public class MessageBundle {
-
-
 
     //Predefined message types
     public static enum messageType{
@@ -21,6 +25,7 @@ public class MessageBundle {
     }
 
     private Map<String, String> messageMap;
+    private List<String> tags;
 
     public static final String SESSION_TOKEN= "session_token";
     public static final String FROM_PHONE_NUMBER = "from_phone_number";
@@ -41,6 +46,7 @@ public class MessageBundle {
     public static final String STATUS = "status";
     public static final String EXPIRY = "expiry";
     public static final String CHATROOMS = "chatrooms";
+    public static final String TAGS = "tags";
     public static final String VALID_STATUS = "1";
 
 //    private String time;
@@ -53,6 +59,8 @@ public class MessageBundle {
         messageMap.put(TYPE, type.toString());
         if(type == messageType.CREATE_ROOM || type == messageType.CREATE_SINGLE_ROOM )
             messageMap.put(EXPIRY, "0"  );
+        if(type == messageType.TEXT)
+            tags = new ArrayList<>();
         putTimestamp();
     }
 
@@ -66,11 +74,9 @@ public class MessageBundle {
 
     private String putTimestamp(){
         Calendar c = Calendar.getInstance();
-        StringBuilder sb = new StringBuilder();
-        sb.append(c.get(Calendar.HOUR_OF_DAY) + ":");
-        sb.append(c.get(Calendar.MINUTE));
-//        setTime(c);
-        return messageMap.put(TIMESTAMP, sb.toString());
+        String timeStamp = String.format("%02d:%02d", c.get(Calendar.HOUR_OF_DAY),
+                c.get(Calendar.MINUTE));
+        return messageMap.put(TIMESTAMP, timeStamp);
     }
 
     public String putTimestamp(String timestamp){
@@ -108,6 +114,15 @@ public class MessageBundle {
 
     public String putNoteTitle(String noteTitle){
         return messageMap.put(NOTE_TITLE, noteTitle);
+    }
+
+    public String putTag(String tag){
+        tags.add(tag);
+        return messageMap.put(TAGS, tags.toString());
+    }
+
+    public String putParsedTags(String tags){
+        return messageMap.put(TAGS, tags);
     }
 
     public Map getMessage(){

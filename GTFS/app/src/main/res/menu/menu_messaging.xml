@@ -1,8 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context="cse.sutd.gtfs.Activities.Messaging.MessagingActivity">
+    <item android:id="@+id/message_tags"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_message_tag"
+        android:orderInCategory="0"
+        android:title="Tags"/>
+
     <item android:id="@+id/open_notes" android:title="Notes"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:orderInCategory="1" app:showAsAction="never" />
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:orderInCategory="3" app:showAsAction="never" />
 </menu>
