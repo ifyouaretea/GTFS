@@ -1,6 +1,5 @@
 package cse.sutd.gtfs.serverUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -90,7 +89,7 @@ public class MessageBundle {
         return messageMap.put(TO_PHONE_NUMBER, toPhoneNumber);
     }
 
-    public String putUsers(String... users){
+    public String putUsers(String[] users){
         return messageMap.put(USERS, Arrays.toString(users));
     }
 

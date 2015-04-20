@@ -53,6 +53,13 @@ public class ContactsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         client = (GTFSClient) getApplicationContext();
+        if(client.getID() == null){
+            Intent intent = new Intent(this, LoginActivityCog.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+            return;
+        }
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -91,7 +98,7 @@ public class ContactsActivity extends ActionBarActivity {
 
                 String chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
 
-                if (chatroomID==null){
+                if (chatroomID == null) {
                     MessageBundle createBundle = new MessageBundle(userID, sessionToken,
                             MessageBundle.messageType.CREATE_SINGLE_ROOM);
                     createBundle.putToPhoneNumber(toPhoneNumber);
@@ -103,20 +110,21 @@ public class ContactsActivity extends ActionBarActivity {
                             JsonWriter.objectToJson(createBundle.getMessage()));
                     ContactsActivity.this.startService(intent);
                 }
-                try {
+                try{
                     Thread.sleep(1000);
                 }catch(Exception e){}
                 //TODO: check if chatroom exist
                 chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
                 Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
-                i.putExtra("ID", chatroomID);
+                i.putExtra(MessageDbAdapter.CHATID, chatroomID);
                 i.putExtra(MessageBundle.TO_PHONE_NUMBER, toPhoneNumber);
+                i.putExtra(MessageDbAdapter.ISGROUP, 0);
                 startActivity(i);
             }
         });
     }
 
-    private void requestContacts(){
+    private void requestContacts() {
         MessageBundle userRequestBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
                 MessageBundle.messageType.GET_USERS);
 
@@ -126,9 +134,9 @@ public class ContactsActivity extends ActionBarActivity {
                 phones.moveToFirst();
                 ArrayList<ArrayList<String>> phoneNumbers = new ArrayList<>();
                 final int USER_LIMIT = 15;
-                do{
+                do {
                     ArrayList<String> numberSubList = new ArrayList<>();
-                    for(int i = 0; i < USER_LIMIT; i++) {
+                    for (int i = 0; i < USER_LIMIT; i++) {
                         String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
                         String h1 = phoneNumber.replaceAll("\\s", "");
                         String h2 = h1.replaceAll(" ", "");
@@ -136,11 +144,11 @@ public class ContactsActivity extends ActionBarActivity {
                         h2 = h2.replaceAll("\\D", "");
                         if (h2.length() >= 8 && !h2.equals(client.getID()))
                             numberSubList.add(h2);
-                        if(!phones.moveToNext())
+                        if (!phones.moveToNext())
                             break;
                     }
                     phoneNumbers.add(numberSubList);
-                }while (!phones.isAfterLast());
+                } while (!phones.isAfterLast());
 
                 phones.close();
                 String[][] phonenumber = new String[phoneNumbers.size()][USER_LIMIT];
@@ -165,18 +173,20 @@ public class ContactsActivity extends ActionBarActivity {
                         JsonWriter.objectToJson(userRequestBundle.getMessage()));
                 this.startService(i);
             }
-        }catch(Exception e){}
+        } catch (Exception e) {
+        }
     }
-    private void updateUI(){
+
+    private void updateUI() {
         Log.d("ContactActivity", "Updating UI");
         contacts.clear();
         Cursor contactBundles = dbMessages.getContacts();
 
         if (contactBundles != null) {
-            if(contactBundles.getCount()> 0) {
+            if (contactBundles.getCount() > 0) {
                 contactBundles.moveToFirst();
                 do {
-                    Contact a = new Contact(contactBundles.getString(0),contactBundles.getString(1));
+                    Contact a = new Contact(contactBundles.getString(0), contactBundles.getString(1));
                     contacts.add(a);
                 } while (contactBundles.moveToNext());
             }
@@ -184,6 +194,7 @@ public class ContactsActivity extends ActionBarActivity {
         }
         contactAdapter.notifyDataSetChanged();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -212,12 +223,12 @@ public class ContactsActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-       switch(item.getItemId()){
+        switch (item.getItemId()) {
 
-           case android.R.id.home:
-               NavUtils.navigateUpFromSameTask(this);
-               return true;
-       }
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

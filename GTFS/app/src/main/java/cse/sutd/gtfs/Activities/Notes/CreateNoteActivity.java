@@ -1,8 +1,8 @@
 package cse.sutd.gtfs.Activities.Notes;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.cedarsoftware.util.io.JsonWriter;
 
+import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
@@ -34,18 +35,27 @@ public class CreateNoteActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_note);
+        client = (GTFSClient) getApplication();
+        if(client.getID() == null){
+            Intent intent = new Intent(this, LoginActivityCog.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+            return;
+        }
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_action_profile); //user's pic
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setTitle("Create Note");
+        setContentView(R.layout.activity_create_note);
 
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             chatroomID = extras.getString(CHAT_ID_KEY);
         }
-        client = (GTFSClient) getApplication();
+
 
         bodyCreate = (EditText) findViewById(R.id.create_body);
         titleCreate = (EditText) findViewById(R.id.create_title);
