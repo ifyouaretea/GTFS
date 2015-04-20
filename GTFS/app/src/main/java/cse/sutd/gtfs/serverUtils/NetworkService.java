@@ -170,6 +170,7 @@ public class NetworkService extends IntentService {
             if (!MessageBundle.messageType.AUTH.toString().equals(messageType) &&
                     messageType != null){
 
+                Log.d("received to handling", receivedMap.toString());
                 Intent receivedMessageIntent = new Intent(MESSAGE_RECEIVED).putExtra
                         (MESSAGE_KEY, JsonWriter.objectToJson(receivedMap));
 

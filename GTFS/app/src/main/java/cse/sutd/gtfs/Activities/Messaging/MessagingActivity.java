@@ -1,5 +1,6 @@
 package cse.sutd.gtfs.Activities.Messaging;
 
+import android.app.ActionBar;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,8 +16,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +28,7 @@ import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import cse.sutd.gtfs.Activities.Notes.NoteListActivity;
@@ -40,8 +45,11 @@ import cse.sutd.gtfs.serverUtils.NetworkService;
 
 public class MessagingActivity extends ActionBarActivity {
     private TextView msg;
+    private EditText messageSearchBar;
+    private Button searchButton;
     private GTFSClient client;
     private MessageAdapter adapter;
+    private View actionBarView;
     private ArrayList<MessageBundle> messageList;
 
     private String toPhoneNumber;
@@ -53,6 +61,13 @@ public class MessagingActivity extends ActionBarActivity {
     private MessageDbAdapter dbMessages;
     private ChatRoom chat;
 
+    /**
+     * Required extras
+     * isGroup:
+     * Chatname
+     * chatID
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +102,9 @@ public class MessagingActivity extends ActionBarActivity {
         getSupportActionBar().setLogo(R.drawable.ic_action_profile); //user's pic
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle(title);
+
         setContentView(R.layout.activity_messaging);
+        messageSearchBar = (EditText) findViewById(R.id.message_search_bar);
 
         client = (GTFSClient) getApplicationContext();
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
@@ -126,6 +143,8 @@ public class MessagingActivity extends ActionBarActivity {
 
                     textBundle.putMessage(msg.getText().toString());
                     textBundle.putChatroomID(chatroomID);
+                    //TODO: remove hardcoded tags
+                    textBundle.putParsedTags("[important]");
 
                     Intent intent = new Intent(MessagingActivity.this, NetworkService.class);
                     intent.putExtra(NetworkService.MESSAGE_KEY,
@@ -136,6 +155,14 @@ public class MessagingActivity extends ActionBarActivity {
                     adapter.notifyDataSetChanged();
                     msg.setText("");
                 }
+            }
+        });
+
+        searchButton = (Button) findViewById(R.id.message_search_button);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.getFilter().filter(messageSearchBar.getText());
             }
         });
     }
@@ -161,9 +188,37 @@ public class MessagingActivity extends ActionBarActivity {
                 openNotes.putExtra(NoteListActivity.CHAT_ID_KEY, chatroomID);
                 startActivity(openNotes);
                 return true;
+
+            case R.id.message_tags:
+                PopupMenu popup = new PopupMenu(this, findViewById(R.id.message_tags));
+                List<String> tagList = adapter.getTags();
+                Log.d("Tags", tagList.toString());
+                if (tagList.size() > 0) {
+                    for (int i = 0; i < tagList.size(); i++)
+                        popup.getMenu().add(i, i, i, tagList.get(i));
+                    popup.setOnMenuItemClickListener(
+                            new PopupMenu.OnMenuItemClickListener() {
+                                public boolean onMenuItemClick(MenuItem item) {
+                                    adapter.getFilter().filter(item.getTitle().toString().toLowerCase());
+                                    return true;
+                                }
+                            }
+                    );
+                }else{
+                    popup.getMenu().add("NO TAGS");
+                }
+                popup.show();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public View getActionBarView() {
+        Window window = getWindow();
+        View v = window.getDecorView();
+        int resId = getResources().getIdentifier("action_bar_container", "id", "android");
+        return v.findViewById(resId);
     }
 
     @Override
@@ -176,7 +231,6 @@ public class MessagingActivity extends ActionBarActivity {
         String messageType = (String) message.get(MessageBundle.TYPE);
         if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)) {
             updateUI();
-            Log.d("adapter updated", message.toString());
         }else if (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString().equals(messageType)){
             for(Object user: (Object[]) message.get(MessageBundle.USERS)){
                 if(user.equals(toPhoneNumber)){
@@ -199,6 +253,7 @@ public class MessagingActivity extends ActionBarActivity {
                             sessionToken, MessageBundle.messageType.TEXT);
                     a.putMessage(msgBundles.getString(1));
                     a.putTimestamp(msgBundles.getString(2));
+                    a.putParsedTags(msgBundles.getString(3));
                     messageList.add(a);
 //                    timestampList.add(msgBundles.getString(2));
                 } while (msgBundles.moveToNext());

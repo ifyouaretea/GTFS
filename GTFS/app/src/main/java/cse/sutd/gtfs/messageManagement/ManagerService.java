@@ -75,7 +75,8 @@ public class ManagerService extends Service{
 
             //TODO: fix possible synchronisation problems
             Log.d("DB message insertion", message.toString());
-
+            if(userID == null)
+                userID = ((GTFSClient)getApplication()).getID();
             if(!message.get(MessageBundle.FROM_PHONE_NUMBER).equals(userID)) {
                 addToNotification(message);
             }
