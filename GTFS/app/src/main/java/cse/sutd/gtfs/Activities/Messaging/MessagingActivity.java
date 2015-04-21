@@ -139,7 +139,7 @@ public class MessagingActivity extends ActionBarActivity {
 
                 chat = new ChatRoom(chatroomID, chatroomName, isGroup);
             }
-            dbMessages.clearRead(chatroomID);
+
         }
 
 //        Log.d("name",chatroomName);
@@ -401,6 +401,13 @@ public class MessagingActivity extends ActionBarActivity {
         super.onStart();
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
+        dbMessages.clearRead(chatroomID);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        dbMessages.clearRead(chatroomID);
     }
 
     private void handleMessage(Map message) {
