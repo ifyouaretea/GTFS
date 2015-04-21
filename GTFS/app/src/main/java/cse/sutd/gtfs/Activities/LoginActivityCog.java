@@ -44,8 +44,9 @@ public class LoginActivityCog extends Activity {
         Log.d("sessionID", sessionID.toString());
 
         String userID = prefs.getString("userid", null);
+        String userName = prefs.getString("username", null);
 
-        if (userID != null) {
+        if (userID != null && userName != null) {
             client.setID(userID);
             client.setNAME(prefs.getString("username", null));
 

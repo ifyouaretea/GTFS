@@ -80,8 +80,7 @@ public class ManagerService extends Service{
             if(!message.get(MessageBundle.FROM_PHONE_NUMBER).equals(userID)) {
                 addToNotification(message);
             }
-        }else if(
-                messageType.equals(MessageBundle.messageType.ROOM_INVITATION.toString()) )
+        }else if(messageType.equals(MessageBundle.messageType.ROOM_INVITATION.toString()) )
             dbAdapter.createGroupChat(message);
 
         else if(messageType.equals(MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString()))
@@ -95,6 +94,9 @@ public class ManagerService extends Service{
 
         else if (messageType.equals(MessageBundle.messageType.GET_NOTES.toString()))
             dbAdapter.importNotes(message);
+
+        else if (messageType.equals(MessageBundle.messageType.EVENT_CREATED.toString()))
+            dbAdapter.createGroupEvent(message);
 
         Intent updateUIIntent = new Intent(UPDATE_UI);
         updateUIIntent.putExtra(NetworkService.MESSAGE_KEY,

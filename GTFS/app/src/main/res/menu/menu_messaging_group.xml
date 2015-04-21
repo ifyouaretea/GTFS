@@ -11,11 +11,15 @@
         android:icon="@drawable/ic_search_icon"
         android:orderInCategory="0"
         android:title="Search"/>
+
     <item android:id="@+id/message_events" app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_calendar" android:orderInCategory="1"
         android:title="New Event"/>
+
+    <item android:id="@+id/group_info" app:showAsAction="never"
+        android:icon="@drawable/ic_search_icon" android:orderInCategory="3"
+        android:title="Group Info"/>
+
     <item android:id="@+id/open_notes" android:title="Notes"
         android:orderInCategory="2" app:showAsAction="never" />
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="3" app:showAsAction="never" />
 </menu>

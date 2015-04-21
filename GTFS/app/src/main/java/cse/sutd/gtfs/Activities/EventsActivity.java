@@ -14,6 +14,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.cedarsoftware.util.io.JsonWriter;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -23,6 +25,7 @@ import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
+import cse.sutd.gtfs.serverUtils.NetworkService;
 
 
 public class EventsActivity extends ActionBarActivity {
@@ -50,6 +53,7 @@ public class EventsActivity extends ActionBarActivity {
     private int minute;
 
     public static final String CHAT_ID_KEY = "chatID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +61,7 @@ public class EventsActivity extends ActionBarActivity {
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         editor = prefs.edit();
 
-        if(client.getID() == null){
+        if (client.getID() == null) {
             Intent intent = new Intent(this, LoginActivityCog.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -66,7 +70,7 @@ public class EventsActivity extends ActionBarActivity {
         }
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
+        if (extras != null) {
             chatID = extras.getString(CHAT_ID_KEY);
         }
 
@@ -88,19 +92,23 @@ public class EventsActivity extends ActionBarActivity {
 
         setCurrentTimeOnView();
 
-        date.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                fromDatePickerDialog.show();
+        date.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    fromDatePickerDialog.show();
             }
         });
-        time.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                fromTimePickerDialog.show();
+        time.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    fromTimePickerDialog.show();
             }
         });
         fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                year = selectedyear; month = selectedmonth; day = selectedday;
+                year = selectedyear;
+                month = selectedmonth;
+                day = selectedday;
                 selectedmonth = selectedmonth + 1;
                 date.setText("" + selectedday + "/" + selectedmonth + "/" + selectedyear);
             }
@@ -110,14 +118,15 @@ public class EventsActivity extends ActionBarActivity {
         fromTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                hour = selectedHour; minute = selectedMinute;
-                time.setText( selectedHour + ":" + selectedMinute);
+                hour = selectedHour;
+                minute = selectedMinute;
+                time.setText(selectedHour + ":" + selectedMinute);
             }
         }, hour, minute, true);//Yes 24 hour time
     }
 
     public void setCurrentTimeOnView() {
-        final Calendar c = Calendar.getInstance();
+        c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
@@ -147,7 +156,7 @@ public class EventsActivity extends ActionBarActivity {
             EVENT_NAME = name.getText().toString();
 
             Calendar getter = Calendar.getInstance();
-            getter.set(year,month,day,hour,minute);
+            getter.set(year, month, day, hour, minute);
             DATE_TIME = getter.getTimeInMillis();
             final MessageBundle eventBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
                     MessageBundle.messageType.CREATE_EVENT);
@@ -155,6 +164,11 @@ public class EventsActivity extends ActionBarActivity {
             eventBundle.putChatroomID(chatID);
             eventBundle.putEventName(name.getText().toString());
             eventBundle.putEventDate(String.valueOf(DATE_TIME));
+
+            Intent intent = new Intent(client, NetworkService.class);
+            intent.putExtra(NetworkService.MESSAGE_KEY,
+                    JsonWriter.objectToJson(eventBundle.getMessage()));
+            client.startService(intent);
 
             Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
             i.putExtra(MessageDbAdapter.CHATID, chatID);

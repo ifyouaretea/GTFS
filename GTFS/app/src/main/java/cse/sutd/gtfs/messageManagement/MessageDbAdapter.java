@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -32,6 +31,7 @@ public class MessageDbAdapter {
 
     public static final String MESSAGES = "messages";
     public static final String CHATS= "chats";
+    public static final String EVENTS= "events";
     public static final String ROWID = "_id";
     public static final String CHATID = "chatID";
     public static final String TIMESTAMP = "timestamp";
@@ -51,6 +51,10 @@ public class MessageDbAdapter {
     public static final String TITLE = "title";
     public static final String NOTES = "notes";
     public static final String TAGS = "tags";
+    public static final String EVENT_NAME = "event_name";
+    public static final String EVENT_ID = "event_id";
+    public static final String EVENT_DATETIME = "event_datetime";
+    public static final String VOTES = "votes";
 
     private static final String TAG = "MessageDbAdapter";
 
@@ -71,11 +75,15 @@ public class MessageDbAdapter {
                 "create table chats (_id text primary key, "
                         + "isGroup integer not null, chatName text, " +
                         "lastMessage integer not null, "+
-                        "users string, expiry integer);";
+                        "users text, expiry integer);";
 
         private static final String DATABASE_CREATE_CONTACTS =
                 "create table contacts (_id text primary key, "
                         + "name text not null, chatID text);";
+
+        private static final String DATABASE_CREATE_EVENTS =
+                "create table events (_id text primary key, "
+                        + "eventname text not null, eventdate text not null, chatID text, voters text);";
 
         private static final String DATABASE_NAME = "data";
 
@@ -91,6 +99,7 @@ public class MessageDbAdapter {
             db.execSQL(DATABASE_CREATE_CHATS);
             db.execSQL(DATABASE_CREATE_CONTACTS);
             db.execSQL(DATABASE_CREATE_NOTES);
+            db.execSQL(DATABASE_CREATE_EVENTS);
         }
 
         @Override
@@ -101,6 +110,7 @@ public class MessageDbAdapter {
             db.execSQL("DROP TABLE IF EXISTS chats");
             db.execSQL("DROP TABLE IF EXISTS contacts");
             db.execSQL("DROP TABLE IF EXISTS messages");
+            db.execSQL("DROP TABLE IF EXISTS events");
             onCreate(db);
         }
     }
@@ -226,6 +236,10 @@ public class MessageDbAdapter {
                 "timestamp, tags FROM messages WHERE chatID ='%s' ORDER BY _id", chatID), null);
     }
 
+    public Cursor getUserForGroup(String chatID){
+        return mDb.rawQuery(String.format("SELECT _id, users FROM chats WHERE _id ='%s'", chatID), null);
+    }
+
     public Cursor getChats(){
         return mDb.rawQuery("SELECT _id, chatName, isGroup FROM " +
                 "chats ORDER BY lastMessage DESC", null);
@@ -240,7 +254,6 @@ public class MessageDbAdapter {
         return mDb.rawQuery("SELECT _id, name FROM " +
                 "contacts WHERE _id = '"+phoneNumber+"'", null);
     }
-
 
     public long createGroupChat(Map message){
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
@@ -260,6 +273,20 @@ public class MessageDbAdapter {
         chatValues.put(LAST_MESSAGE, chatID);
         chatValues.put(EXPIRY, expiry);
         return mDb.insert(CHATS, null, chatValues);
+    }
+
+    public long createGroupEvent(Map message){
+        String chatID = (String) message.get(MessageBundle.CHATROOMID);
+        String eventID = (String) message.get(MessageBundle.EVENT_ID);
+        String eventName = (String) message.get(MessageBundle.EVENT_NAME);
+        String eventDateTime = (String) message.get(MessageBundle.EVENT_DATE);
+
+        ContentValues chatValues = new ContentValues();
+        chatValues.put(ROWID, eventID);
+        chatValues.put(CHATID, chatID);
+        chatValues.put(EVENT_NAME, eventName);
+        chatValues.put(EVENT_DATETIME, eventDateTime);
+        return mDb.insert(EVENTS, null, chatValues);
     }
 
     public long putContact(String phoneNum, String contactName){
@@ -558,6 +585,7 @@ public class MessageDbAdapter {
         result.close();
         return null;
     }
+
 
     public String[] getNoteTitleBody(String noteID){
         Cursor titleBody = mDb.rawQuery(String.format(

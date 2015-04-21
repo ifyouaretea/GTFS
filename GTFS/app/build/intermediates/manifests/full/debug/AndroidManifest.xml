@@ -104,6 +104,10 @@
             android:label="@string/title_activity_create_note"
             android:parentActivityName="cse.sutd.gtfs.Activities.Notes.NoteListActivity" >
         </activity>
+        <activity
+            android:name="cse.sutd.gtfs.GroupInfoActivity"
+            android:label="@string/title_activity_group_info" >
+        </activity>
     </application>
 
 </manifest>

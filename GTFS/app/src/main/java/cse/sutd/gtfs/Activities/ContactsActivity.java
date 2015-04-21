@@ -103,7 +103,7 @@ public class ContactsActivity extends ActionBarActivity {
                             MessageBundle.messageType.CREATE_SINGLE_ROOM);
                     createBundle.putToPhoneNumber(toPhoneNumber);
                     //TODO: setChatroomName
-                    createBundle.putChatroomName(userID + "," + toPhoneNumber);
+                    createBundle.putChatroomName(dbMessages.getUsername(toPhoneNumber));
 
                     Intent intent = new Intent(ContactsActivity.this, NetworkService.class);
                     intent.putExtra(NetworkService.MESSAGE_KEY,
@@ -120,6 +120,7 @@ public class ContactsActivity extends ActionBarActivity {
                 i.putExtra(MessageBundle.TO_PHONE_NUMBER, toPhoneNumber);
                 i.putExtra(MessageDbAdapter.ISGROUP, 0);
                 startActivity(i);
+                finish();
             }
         });
     }

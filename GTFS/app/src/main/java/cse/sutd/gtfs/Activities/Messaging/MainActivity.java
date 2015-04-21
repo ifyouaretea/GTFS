@@ -94,6 +94,7 @@ public class MainActivity extends ActionBarActivity {
         updateUI();
 
         client.resetNotificationMap();
+//        requestContacts();
     }
 
 
@@ -129,11 +130,10 @@ public class MainActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_search:
                 return true;
+            case R.id.action_chat:
             case R.id.action_contacts:
                 intent = new Intent(this, ContactsActivity.class);
                 startActivity(intent);
-                return true;
-            case R.id.action_chat:
                 return true;
             case R.id.action_group:
                 intent = new Intent(this, NewGroupActivity.class);
@@ -167,7 +167,6 @@ public class MainActivity extends ActionBarActivity {
         client.resetNotificationMap();
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
-        requestContacts();
         dbMessages.deleteExpiredChats();
     }
 

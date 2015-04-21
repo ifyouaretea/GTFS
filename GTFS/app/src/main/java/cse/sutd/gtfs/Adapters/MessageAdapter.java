@@ -3,26 +3,20 @@ package cse.sutd.gtfs.Adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -101,8 +95,9 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
             if(isGroup==0){
                 userName.setVisibility(View.GONE);
             }else{
+                String fromPhone = message.getFromPhoneNumber();
                 MessageDbAdapter dbMessages = MessageDbAdapter.getInstance(context);
-                Cursor contactName = dbMessages.getContact(user);
+                Cursor contactName = dbMessages.getContact(fromPhone);
                 String contact = null;
                 if (contactName != null) {
                     contactName.moveToFirst();
@@ -112,7 +107,7 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
                     contactName.close();
                     userName.setText(contact);
                 }else{
-                    userName.setText(user);
+                    userName.setText(fromPhone);
                 }
             }
         }

@@ -15,7 +15,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +40,7 @@ import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Activities.Notes.NoteListActivity;
 import cse.sutd.gtfs.Adapters.MessageAdapter;
 import cse.sutd.gtfs.GTFSClient;
+import cse.sutd.gtfs.GroupInfoActivity;
 import cse.sutd.gtfs.Objects.ChatRoom;
 import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.ManagerService;
@@ -75,6 +75,7 @@ public class MessagingActivity extends ActionBarActivity {
 
     private MessageDbAdapter dbMessages;
     private ChatRoom chat;
+    private String[] userList;
 
     /**
      * Required extras
@@ -89,7 +90,6 @@ public class MessagingActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         dbMessages = MessageDbAdapter.getInstance(this);
         Bundle extras = getIntent().getExtras();
-
 
         if (extras != null) {
             isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
@@ -143,6 +143,7 @@ public class MessagingActivity extends ActionBarActivity {
             finish();
             return;
         }
+
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         final String userID = prefs.getString("userid", null);
 
@@ -151,9 +152,9 @@ public class MessagingActivity extends ActionBarActivity {
         listview = (ListView) findViewById(R.id.messageList);
 
         messageList = new ArrayList<>();
-        adapter = new MessageAdapter(this, listview, messageList, userID, isGroup);
-        updateUI();
+        adapter = new MessageAdapter(this, listview, messageList, client.getID(), isGroup);
         listview.setAdapter(adapter);
+        updateUI();
 
         msg = (TextView) findViewById(R.id.message);
         Button send = (Button) findViewById(R.id.sendMessageButton);
@@ -199,7 +200,6 @@ public class MessagingActivity extends ActionBarActivity {
                 }
             }
         });
-
    /*     searchButton = (Button) findViewById(R.id.message_search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -313,7 +313,7 @@ public class MessagingActivity extends ActionBarActivity {
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.message_events:
-                Intent createEvent = new Intent(this, NewGroupActivity.class);
+                Intent createEvent = new Intent(this, EventsActivity.class);
                 createEvent.putExtra(EventsActivity.CHAT_ID_KEY, chatroomID);
                 startActivity(createEvent);
                 return true;
@@ -321,6 +321,11 @@ public class MessagingActivity extends ActionBarActivity {
                 Intent openNotes = new Intent(this, NoteListActivity.class);
                 openNotes.putExtra(NoteListActivity.CHAT_ID_KEY, chatroomID);
                 startActivity(openNotes);
+                return true;
+            case R.id.group_info:
+                Intent groupinfo = new Intent(this, GroupInfoActivity.class);
+                groupinfo.putExtra(GroupInfoActivity.CHAT_ID_KEY, chatroomID);
+                startActivity(groupinfo);
                 return true;
             case R.id.message_search_icon:
                 searchBarLayout.setVisibility(View.VISIBLE);
@@ -382,6 +387,14 @@ public class MessagingActivity extends ActionBarActivity {
                 chatroomID = (String) message.get(MessageBundle.CHATROOMID);
                 Log.d("Room id updated", chatroomID);
             }
+        }else if (MessageBundle.messageType.EVENT_CREATED.toString().equals(messageType)) {
+            LinearLayout newEvent = (LinearLayout) findViewById(R.id.eventLayout);
+            newEvent.setVisibility(View.VISIBLE);
+
+            if (chatroomName.equals(message.get(MessageBundle.CHATROOM_NAME))) {
+                chatroomID = (String) message.get(MessageBundle.CHATROOMID);
+                Log.d("Room id updated", chatroomID);
+            }
         }
     }
 
@@ -407,7 +420,6 @@ public class MessagingActivity extends ActionBarActivity {
     }
 
     private class MessageBroadcastReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             Map received = (Map) JsonReader.jsonToJava(intent.getStringExtra

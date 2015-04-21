@@ -17,7 +17,7 @@ public class MessageBundle {
         AUTH, TEXT,TEXT_RECEIVED, TYPING, CREATE_SINGLE_ROOM, CREATE_ROOM,ROOM_INVITATION,
         SINGLE_ROOM_INVITATION,ACCEPT_INVITATION, LEAVE, GROUP_EXPIRED, GET_USERS,
         FETCH_NOTE, EDIT_NOTE, GET_ROOMS, CREATE_NOTE, GET_NOTES,
-        CREATE_EVENT,GET_EVENTS,EVENT_VOTE,EVENT_UNVOTE;
+        CREATE_EVENT,GET_EVENTS,EVENT_CREATED,EVENT_VOTE,EVENT_UNVOTE,EVENT_VOTE_RECEIVED, EVENT_UNVOTE_RECEIVED;
     }
 
     private Map<String, String> messageMap;
@@ -44,6 +44,8 @@ public class MessageBundle {
     public static final String CHATROOMS = "chatrooms";
     public static final String TAGS = "tags";
     public static final String VALID_STATUS = "1";
+    public static final String EVENTS = "events";
+    public static final String VOTES = "votes";
     public static final String EVENT_ID = "event_id";
     public static final String EVENT_NAME = "event_name";
     public static final String EVENT_DATE = "event_date";
@@ -66,6 +68,10 @@ public class MessageBundle {
 
     public String putUsername(String username){
         return messageMap.put(USERNAME, username);
+    }
+
+    public String getFromPhoneNumber(){
+        return messageMap.get(FROM_PHONE_NUMBER);
     }
 
     public String putChatroomID(String chatRoomID){
