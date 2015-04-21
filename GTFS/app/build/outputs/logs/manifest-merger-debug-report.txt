@@ -132,7 +132,7 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:64:17
 	android:name
 		ADDED from AndroidManifest.xml:64:27
-activity#cse.sutd.gtfs.Activities.Messaging.NewGroupActivity
+activity#cse.sutd.gtfs.Activities.Group.NewGroupActivity
 ADDED from AndroidManifest.xml:67:9
 	android:label
 		ADDED from AndroidManifest.xml:69:13
@@ -148,13 +148,13 @@ ADDED from AndroidManifest.xml:72:9
 		ADDED from AndroidManifest.xml:75:13
 	android:name
 		ADDED from AndroidManifest.xml:73:13
-activity#cse.sutd.gtfs.Activities.EventsActivity
+activity#cse.sutd.gtfs.Activities.Group.EventsActivity
 ADDED from AndroidManifest.xml:77:9
 	android:label
 		ADDED from AndroidManifest.xml:79:13
 	android:name
 		ADDED from AndroidManifest.xml:78:13
-activity#cse.sutd.gtfs.Activities.AddContactToGroup
+activity#cse.sutd.gtfs.Activities.Group.AddContactToGroup
 ADDED from AndroidManifest.xml:81:9
 	android:label
 		ADDED from AndroidManifest.xml:83:13
@@ -186,10 +186,12 @@ ADDED from AndroidManifest.xml:96:9
 		ADDED from AndroidManifest.xml:99:13
 	android:name
 		ADDED from AndroidManifest.xml:97:13
-activity#cse.sutd.gtfs.GroupInfoActivity
+activity#cse.sutd.gtfs.Activities.Group.GroupInfoActivity
 ADDED from AndroidManifest.xml:101:9
 	android:label
 		ADDED from AndroidManifest.xml:103:13
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:104:13
 	android:name
 		ADDED from AndroidManifest.xml:102:13
 uses-sdk

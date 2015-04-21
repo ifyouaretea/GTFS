@@ -65,7 +65,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.Messaging.NewGroupActivity"
+            android:name=".Activities.Group.NewGroupActivity"
             android:label="@string/title_activity_new_group"
             android:parentActivityName=".Activities.Messaging.MainActivity" >
         </activity>
@@ -75,13 +75,13 @@
             android:parentActivityName=".Activities.Messaging.MainActivity" >
         </activity>
         <activity
-            android:name=".Activities.EventsActivity"
+            android:name=".Activities.Group.EventsActivity"
             android:label="@string/title_activity_events" >
         </activity>
         <activity
-            android:name=".Activities.AddContactToGroup"
+            android:name=".Activities.Group.AddContactToGroup"
             android:label="@string/title_activity_add_contact_to_group"
-            android:parentActivityName=".Activities.Messaging.NewGroupActivity" >
+            android:parentActivityName=".Activities.Group.NewGroupActivity" >
         </activity>
         <activity
             android:name=".Activities.Notes.EditNoteActivity"
@@ -99,8 +99,9 @@
             android:parentActivityName=".Activities.Notes.NoteListActivity" >
         </activity>
         <activity
-            android:name=".GroupInfoActivity"
-            android:label="@string/title_activity_group_info" >
+            android:name=".Activities.Group.GroupInfoActivity"
+            android:label="@string/title_activity_group_info"
+            android:parentActivityName=".Activities.Messaging.MessagingActivity" >
         </activity>
     </application>
 

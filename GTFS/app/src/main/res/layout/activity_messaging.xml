@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="10dip"
+    android:padding="5dip"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#FAFDF9">
+    android:background="#FAFDF9"
+    android:weightSum="1"
+    android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
@@ -13,7 +14,10 @@
         android:layout_height="wrap_content"
         android:background="#FAFDF9"
         android:visibility="gone"
-        android:id="@+id/message_search_bar_layout">
+        android:id="@+id/message_search_bar_layout"
+        android:layout_alignStart="@+id/eventLayout"
+        android:layout_alignTop="@+id/eventLayout"
+        android:layout_weight="0.05">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -52,21 +56,27 @@
 
     <ListView
         android:id="@+id/messageList"
-        android:layout_width="wrap_content"
-        android:layout_height="0px"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="166dp"
         android:dividerHeight="0dp"
         android:divider="@null"
         android:scrollbars="vertical"
         android:stackFromBottom="true"
-        android:transcriptMode="alwaysScroll"/>
+        android:transcriptMode="alwaysScroll"
+        android:layout_below="@+id/message_search_bar_layout"
+        android:layout_alignStart="@+id/eventLayout"
+        android:layout_weight="0.9" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="1"
-        android:background="@drawable/event">
+        android:background="@drawable/event"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_weight="0.05"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -95,17 +105,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="54dp"
-        android:visibility="gone"
-        android:id="@+id/eventLayout">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_message_tag"
-            android:tint="#808980"
-            android:clickable="true"
-            android:id="@+id/add_tag_button"/>
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.05">
+
         <EditText
             android:id="@+id/message"
             android:layout_width="0dip"
@@ -114,14 +118,21 @@
             android:maxLength="1000"
             android:maxLines="4"
             android:gravity="top"
-            android:layout_weight="4"/>
+            android:layout_weight="4" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_message_tag"
+            android:tint="#808980"
+            android:clickable="true"
+            android:id="@+id/add_tag_button" />
 
         <Button
             android:id="@+id/sendMessageButton"
             android:layout_width="66dp"
             android:layout_height="fill_parent"
-            android:text="Send"/>
-
+            android:text="Send" />
     </LinearLayout>
 
 </LinearLayout>
