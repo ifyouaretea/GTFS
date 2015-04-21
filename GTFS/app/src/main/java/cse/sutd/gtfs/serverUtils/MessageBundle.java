@@ -48,7 +48,7 @@ public class MessageBundle {
     public static final String VOTES = "votes";
     public static final String EVENT_ID = "event_id";
     public static final String EVENT_NAME = "event_name";
-    public static final String EVENT_DATE = "event_date";
+    public static final String EVENT_DATETIME = "event_datetime";
 
 //    private String time;
 
@@ -127,7 +127,7 @@ public class MessageBundle {
     }
 
     public String putEventDate(String eventDate){
-        return messageMap.put(EVENT_DATE, eventDate);
+        return messageMap.put(EVENT_DATETIME, eventDate);
     }
 
     public String putTag(String tag){

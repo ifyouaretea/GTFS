@@ -12,8 +12,10 @@ public class Event {
     private long EVENT_DATE;
     private ArrayList<String> voters;
 
-    public Event(String name, String id){
-
+    public Event(String name, String id, long date){
+        EVENT_NAME = name;
+        EVENT_ID = id;
+        EVENT_DATE = date;
     }
 
     public String getEVENT_NAME() {

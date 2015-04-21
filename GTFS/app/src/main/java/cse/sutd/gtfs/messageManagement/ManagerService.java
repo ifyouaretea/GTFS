@@ -97,8 +97,9 @@ public class ManagerService extends Service{
         else if (messageType.equals(MessageBundle.messageType.GET_NOTES.toString()))
             dbAdapter.importNotes(message);
 
-        else if (messageType.equals(MessageBundle.messageType.EVENT_CREATED.toString()))
-            dbAdapter.createGroupEvent(message);
+        else if (messageType.equals(MessageBundle.messageType.GET_EVENTS.toString()))
+            dbAdapter.importEvents(message);
+
 
         Intent updateUIIntent = new Intent(UPDATE_UI);
         updateUIIntent.putExtra(NetworkService.MESSAGE_KEY,

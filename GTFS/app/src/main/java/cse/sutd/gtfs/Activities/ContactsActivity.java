@@ -74,7 +74,7 @@ public class ContactsActivity extends ActionBarActivity {
         getSupportActionBar().setTitle("Contacts");
         setContentView(R.layout.activity_contacts);
 
-        requestContacts();
+
 
         IntentFilter receivedIntentFilter = new IntentFilter(ManagerService.UPDATE_UI);
         MessageBroadcastReceiver broadcastReceiver = new MessageBroadcastReceiver();

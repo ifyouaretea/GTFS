@@ -12,11 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-<<<<<<< HEAD
-=======
+
 import android.widget.ImageView;
 import android.widget.LinearLayout;
->>>>>>> 6f3870bdd681a9dc1be0455353bce7e1b73348d3
 import android.widget.ListView;
 import android.widget.TextView;
 
