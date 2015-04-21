@@ -38,9 +38,9 @@ public class ProfileActivity extends ActionBarActivity {
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-//        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle("Profile");
         setContentView(R.layout.activity_profile);
 
@@ -49,7 +49,9 @@ public class ProfileActivity extends ActionBarActivity {
 
         Cursor c = getApplication().getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
         c.moveToFirst();
-        String username = c.getString(c.getColumnIndex("display_name"));
+        String username=null;
+        if (c!=null)
+            username = c.getString(c.getColumnIndex("display_name"));
         c.close();
 
         final EditText prof_name = (EditText) findViewById(R.id.prof_name);

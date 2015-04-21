@@ -1,6 +1,5 @@
 package cse.sutd.gtfs.Activities.Messaging;
 
-import android.app.ActionBar;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,7 +19,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,7 +38,6 @@ import java.util.Map;
 import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Activities.Notes.NoteListActivity;
 import cse.sutd.gtfs.Adapters.MessageAdapter;
-
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.ChatRoom;
 import cse.sutd.gtfs.R;
@@ -82,6 +79,7 @@ public class MessagingActivity extends ActionBarActivity {
      * isGroup:
      * Chatname
      * chatID
+     *
      * @param savedInstanceState
      */
     @Override
@@ -95,7 +93,7 @@ public class MessagingActivity extends ActionBarActivity {
             isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
             if (isGroup == 0) {
                 toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
-                if(toPhoneNumber != null)
+                if (toPhoneNumber != null)
                     chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
                 else
                     chatroomID = extras.getString(MessageDbAdapter.CHATID);
@@ -105,8 +103,8 @@ public class MessagingActivity extends ActionBarActivity {
                 else
                     chatroomName = dbMessages.getUsernameFromNumber(toPhoneNumber);
 
-                chat = new ChatRoom(chatroomID, chatroomName,toPhoneNumber,isGroup);
-            }else{
+                chat = new ChatRoom(chatroomID, chatroomName, toPhoneNumber, isGroup);
+            } else {
                 chatroomID = extras.getString(MessageDbAdapter.CHATID);
                 if (chatroomID != null)
                     chatroomName = dbMessages.getChatroomName(chatroomID);
@@ -118,7 +116,7 @@ public class MessagingActivity extends ActionBarActivity {
                 else
                     chatroomName = dbMessages.getUsernameFromNumber(toPhoneNumber);
 
-                chat = new ChatRoom(chatroomID, chatroomName,isGroup);
+                chat = new ChatRoom(chatroomID, chatroomName, isGroup);
             }
             dbMessages.clearRead(chatroomID);
         }
@@ -131,13 +129,12 @@ public class MessagingActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_action_profile); //user's pic
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-
         getSupportActionBar().setTitle(chatroomName);
 
         setContentView(R.layout.activity_messaging);
 
         client = (GTFSClient) getApplicationContext();
-        if(client.getID() == null){
+        if (client.getID() == null) {
             Intent intent = new Intent(this, LoginActivityCog.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -181,8 +178,8 @@ public class MessagingActivity extends ActionBarActivity {
                     textBundle.putMessage(msg.getText().toString());
                     textBundle.putChatroomID(chatroomID);
 
-                    for(int i = 0; i < addTagPopupMenu.getMenu().size(); i++){
-                        if(addTagPopupMenu.getMenu().getItem(i).isChecked())
+                    for (int i = 0; i < addTagPopupMenu.getMenu().size(); i++) {
+                        if (addTagPopupMenu.getMenu().getItem(i).isChecked())
                             textBundle.putTag(addTagPopupMenu.getMenu()
                                     .getItem(i).getTitle().toString());
                     }
@@ -210,7 +207,7 @@ public class MessagingActivity extends ActionBarActivity {
         tagImageView = (ImageView) findViewById(R.id.add_tag_button);
 
         addTagPopupMenu = new PopupMenu(MessagingActivity.this, tagImageView);
-        addTagPopupMenu.getMenuInflater().inflate(R.menu.menu_add_tag, addTagPopupMenu .getMenu());
+        addTagPopupMenu.getMenuInflater().inflate(R.menu.menu_add_tag, addTagPopupMenu.getMenu());
         addTagPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -228,29 +225,29 @@ public class MessagingActivity extends ActionBarActivity {
         searchBarLayout = (LinearLayout) findViewById(R.id.message_search_bar_layout);
         messageSearchBar = (EditText) findViewById(R.id.message_search_bar);
         messageSearchBar.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                                    @Override
+                                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                }
+                                                    }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    adapter.setSearchTerm(messageSearchBar.getText().toString());
-                    adapter.notifyDataSetChanged();
-                }
+                                                    @Override
+                                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                                        adapter.setSearchTerm(messageSearchBar.getText().toString());
+                                                        adapter.notifyDataSetChanged();
+                                                    }
 
-                @Override
-                public void afterTextChanged(Editable s) {
+                                                    @Override
+                                                    public void afterTextChanged(Editable s) {
 
-                }
-            }
+                                                    }
+                                                }
         );
 
         ImageView downSearch = (ImageView) findViewById(R.id.search_down_arrow);
         downSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(searchPosition <= 0)
+                if (searchPosition <= 0)
                     searchPosition = adapter.getSearchResult().size() - 1;
                 else
                     searchPosition--;
@@ -262,7 +259,7 @@ public class MessagingActivity extends ActionBarActivity {
         upSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(searchPosition >= adapter.getSearchResult().size() - 1)
+                if (searchPosition >= adapter.getSearchResult().size() - 1)
                     searchPosition = 0;
                 else
                     searchPosition++;
@@ -280,11 +277,11 @@ public class MessagingActivity extends ActionBarActivity {
         });
     }
 
-    private void moveToSearch(){
+    private void moveToSearch() {
         List<Integer> searchResults = adapter.getSearchResult();
-        if(searchResults.size() > 0 && searchResults.get(searchPosition) > 0) {
+        if (searchResults.size() > 0 && searchResults.get(searchPosition) > 0) {
             listview.setSelection(searchResults.get(searchPosition));
-            listview.smoothScrollToPosition(searchPosition);
+            listview.requestFocus();
             listview.getChildAt(searchResults.get(searchPosition)).getBackground().setColorFilter(
                     Color.parseColor("#00f00"), PorterDuff.Mode.DARKEN
             );
@@ -304,7 +301,7 @@ public class MessagingActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
@@ -328,7 +325,7 @@ public class MessagingActivity extends ActionBarActivity {
                     popup.setOnMenuItemClickListener(
                             new PopupMenu.OnMenuItemClickListener() {
                                 public boolean onMenuItemClick(MenuItem item) {
-                                    if(item.getItemId() == tagList.size())
+                                    if (item.getItemId() == tagList.size())
                                         adapter.getFilter().filter("");
                                     else
                                         adapter.getFilter().filter(item.getTitle()
@@ -337,43 +334,48 @@ public class MessagingActivity extends ActionBarActivity {
                                 }
                             }
                     );
-                }else{
+                } else {
                     popup.getMenu().add("No tags");
                 }
                 popup.show();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
-        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
     }
+
     private void handleMessage(Map message) {
         String messageType = (String) message.get(MessageBundle.TYPE);
         if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)) {
             updateUI();
-        }else if (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString().equals(messageType)){
-            for(Object user: (Object[]) message.get(MessageBundle.USERS)){
-                if(user.equals(toPhoneNumber)){
+        } else if (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString().equals(messageType)) {
+            for (Object user : (Object[]) message.get(MessageBundle.USERS)) {
+                if (user.equals(toPhoneNumber)) {
                     chatroomID = (String) message.get(MessageBundle.CHATROOMID);
-                    Log.d("Messaging id updated", chatroomID);
+                    Log.d("Room id updated", chatroomID);
                     break;
                 }
+            }
+        } else if (MessageBundle.messageType.ROOM_INVITATION.toString().equals(messageType)) {
+            if (chatroomName.equals(message.get(MessageBundle.CHATROOM_NAME))) {
+                chatroomID = (String) message.get(MessageBundle.CHATROOMID);
+                Log.d("Room id updated", chatroomID);
             }
         }
     }
 
-    private void updateUI(){
+    private void updateUI() {
         Cursor msgBundles = dbMessages.getChatMessages(chatroomID);
         if (msgBundles != null) {
             messageList.clear();
-            if(msgBundles.getCount()>0) {
+            if (msgBundles.getCount() > 0) {
                 msgBundles.moveToFirst();
                 do {
                     MessageBundle a = new MessageBundle(msgBundles.getString(0),

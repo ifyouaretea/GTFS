@@ -17,7 +17,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText"
+            android:id="@+id/eventname"
             android:hint="Enter titles and places" />
 
         <LinearLayout
@@ -29,6 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageView"
+                android:tint="#545A61"
                 android:src="@drawable/ic_action_calendar" />
 
             <EditText
@@ -36,14 +37,14 @@
                 android:layout_height="wrap_content"
                 android:inputType="date"
                 android:ems="10"
-                android:id="@+id/editText2" />
+                android:id="@+id/fromDate" />
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="date"
+                android:inputType="time"
                 android:ems="10"
-                android:id="@+id/editText3" />
+                android:id="@+id/fromTime" />
 
         </LinearLayout>
     </LinearLayout>

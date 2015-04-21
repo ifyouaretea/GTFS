@@ -1,9 +1,5 @@
 package cse.sutd.gtfs.serverUtils;
 
-import java.util.Map;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -20,7 +16,8 @@ public class MessageBundle {
     public static enum messageType{
         AUTH, TEXT,TEXT_RECEIVED, TYPING, CREATE_SINGLE_ROOM, CREATE_ROOM,ROOM_INVITATION,
         SINGLE_ROOM_INVITATION,ACCEPT_INVITATION, LEAVE, GROUP_EXPIRED, GET_USERS,
-        FETCH_NOTE, EDIT_NOTE, GET_ROOMS, CREATE_NOTE, GET_NOTES;
+        FETCH_NOTE, EDIT_NOTE, GET_ROOMS, CREATE_NOTE, GET_NOTES,
+        CREATE_EVENT,GET_EVENTS,EVENT_VOTE,EVENT_UNVOTE;
     }
 
     private Map<String, String> messageMap;
@@ -47,6 +44,9 @@ public class MessageBundle {
     public static final String CHATROOMS = "chatrooms";
     public static final String TAGS = "tags";
     public static final String VALID_STATUS = "1";
+    public static final String EVENT_ID = "event_id";
+    public static final String EVENT_NAME = "event_name";
+    public static final String EVENT_DATE = "event_date";
 
 //    private String time;
 
@@ -57,9 +57,10 @@ public class MessageBundle {
         messageMap.put(SESSION_TOKEN, sessionToken);
         messageMap.put(TYPE, type.toString());
         if(type == messageType.CREATE_ROOM || type == messageType.CREATE_SINGLE_ROOM )
-            messageMap.put(EXPIRY, "0"  );
-        if(type == messageType.TEXT)
-            tags = new ArrayList<>();
+            messageMap.put(EXPIRY, "0" );
+        if(type == messageType.TEXT) {
+            messageMap.put(TAGS, "Normal");
+        }
         putTimestamp();
     }
 
@@ -115,9 +116,16 @@ public class MessageBundle {
         return messageMap.put(NOTE_TITLE, noteTitle);
     }
 
+    public String putEventName(String eventName){
+        return messageMap.put(EVENT_NAME, eventName);
+    }
+
+    public String putEventDate(String eventDate){
+        return messageMap.put(EVENT_DATE, eventDate);
+    }
+
     public String putTag(String tag){
-        tags.add(tag);
-        return messageMap.put(TAGS, tags.toString());
+        return messageMap.put(TAGS, tag);
     }
 
     public String putParsedTags(String tags){
