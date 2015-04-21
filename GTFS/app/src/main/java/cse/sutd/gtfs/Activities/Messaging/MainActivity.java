@@ -168,6 +168,7 @@ public class MainActivity extends ActionBarActivity {
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
         requestContacts();
+        dbMessages.deleteExpiredChats();
     }
 
     private void requestContacts(){
