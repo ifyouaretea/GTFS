@@ -159,6 +159,7 @@ public class AddContactToGroup extends ActionBarActivity {
                     i.putExtra(MessageDbAdapter.CHATNAME, extras[0]);
                     i.putExtra(MessageDbAdapter.ISGROUP, 1);
                     startActivity(i);
+                    finish();
                 }else{
                     Toast.makeText(getApplicationContext(), "Please add contacts!", Toast.LENGTH_SHORT).show();
                 }

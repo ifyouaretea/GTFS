@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import cse.sutd.gtfs.Activities.EventsActivity;
 import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Activities.Notes.NoteListActivity;
 import cse.sutd.gtfs.Adapters.MessageAdapter;
@@ -292,7 +293,10 @@ public class MessagingActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_messaging, menu);
+        if(isGroup ==0)
+            getMenuInflater().inflate(R.menu.menu_messaging, menu);
+        else
+            getMenuInflater().inflate(R.menu.menu_messaging_group, menu);
         return true;
     }
 
@@ -304,6 +308,11 @@ public class MessagingActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
+                return true;
+            case R.id.message_events:
+                Intent createEvent = new Intent(this, NewGroupActivity.class);
+                createEvent.putExtra(EventsActivity.CHAT_ID_KEY, chatroomID);
+                startActivity(createEvent);
                 return true;
             case R.id.open_notes:
                 Intent openNotes = new Intent(this, NoteListActivity.class);

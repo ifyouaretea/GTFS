@@ -18,14 +18,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.R;
+import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 
 
 public class EventsActivity extends ActionBarActivity {
     private GTFSClient client;
     private SharedPreferences.Editor editor;
+    private String chatID;
 
     private EditText name;
     private EditText date;
@@ -45,6 +48,8 @@ public class EventsActivity extends ActionBarActivity {
     private int day;
     private int hour;
     private int minute;
+
+    public static final String CHAT_ID_KEY = "chatID";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +63,11 @@ public class EventsActivity extends ActionBarActivity {
             startActivity(intent);
             finish();
             return;
+        }
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            chatID = extras.getString(CHAT_ID_KEY);
         }
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -142,8 +152,16 @@ public class EventsActivity extends ActionBarActivity {
             final MessageBundle eventBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
                     MessageBundle.messageType.CREATE_EVENT);
 
+            eventBundle.putChatroomID(chatID);
             eventBundle.putEventName(name.getText().toString());
             eventBundle.putEventDate(String.valueOf(DATE_TIME));
+
+            Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
+            i.putExtra(MessageDbAdapter.CHATID, chatID);
+            i.putExtra(MessageDbAdapter.ISGROUP, 1);
+            startActivity(i);
+            finish();
+
             return true;
         }
 

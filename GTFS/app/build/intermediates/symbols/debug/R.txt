@@ -383,7 +383,7 @@ int id action_chat 0x7f0b007e
 int id action_contacts 0x7f0b0080
 int id action_context_bar 0x7f0b0032
 int id action_create_event 0x7f0b007d
-int id action_create_group 0x7f0b0086
+int id action_create_group 0x7f0b0087
 int id action_done 0x7f0b0078
 int id action_group 0x7f0b007f
 int id action_logout 0x7f0b0082
@@ -411,7 +411,7 @@ int id contacts 0x7f0b0041
 int id countTextView 0x7f0b0060
 int id country_code_tv 0x7f0b004d
 int id create_body 0x7f0b0044
-int id create_note 0x7f0b0087
+int id create_note 0x7f0b0088
 int id create_title 0x7f0b0043
 int id decor_content_parent 0x7f0b002f
 int id default_activity_button 0x7f0b0024
@@ -444,6 +444,7 @@ int id list_item 0x7f0b0025
 int id main 0x7f0b0053
 int id message 0x7f0b005c
 int id messageList 0x7f0b005a
+int id message_events 0x7f0b0086
 int id message_search_bar 0x7f0b0057
 int id message_search_bar_layout 0x7f0b0055
 int id message_search_icon 0x7f0b0084
@@ -562,10 +563,11 @@ int menu menu_login 0x7f0f0005
 int menu menu_login_activity_cog 0x7f0f0006
 int menu menu_main 0x7f0f0007
 int menu menu_messaging 0x7f0f0008
-int menu menu_new_group 0x7f0f0009
-int menu menu_note 0x7f0f000a
-int menu menu_note_list 0x7f0f000b
-int menu menu_profile 0x7f0f000c
+int menu menu_messaging_group 0x7f0f0009
+int menu menu_new_group 0x7f0f000a
+int menu menu_note 0x7f0f000b
+int menu menu_note_list 0x7f0f000c
+int menu menu_profile 0x7f0f000d
 int mipmap ic_launcher 0x7f030000
 int string abc_action_bar_home_description 0x7f0d0000
 int string abc_action_bar_home_description_format 0x7f0d0001

@@ -50,7 +50,7 @@ public class ProfileActivity extends ActionBarActivity {
         Cursor c = getApplication().getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
         c.moveToFirst();
         String username=null;
-        if (c!=null)
+        if (c.getCount()>0)
             username = c.getString(c.getColumnIndex("display_name"));
         c.close();
 
