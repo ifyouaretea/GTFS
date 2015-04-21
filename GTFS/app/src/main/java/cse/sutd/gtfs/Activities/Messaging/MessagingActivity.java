@@ -78,11 +78,10 @@ public class MessagingActivity extends ActionBarActivity {
     private MessageDbAdapter dbMessages;
     private ChatRoom chat;
     private String[] userList;
-<<<<<<< HEAD
     private String[] eventsList;
-=======
+
     private List<Event> unvotedEvents;
->>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
+
 
     /**
      * Required extras
@@ -98,7 +97,6 @@ public class MessagingActivity extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-<<<<<<< HEAD
             chatroomID = extras.getString(MessageDbAdapter.CHATID);
             if (chatroomID != null) {
                 chatroomName = dbMessages.getUsername(chatroomID);
@@ -106,25 +104,6 @@ public class MessagingActivity extends ActionBarActivity {
             }else{
                 isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
                 if(isGroup==1){
-=======
-            isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
-            if (isGroup == 0) {
-                toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
-                if (toPhoneNumber != null)
-                    chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
-                else
-                    chatroomID = extras.getString(MessageDbAdapter.CHATID);
-                if (chatroomID != null)
-                    chatroomName = dbMessages.getUsername(chatroomID);
-                else
-                    chatroomName = dbMessages.getUsernameFromNumber(toPhoneNumber);
-                chat = new ChatRoom(chatroomID, chatroomName, toPhoneNumber, isGroup);
-            } else {
-                chatroomID = extras.getString(MessageDbAdapter.CHATID);
-                if (chatroomID != null)
-                    chatroomName = dbMessages.getChatroomName(chatroomID);
-                else
->>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
                     chatroomName = extras.getString(MessageDbAdapter.CHATNAME);
                 }else{
                     chatroomName = dbMessages.getUsernameFromNumber(toPhoneNumber);
@@ -447,6 +426,37 @@ public class MessagingActivity extends ActionBarActivity {
                 }
             });
             newEvent.setVisibility(View.VISIBLE);
+            updateUI();
+        }else if (MessageBundle.messageType.EVENT_VOTE_RECEIVED.toString().equals(messageType)) {
+            String fromPhoneNumber = (String) message.get(MessageBundle.FROM_PHONE_NUMBER);
+            if(fromPhoneNumber.equals(client.getID())){
+                MessageBundle a = new MessageBundle(client.getID(),
+                        sessionToken, MessageBundle.messageType.ADMIN);
+                a.putMessage("You are attending "+(String)dbMessages.getEventName(MessageBundle.EVENT_ID));
+                messageList.add(a);
+            }else{
+                MessageBundle a = new MessageBundle(client.getID(),
+                        sessionToken, MessageBundle.messageType.ADMIN);
+                String name = dbMessages.getUsername(fromPhoneNumber);
+                a.putMessage(name+" is attending "+(String)dbMessages.getEventName(MessageBundle.EVENT_ID));
+                messageList.add(a);
+            }
+            updateUI();
+        }
+        else if (MessageBundle.messageType.EVENT_UNVOTE_RECEIVED.toString().equals(messageType)) {
+            String fromPhoneNumber = (String) message.get(MessageBundle.FROM_PHONE_NUMBER);
+            if(fromPhoneNumber.equals(client.getID())){
+                MessageBundle a = new MessageBundle(client.getID(),
+                        sessionToken, MessageBundle.messageType.ADMIN);
+                a.putMessage("You are not attending "+(String)dbMessages.getEventName(MessageBundle.EVENT_ID));
+                messageList.add(a);
+            }else{
+                MessageBundle a = new MessageBundle(client.getID(),
+                        sessionToken, MessageBundle.messageType.ADMIN);
+                String name = dbMessages.getUsername(fromPhoneNumber);
+                a.putMessage(name+" is not attending "+(String)dbMessages.getEventName(MessageBundle.EVENT_ID));
+                messageList.add(a);
+            }
             updateUI();
         }
     }

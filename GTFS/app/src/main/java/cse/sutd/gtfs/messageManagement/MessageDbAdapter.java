@@ -57,20 +57,11 @@ public class MessageDbAdapter {
     public static final String TITLE = "title";
     public static final String NOTES = "notes";
     public static final String TAGS = "tags";
-<<<<<<< HEAD
     public static final String EVENT_NAME = "event_name";
     public static final String EVENT_ID = "event_id";
-    public static final String EVENT_DATETIME = "event_datetime";
+    public static final String EVENT_DATE = "event_datetime";
     public static final String VOTES = "votes";
     public static final String DELETED = "deleted";
-
-=======
-    public static final String EVENT_NAME = "eventName";
-    public static final String EVENT_DATE = "eventDate";
-    public static final String VOTES = "votes";
-    public static final String DELETED = "deleted";
-    public static final String HAS_VOTED = "hasVoted";
->>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
 
     private static final String TAG = "MessageDbAdapter";
 
@@ -92,10 +83,6 @@ public class MessageDbAdapter {
                         + "isGroup integer not null, chatName text, " +
                         "lastMessage integer not null, "+
                         "users text, expiry integer, deleted integer not null);";
-<<<<<<< HEAD
-
-=======
->>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
 
         private static final String DATABASE_CREATE_CONTACTS =
                 "create table contacts (_id text primary key, "
@@ -103,7 +90,7 @@ public class MessageDbAdapter {
 
         private static final String DATABASE_CREATE_EVENTS =
                 "create table events (_id text primary key, "
-                        + "eventName text not null, eventDate text not null, chatID text," +
+                        + "eventName text not null, event_datetime text not null, chatID text," +
                         " votes text);";
 
         private static final String DATABASE_NAME = "data";
@@ -722,14 +709,6 @@ public class MessageDbAdapter {
         return tags;
     }
 
-<<<<<<< HEAD
-=======
-    public Cursor getUserIDsUsernamesForChat(String chatID){
-        return mDb.rawQuery(String.format("SELECT contacts._id, contacts.name FROM " +
-                "contacts INNER JOIN chats ON chats.users LIKE '%' + contacts._id  + '%' " +
-                "WHERE chats._id ='%s'",chatID),null);
-    }
-
     public void importEvents(Map message){
         Object[] events = (Object[])message.get(MessageBundle.EVENTS);
         for(Object event : events){
@@ -764,5 +743,4 @@ public class MessageDbAdapter {
         return mDb.rawQuery(String.format("SELECT _id, eventName, " +
                 "eventDate FROM events WHERE chatID='%s'",  chatID),null);
     }*/
->>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
 }

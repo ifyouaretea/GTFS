@@ -402,7 +402,7 @@ int id action_profile 0x7f0b0088
 int id action_search 0x7f0b0082
 int id action_settings 0x7f0b0083
 int id activity_chooser_view_content 0x7f0b0021
-int id add_tag_button 0x7f0b0060
+int id add_tag_button 0x7f0b005f
 int id adminMsg 0x7f0b0078
 int id always 0x7f0b0016
 int id avatar 0x7f0b006e
@@ -453,7 +453,7 @@ int id important_tag 0x7f0b007f
 int id listMode 0x7f0b0009
 int id list_item 0x7f0b0025
 int id main 0x7f0b0053
-int id message 0x7f0b005f
+int id message 0x7f0b0060
 int id messageList 0x7f0b005b
 int id message_events 0x7f0b008d
 int id message_search_bar 0x7f0b0058

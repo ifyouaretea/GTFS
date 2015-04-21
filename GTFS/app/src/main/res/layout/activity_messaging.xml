@@ -72,6 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="1"
+        android:id="@+id/eventLayout"
         android:background="@drawable/event"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
@@ -114,6 +115,14 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.05">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_message_tag"
+            android:tint="#808980"
+            android:clickable="true"
+            android:id="@+id/add_tag_button" />
+
         <EditText
             android:id="@+id/message"
             android:layout_width="0dip"
@@ -123,14 +132,6 @@
             android:maxLines="4"
             android:gravity="top"
             android:layout_weight="4" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_message_tag"
-            android:tint="#808980"
-            android:clickable="true"
-            android:id="@+id/add_tag_button" />
 
         <Button
             android:id="@+id/sendMessageButton"
