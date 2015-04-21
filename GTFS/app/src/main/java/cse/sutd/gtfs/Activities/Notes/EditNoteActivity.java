@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.cedarsoftware.util.io.JsonWriter;
 
+import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
@@ -36,12 +37,20 @@ public class EditNoteActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_note);
+        if(client.getID() == null){
+            Intent intent = new Intent(this, LoginActivityCog.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_action_profile); //user's pic
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher); //user's pic
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+        setContentView(R.layout.activity_edit_note);
 
         Bundle extras = getIntent().getExtras();
 
@@ -49,7 +58,6 @@ public class EditNoteActivity extends ActionBarActivity {
             noteID = extras.getString(NOTE_ID_KEY);
         }
 
-        client = (GTFSClient) getApplication();
         dbAdapter = client.getDatabaseAdapter();
 
         String[] titleBody = dbAdapter.getNoteTitleBody(noteID);

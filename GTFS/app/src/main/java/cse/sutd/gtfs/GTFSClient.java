@@ -27,9 +27,9 @@ public class GTFSClient extends Application{
     private final String TWITTER_SECRET = "8nvcBPCoqhkt1Lvzjv6Pb5GmBB4uBmreV3KSgVxfcgCJrMQT8E";
     public final String PREFS_NAME = "MyPrefsFile";
 
-    private String PROFILE_ID;
-    private String PROFILE_NAME;
-    private String SESSION_ID;
+    private String PROFILE_ID = null;
+    private String PROFILE_NAME = null;;
+    private String SESSION_ID = null;;
 
     private Socket client;
     private MessageDbAdapter messageDbAdapter;

@@ -13,11 +13,11 @@
     <string name="title_activity_contacts">ContactsActivity</string>
 
     <string-array name="time_arrays">
-        <item>Minutes</item>
-        <item>Hours</item>
-        <item>Days</item>
-        <item>Weeks</item>
-        <item>Months</item>
+        <item>MINUTES</item>
+        <item>HOURS</item>
+        <item>DAYS</item>
+        <item>WEEKS</item>
+        <item>MONTHS</item>
     </string-array>
 
     <string name="title_activity_events">EventsActivity</string>

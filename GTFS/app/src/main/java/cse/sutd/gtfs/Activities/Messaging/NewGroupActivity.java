@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cse.sutd.gtfs.AddContactToGroup;
+import java.util.Arrays;
+
+import cse.sutd.gtfs.Activities.AddContactToGroup;
+import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.R;
 
@@ -30,7 +34,6 @@ public class NewGroupActivity extends ActionBarActivity {
     private Switch timedGroup;
     private EditText time;
     private Spinner timer;
-    private Switch mySwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,14 @@ public class NewGroupActivity extends ActionBarActivity {
         client = (GTFSClient) getApplicationContext();
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         editor = prefs.edit();
+
+        if(client.getID() == null){
+            Intent intent = new Intent(this, LoginActivityCog.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+            return;
+        }
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -65,16 +76,16 @@ public class NewGroupActivity extends ActionBarActivity {
                 countTextView.setText(Integer.toString(25 - group_name.toString().length()));
             }
         });
-        timedGroup = (Switch) findViewById(R.id.switch1);
+
         timer = (Spinner) findViewById(R.id.timer);
 
 
         final LinearLayout timing = (LinearLayout) findViewById(R.id.timing);
         time = (EditText) findViewById(R.id.time);
 
-        mySwitch = (Switch) findViewById(R.id.switch1);
-        mySwitch.setChecked(false);
-        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        timedGroup = (Switch) findViewById(R.id.switch1);
+        timedGroup.setChecked(false);
+        timedGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
@@ -86,7 +97,7 @@ public class NewGroupActivity extends ActionBarActivity {
                 }
             }
         });
-        if (mySwitch.isChecked()) {
+        if (timedGroup.isChecked()) {
             timing.setVisibility(View.VISIBLE);
             time.requestFocus();
         } else {
@@ -111,8 +122,26 @@ public class NewGroupActivity extends ActionBarActivity {
                 if (group_name.getText().toString().trim().length() > 0) {
                     if((timedGroup.isChecked()&&time.getText().toString().trim().length()>0)||!timedGroup.isChecked()) {
                         Intent intent = new Intent(NewGroupActivity.this, AddContactToGroup.class);
-                        String[] extra = {group_name.getText().toString(), String.valueOf(timedGroup.isChecked()), time.getText().toString(), String.valueOf(timer.getSelectedItem())};
+                        String timeunit;
+                        int TTL;
+                        if(time.getText().toString().length()>0) {
+                            if (String.valueOf(timer.getSelectedItem()).equals("WEEKS")) {
+                                timeunit = "DAYS";
+                                TTL = Integer.valueOf(time.getText().toString()) * 7;
+                            } else if (String.valueOf(timer.getSelectedItem()).equals("MONTHS")) {
+                                timeunit = "DAYS";
+                                TTL = Integer.valueOf(time.getText().toString()) * 30;
+                            } else {
+                                timeunit = String.valueOf(timer.getSelectedItem());
+                                TTL = Integer.valueOf(time.getText().toString());
+                            }
+                        }else{
+                            timeunit = String.valueOf(timer.getSelectedItem());
+                            TTL = 0;
+                        }
+                        String[] extra = {group_name.getText().toString(), String.valueOf(timedGroup.isChecked()), String.valueOf(TTL), timeunit};
                         //{groupname,timedgroup,time,unit}
+                        Log.d("group info", Arrays.toString(extra));
                         intent.putExtra("extras", extra);
                         startActivity(intent);
                         finish();
@@ -128,19 +157,3 @@ public class NewGroupActivity extends ActionBarActivity {
         }
     }
 }
-
-
-
-//
-////TODO: integrate messageBundle sending
-//MessageBundle createRoomBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
-//        MessageBundle.messageType.CREATE_ROOM);
-//
-//createRoomBundle.putUsers(userArray);
-//        createRoomBundle.putChatroomName(chatName);
-//        createRoomBundle.putExpiry(unit, duration);
-//        Intent i = new Intent(getApplicationContext(), NetworkService.class);
-//        i.putExtra(NetworkService.MESSAGE_KEY,
-//        JsonWriter.objectToJson(createRoomBundleBundle.getMessage()));
-//
-//        this.startService(i);

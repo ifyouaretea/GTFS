@@ -44,7 +44,6 @@
             android:name=".Activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".Activities.Messaging.MainActivity" >
->
         </activity>
         <activity
             android:name=".Activities.Messaging.MessagingActivity"
@@ -80,21 +79,24 @@
             android:label="@string/title_activity_events" >
         </activity>
         <activity
-            android:name=".AddContactToGroup"
-            android:label="@string/title_activity_add_contact_to_group" >
+            android:name=".Activities.AddContactToGroup"
+            android:label="@string/title_activity_add_contact_to_group"
+            android:parentActivityName=".Activities.Messaging.NewGroupActivity" >
         </activity>
         <activity
             android:name=".Activities.Notes.EditNoteActivity"
-            android:label="@string/title_activity_note" >
+            android:label="@string/title_activity_note"
+            android:parentActivityName=".Activities.Notes.NoteListActivity" >
         </activity>
         <activity
             android:name=".Activities.Notes.NoteListActivity"
-            android:label="@string/title_activity_note_list" >
+            android:label="@string/title_activity_note_list"
+            android:parentActivityName=".Activities.Messaging.MessagingActivity" >
         </activity>
         <activity
             android:name=".Activities.Notes.CreateNoteActivity"
-            android:label="@string/title_activity_create_note" >
+            android:label="@string/title_activity_create_note"
+            android:parentActivityName=".Activities.Notes.NoteListActivity" >
         </activity>
     </application>
-
 </manifest>

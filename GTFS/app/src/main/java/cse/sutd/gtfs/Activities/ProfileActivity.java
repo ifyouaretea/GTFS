@@ -29,6 +29,14 @@ public class ProfileActivity extends ActionBarActivity {
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = prefs.edit();
 
+        if(client.getID() == null){
+            Intent intent = new Intent(this, LoginActivityCog.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setDisplayShowHomeEnabled(true);
 //        getSupportActionBar().setLogo(R.mipmap.ic_launcher);

@@ -1,4 +1,4 @@
-package cse.sutd.gtfs;
+package cse.sutd.gtfs.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,10 +23,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.cedarsoftware.util.io.JsonWriter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+
+import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
+import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.Contact;
+import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.serverUtils.MessageBundle;
+import cse.sutd.gtfs.serverUtils.NetworkService;
 
 
 public class AddContactToGroup extends ActionBarActivity {
@@ -43,6 +53,14 @@ public class AddContactToGroup extends ActionBarActivity {
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         editor = prefs.edit();
 
+        if(client.getID() == null){
+            Intent intent = new Intent(this, LoginActivityCog.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
@@ -52,6 +70,7 @@ public class AddContactToGroup extends ActionBarActivity {
 
         Intent intent = getIntent();
         extras = intent.getStringArrayExtra("extras");
+        Log.d("group info", Arrays.toString(extras));
 
         dbMessages = MessageDbAdapter.getInstance(this);
         final ArrayList<Contact> contacts = new ArrayList<>();
@@ -113,15 +132,32 @@ public class AddContactToGroup extends ActionBarActivity {
                             selected.add(cc);
                         }
                     }
-//                    MessageBundle createBundle = new MessageBundle(client.getID(), client.getSESSION_ID(), MessageBundle.messageType.CREATE_ROOM);
-//                    createBundle.putToPhoneNumber(toPhoneNumber);
-//                    //TODO: setChatroomName
-//                    createBundle.putChatroomName(userID + "," + toPhoneNumber);
-//
-//                    Intent intent = new Intent(ContactsActivity.this, NetworkService.class);
-//                    intent.putExtra(NetworkService.MESSAGE_KEY,
-//                            JsonWriter.objectToJson(createBundle.getMessage()));
-//                    ContactsActivity.this.startService(intent);
+                    String[] groupct = new String[selected.size()];
+                    for(int i=0;i<selected.size();i++){
+                        groupct[i]=selected.get(i).getNumber();
+                    }
+//                    String[] myArray = selected.toArray(new String[selected.size()]);
+                    Log.d("users",Arrays.toString(groupct));
+
+                    MessageBundle createBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
+                            MessageBundle.messageType.CREATE_ROOM);
+                    createBundle.putChatroomName(extras[0]);
+                    if(!extras[1].equalsIgnoreCase("false")){
+                        createBundle.putExpiry(TimeUnit.valueOf(extras[3]),Long.parseLong(extras[2]));
+                    }
+                    createBundle.putUsers(groupct);
+
+                    Intent intent = new Intent(this, NetworkService.class);
+                    intent.putExtra(NetworkService.MESSAGE_KEY,JsonWriter.objectToJson(createBundle.getMessage()));
+                    this.startService(intent);
+
+                    //TODO: check if chatroom exist
+                    String chatID = dbMessages.getChatroomID(extras[0]);
+                    Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
+                    i.putExtra(MessageDbAdapter.CHATID, chatID);
+                    i.putExtra(MessageDbAdapter.CHATNAME, extras[0]);
+                    i.putExtra(MessageDbAdapter.ISGROUP, 1);
+                    startActivity(i);
                 }else{
                     Toast.makeText(getApplicationContext(), "Please add contacts!", Toast.LENGTH_SHORT).show();
                 }

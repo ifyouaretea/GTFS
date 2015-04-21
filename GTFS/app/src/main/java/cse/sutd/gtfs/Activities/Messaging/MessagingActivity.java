@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Activities.Notes.NoteListActivity;
 import cse.sutd.gtfs.Adapters.MessageAdapter;
 
@@ -48,7 +49,11 @@ import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
 
-
+/*
+ * From MainActivity Requires (CHATID, ISGROUP, GROUPNAME)
+ * From ContactsActivity Requires (CHATID, TO_PHONE_NUMBER, ISGROUP)
+ * From AddContactToGroup Requires (CHATID, ISGROUP, GROUPNAME)
+ */
 public class MessagingActivity extends ActionBarActivity {
     private TextView msg;
     private EditText messageSearchBar;
@@ -85,38 +90,63 @@ public class MessagingActivity extends ActionBarActivity {
         dbMessages = MessageDbAdapter.getInstance(this);
         Bundle extras = getIntent().getExtras();
 
-        String title = null;
 
         if (extras != null) {
-            toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
-
-            if(toPhoneNumber != null)
-                chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
-            else
-                chatroomID = extras.getString(MessageDbAdapter.CHATID);
-
             isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
-            title = extras.getString(MessageDbAdapter.CHATNAME);
-            chat = new ChatRoom(chatroomID,toPhoneNumber,isGroup);
+            if (isGroup == 0) {
+                toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
+                if(toPhoneNumber != null)
+                    chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
+                else
+                    chatroomID = extras.getString(MessageDbAdapter.CHATID);
+
+                if (chatroomID != null)
+                    chatroomName = dbMessages.getUsername(chatroomID);
+                else
+                    chatroomName = dbMessages.getUsernameFromNumber(toPhoneNumber);
+
+                chat = new ChatRoom(chatroomID, chatroomName,toPhoneNumber,isGroup);
+            }else{
+                chatroomID = extras.getString(MessageDbAdapter.CHATID);
+                if (chatroomID != null)
+                    chatroomName = dbMessages.getChatroomName(chatroomID);
+                else
+                    chatroomName = extras.getString(MessageDbAdapter.CHATNAME);
+
+                if (chatroomName != null)
+                    chatroomID = dbMessages.getChatroomID(chatroomName);
+                else
+                    chatroomName = dbMessages.getUsernameFromNumber(toPhoneNumber);
+
+                chat = new ChatRoom(chatroomID, chatroomName,isGroup);
+            }
             dbMessages.clearRead(chatroomID);
         }
 
-        if (isGroup == 0) {
-            if (chatroomID != null)
-                title = dbMessages.getUsername(chatroomID);
-            else
-                title = dbMessages.getUsernameFromNumber(toPhoneNumber);
-        }
+//        Log.d("name",chatroomName);
+//        Log.d("ID",chatroomID);
+//        Log.d("isGroup",String.valueOf(isGroup));
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_action_profile); //user's pic
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+<<<<<<< HEAD
+        getSupportActionBar().setTitle(chatroomName);
+=======
         getSupportActionBar().setTitle(title);
 
+>>>>>>> 10d386922f0e6b98db5cd6f98a6beac8f9ab46ab
         setContentView(R.layout.activity_messaging);
 
         client = (GTFSClient) getApplicationContext();
+        if(client.getID() == null){
+            Intent intent = new Intent(this, LoginActivityCog.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+            return;
+        }
         SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
         final String userID = prefs.getString("userid", null);
 
@@ -145,7 +175,7 @@ public class MessagingActivity extends ActionBarActivity {
                     if (chatroomID == null) {
                         Log.d("FAIL FAIL FAIL", "FAIL");
                         Toast.makeText(MessagingActivity.this,
-                                "Error in sending", Toast.LENGTH_SHORT);
+                                "Error in sending", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     final MessageBundle textBundle = new MessageBundle(userID, sessionToken,
@@ -160,10 +190,10 @@ public class MessagingActivity extends ActionBarActivity {
                                     .getItem(i).getTitle().toString());
                     }
 
-                    Intent intent = new Intent(MessagingActivity.this, NetworkService.class);
+                    Intent intent = new Intent(client, NetworkService.class);
                     intent.putExtra(NetworkService.MESSAGE_KEY,
                             JsonWriter.objectToJson(textBundle.getMessage()));
-                    MessagingActivity.this.startService(intent);
+                    client.startService(intent);
 
                     messageList.add(textBundle);
                     adapter.notifyDataSetChanged();

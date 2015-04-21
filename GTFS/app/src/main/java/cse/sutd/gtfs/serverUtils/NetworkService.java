@@ -44,9 +44,11 @@ public class NetworkService extends IntentService {
                         authenticate();
                     }
                     Map received = receive();
-                    Log.d("Listener received", received.toString());
+
                     if (received == null)
                         sleep(SLEEP_TIME);
+                    else
+                        Log.d("Listener received", received.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                     try {

@@ -5,29 +5,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.cedarsoftware.util.io.JsonWriter;
 
 import java.util.ArrayList;
 
-import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
-import cse.sutd.gtfs.Activities.ProfileActivity;
+import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Adapters.NoteAdapter;
 import cse.sutd.gtfs.GTFSClient;
-import cse.sutd.gtfs.Objects.ChatRoom;
 import cse.sutd.gtfs.Objects.Note;
 import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.ManagerService;
@@ -48,13 +41,26 @@ public class NoteListActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        client = (GTFSClient) getApplication();
+        if(client.getID() == null){
+            Intent intent = new Intent(this, LoginActivityCog.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+            return;
+        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setTitle("Notes");
         setContentView(R.layout.activity_note_list);
         Bundle extras = getIntent().getExtras();
 
         if(extras != null){
             chatID = extras.getString(CHAT_ID_KEY);
         }
-        client = (GTFSClient) getApplication();
+
         noteList = new ArrayList<>();
         listView = (ListView) findViewById(R.id.noteList);
 
