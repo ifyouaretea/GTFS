@@ -3,6 +3,11 @@ package cse.sutd.gtfs.Adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,22 +37,33 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
 
     private ArrayList<MessageBundle> values;
     private ArrayList<MessageBundle> originalValues;
+    private String searchTerm = "";
     private List<String> tags;
+    private ListView target;
+
+    public List<Integer> getSearchResult() {
+        return searchResult;
+    }
+
+    private List<Integer> searchResult;
+
+
     private final String user;
     private final int isGroup;
     private final Context context;
 
     private SearchFilter searchFilter;
-//    private SubsetFilter subsetFilter;
 
-
-    public MessageAdapter(Context context, ArrayList<MessageBundle> values, String user, int isGroup) {
+    public MessageAdapter(Context context, ListView target, ArrayList<MessageBundle> values,
+                          String user, int isGroup) {
         super(context, R.layout.message_list_item_left, values);
         this.context = context;
         this.values = values;
         this.originalValues = new ArrayList<>(values);
         this.user = user;
         this.isGroup = isGroup;
+        this.target = target;
+        this.searchResult = new ArrayList<>();
         extractTags();
     }
 
@@ -72,7 +89,7 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View rowView;
+        final View rowView;
         if(user.equalsIgnoreCase((String)message.getMessage().get("from_phone_number"))) {
             rowView = inflater.inflate(R.layout.message_list_item_right, parent, false);
         }
@@ -100,7 +117,19 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
         }
 
         TextView msg = (TextView) rowView.findViewById(R.id.textMessage);
-        msg.setText((String)values.get(position).getMessage().get(MessageBundle.MESSAGE));
+        String nonFormatedText = (String)values.get(position).
+                getMessage().get(MessageBundle.MESSAGE);
+
+        int searchPosition;
+
+        if((searchPosition = nonFormatedText.toLowerCase().indexOf(searchTerm.toLowerCase())) > -1){
+            Spannable formattedText = new SpannableString(nonFormatedText);
+            formattedText.setSpan(new BackgroundColorSpan(Color.YELLOW),
+                    searchPosition, searchPosition + searchTerm.length(),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            msg.setText(formattedText);
+        }else
+                msg.setText(nonFormatedText);
 
         TextView time = (TextView) rowView.findViewById(R.id.textTime);
         time.setText((String)values.get(position).getMessage().get(MessageBundle.TIMESTAMP));
@@ -111,6 +140,11 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
     {
         TextView message;
     }
+
+    public void setSearchTerm(String searchTerm) {
+        this.searchTerm = searchTerm;
+    }
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -135,8 +169,15 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
             searchFilter = new SearchFilter();
         return searchFilter;
     }
+
     @Override
     public void notifyDataSetChanged() {
+        searchResult.clear();
+        for(int i = 0; i < values.size(); i++){
+            if(((String) values.get(i).getMessage().get(MessageBundle.MESSAGE)).toLowerCase().
+                    contains(searchTerm.toLowerCase()))
+            searchResult.add(i);
+        }
         super.notifyDataSetChanged();
         getTags();
         if(originalValues.size() < values.size())
@@ -150,23 +191,25 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
     private class SearchFilter extends Filter {
 
         @Override
-        protected FilterResults performFiltering(CharSequence searchTerm) {
+        protected FilterResults performFiltering(CharSequence searchedTag) {
 
             FilterResults results = new FilterResults();
-            if (searchTerm == null || searchTerm.length() == 0) {
+            if (searchedTag == null || searchedTag.length() == 0) {
 //                ArrayList<MessageBundle> list = new ArrayList<>(originalValues);
                 results.values = originalValues;
                 results.count = originalValues.size();
             } else {
                 final ArrayList<MessageBundle> newValues = new ArrayList<>();
-                String lowerSearchTerm = searchTerm.toString().toLowerCase();
 
                 for (MessageBundle messageBundle : values) {
-                    final String matchText = ((String)messageBundle.getMessage().
-                            get(MessageBundle.MESSAGE)).toLowerCase();
-
-                    if (matchText.contains(lowerSearchTerm )) {
-                        newValues.add(messageBundle);
+                    final String[] messageTags = ((String)messageBundle.getMessage().
+                            get(MessageBundle.TAGS)).replaceAll("\\[", "").replaceAll("\\[", "")
+                            .split(",");
+                    for(String messageTag : messageTags){
+                        if(messageTag.trim().equals(searchedTag)) {
+                            newValues.add(messageBundle);
+                            break;
+                        }
                     }
                 }
                 results.values = newValues;

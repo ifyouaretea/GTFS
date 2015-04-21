@@ -7,10 +7,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +22,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -52,9 +58,14 @@ public class MessagingActivity extends ActionBarActivity {
     private Button searchButton;
     private GTFSClient client;
     private MessageAdapter adapter;
-    private View actionBarView;
+    private ImageView tagImageView;
     private ArrayList<MessageBundle> messageList;
+    private LinearLayout searchBarLayout;
+    private ListView listview;
+    private int searchPosition = -1;
 
+
+    private PopupMenu addTagPopupMenu;
     private String toPhoneNumber;
     private String sessionToken;    //get from client.getSESSIONID();
     private String chatroomID;      //get from previous intent
@@ -121,7 +132,6 @@ public class MessagingActivity extends ActionBarActivity {
         getSupportActionBar().setTitle(chatroomName);
 
         setContentView(R.layout.activity_messaging);
-        messageSearchBar = (EditText) findViewById(R.id.message_search_bar);
 
         client = (GTFSClient) getApplicationContext();
         if(client.getID() == null){
@@ -136,10 +146,10 @@ public class MessagingActivity extends ActionBarActivity {
 
         sessionToken = client.getSESSION_ID();
 
-        ListView listview = (ListView) findViewById(R.id.messageList);
+        listview = (ListView) findViewById(R.id.messageList);
 
         messageList = new ArrayList<>();
-        adapter = new MessageAdapter(this, messageList, userID, isGroup);
+        adapter = new MessageAdapter(this, listview, messageList, userID, isGroup);
         updateUI();
         listview.setAdapter(adapter);
 
@@ -167,8 +177,12 @@ public class MessagingActivity extends ActionBarActivity {
 
                     textBundle.putMessage(msg.getText().toString());
                     textBundle.putChatroomID(chatroomID);
-                    //TODO: remove hardcoded tags
-                    textBundle.putParsedTags("[important]");
+
+                    for(int i = 0; i < addTagPopupMenu.getMenu().size(); i++){
+                        if(addTagPopupMenu.getMenu().getItem(i).isChecked())
+                            textBundle.putTag(addTagPopupMenu.getMenu()
+                                    .getItem(i).getTitle().toString());
+                    }
 
                     Intent intent = new Intent(client, NetworkService.class);
                     intent.putExtra(NetworkService.MESSAGE_KEY,
@@ -182,13 +196,97 @@ public class MessagingActivity extends ActionBarActivity {
             }
         });
 
-        searchButton = (Button) findViewById(R.id.message_search_button);
+   /*     searchButton = (Button) findViewById(R.id.message_search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 adapter.getFilter().filter(messageSearchBar.getText());
             }
+        });*/
+
+        tagImageView = (ImageView) findViewById(R.id.add_tag_button);
+
+        addTagPopupMenu = new PopupMenu(MessagingActivity.this, tagImageView);
+        addTagPopupMenu.getMenuInflater().inflate(R.menu.menu_add_tag, addTagPopupMenu .getMenu());
+        addTagPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                item.setChecked(!item.isChecked());
+                return item.isChecked();
+            }
         });
+
+        tagImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTagPopupMenu.show();
+            }
+        });
+        searchBarLayout = (LinearLayout) findViewById(R.id.message_search_bar_layout);
+        messageSearchBar = (EditText) findViewById(R.id.message_search_bar);
+        messageSearchBar.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    adapter.setSearchTerm(messageSearchBar.getText().toString());
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            }
+        );
+
+        ImageView downSearch = (ImageView) findViewById(R.id.search_down_arrow);
+        downSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(searchPosition <= 0)
+                    searchPosition = adapter.getSearchResult().size() - 1;
+                else
+                    searchPosition--;
+                moveToSearch();
+            }
+        });
+
+        ImageView upSearch = (ImageView) findViewById(R.id.search_up_arrow);
+        upSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(searchPosition >= adapter.getSearchResult().size() - 1)
+                    searchPosition = 0;
+                else
+                    searchPosition++;
+                moveToSearch();
+            }
+        });
+
+        ImageView backButton = (ImageView) findViewById(R.id.search_back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSupportActionBar().show();
+                searchBarLayout.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void moveToSearch(){
+        List<Integer> searchResults = adapter.getSearchResult();
+        if(searchResults.size() > 0 && searchResults.get(searchPosition) > 0) {
+            listview.setSelection(searchResults.get(searchPosition));
+            listview.requestFocus();
+            listview.getChildAt(searchResults.get(searchPosition)).getBackground().setColorFilter(
+                    Color.parseColor("#00f00"), PorterDuff.Mode.DARKEN
+            );
+        }
+        Log.d(String.valueOf(searchResults.size()), String.valueOf(searchPosition));
     }
 
     @Override
@@ -212,24 +310,32 @@ public class MessagingActivity extends ActionBarActivity {
                 openNotes.putExtra(NoteListActivity.CHAT_ID_KEY, chatroomID);
                 startActivity(openNotes);
                 return true;
-
+            case R.id.message_search_icon:
+                searchBarLayout.setVisibility(View.VISIBLE);
+                getSupportActionBar().hide();
+                return true;
             case R.id.message_tags:
                 PopupMenu popup = new PopupMenu(this, findViewById(R.id.message_tags));
-                List<String> tagList = adapter.getTags();
+                final List<String> tagList = adapter.getTags();
                 Log.d("Tags", tagList.toString());
                 if (tagList.size() > 0) {
                     for (int i = 0; i < tagList.size(); i++)
                         popup.getMenu().add(i, i, i, tagList.get(i));
+                    popup.getMenu().add(tagList.size(), tagList.size(), tagList.size(), "No tags");
                     popup.setOnMenuItemClickListener(
                             new PopupMenu.OnMenuItemClickListener() {
                                 public boolean onMenuItemClick(MenuItem item) {
-                                    adapter.getFilter().filter(item.getTitle().toString().toLowerCase());
+                                    if(item.getItemId() == tagList.size())
+                                        adapter.getFilter().filter("");
+                                    else
+                                        adapter.getFilter().filter(item.getTitle()
+                                                .toString().toLowerCase());
                                     return true;
                                 }
                             }
                     );
                 }else{
-                    popup.getMenu().add("NO TAGS");
+                    popup.getMenu().add("No tags");
                 }
                 popup.show();
                 return true;
@@ -238,12 +344,6 @@ public class MessagingActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public View getActionBarView() {
-        Window window = getWindow();
-        View v = window.getDecorView();
-        int resId = getResources().getIdentifier("action_bar_container", "id", "android");
-        return v.findViewById(resId);
-    }
 
     @Override
     public void onStart(){

@@ -6,6 +6,12 @@
         android:icon="@drawable/ic_message_tag"
         android:orderInCategory="0"
         android:title="Tags"/>
+    <item android:id="@+id/message_search_icon"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_search_icon"
+        android:orderInCategory="0"
+        android:title="Tags"
+        />
 
     <item android:id="@+id/open_notes" android:title="Notes"
         android:orderInCategory="1" app:showAsAction="never" />
