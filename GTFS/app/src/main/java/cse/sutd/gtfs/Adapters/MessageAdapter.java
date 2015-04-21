@@ -86,11 +86,12 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         final View rowView;
-        if(user.equalsIgnoreCase((String)message.getMessage().get("from_phone_number"))) {
-            rowView = inflater.inflate(R.layout.message_list_item_right, parent, false);
-        }
+        if(MessageBundle.messageType.ADMIN.toString().equals(message.getMessage().get(MessageBundle.TYPE))){
+            rowView = inflater.inflate(R.layout.message_list_item_center, parent, false);
 
-        else {
+        }else if(user.equalsIgnoreCase((String)message.getMessage().get("from_phone_number"))) {
+            rowView = inflater.inflate(R.layout.message_list_item_right, parent, false);
+        } else {
             rowView = inflater.inflate(R.layout.message_list_item_left, parent, false);
             TextView userName = (TextView) rowView.findViewById(R.id.textUser);
             if(isGroup==0){
@@ -102,14 +103,13 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
                 String contact = null;
                 if (contactName != null) {
                     contactName.moveToFirst();
-                    while (contactName.moveToNext()) {
-                        contact = contactName.getString(1);
-                    }
+                    contact = contactName.getString(1);
                     contactName.close();
                     userName.setText(contact);
                 }else{
                     userName.setText(fromPhone);
                 }
+                userName.setVisibility(View.VISIBLE);
             }
         }
 

@@ -14,13 +14,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.cedarsoftware.util.io.JsonWriter;
+
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import cse.sutd.gtfs.Activities.Messaging.MainActivity;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.R;
+import cse.sutd.gtfs.serverUtils.MessageBundle;
+import cse.sutd.gtfs.serverUtils.NetworkService;
 
 
 public class ProfileActivity extends ActionBarActivity {
     private GTFSClient client;
+    private static final ExecutorService exec = new ScheduledThreadPoolExecutor(100);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,12 +80,65 @@ public class ProfileActivity extends ActionBarActivity {
                         client.setNAME(name);
                         Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
                         startActivity(intent);
+                        requestContacts();
                         ProfileActivity.this.finish();
                     }
                 });
 
     }
+    private void requestContacts(){
+        MessageBundle userRequestBundle = new MessageBundle(client.getID(), client.getSESSION_ID(),
+                MessageBundle.messageType.GET_USERS);
 
+        Callable<String[][]> task = new Callable<String[][]>() {
+            public String[][] call() {
+                Cursor phones = getContentResolver().query(ContactsContract.
+                        CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+                phones.moveToFirst();
+                ArrayList<ArrayList<String>> phoneNumbers = new ArrayList<>();
+                final int USER_LIMIT = 15;
+                do{
+                    ArrayList<String> numberSubList = new ArrayList<>();
+                    for(int i = 0; i < USER_LIMIT; i++) {
+                        String phoneNumber = phones.getString(phones.getColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
+                        String h1 = phoneNumber.replaceAll("\\s", "");
+                        String h2 = h1.replaceAll(" ", "");
+                        h2 = h2.replace("+65", "");
+                        h2 = h2.replaceAll("\\D", "");
+                        if (h2.length() >= 8 && !h2.equals(client.getID()))
+                            numberSubList.add(h2);
+                        if(!phones.moveToNext())
+                            break;
+                    }
+                    phoneNumbers.add(numberSubList);
+                }while (!phones.isAfterLast());
+
+                phones.close();
+                String[][] phonenumber = new String[phoneNumbers.size()][USER_LIMIT];
+
+                for (int j = 0; j < phoneNumbers.size(); j++)
+                    for (int k = 0; k < phoneNumbers.get(j).size(); k++)
+                        phonenumber[j][k] = phoneNumbers.get(j).get(k);
+                return phonenumber;
+            }
+        };
+
+        String[][] users;
+        Future<String[][]> backtothefuture = exec.submit(task);
+        try {
+            backtothefuture.get(1, TimeUnit.MINUTES);
+
+            users = backtothefuture.get();
+            for (String[] s : users) {
+                userRequestBundle.putUsers(s);
+                Intent i = new Intent(getApplicationContext(), NetworkService.class);
+                i.putExtra(NetworkService.MESSAGE_KEY,
+                        JsonWriter.objectToJson(userRequestBundle.getMessage()));
+                this.startService(i);
+            }
+        }catch(Exception e){}
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

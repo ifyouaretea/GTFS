@@ -57,23 +57,13 @@ public class MessageDbAdapter {
     public static final String TITLE = "title";
     public static final String NOTES = "notes";
     public static final String TAGS = "tags";
-<<<<<<< HEAD
+
     public static final String EVENT_NAME = "event_name";
     public static final String EVENT_ID = "event_id";
     public static final String EVENT_DATE = "event_datetime";
     public static final String VOTES = "votes";
     public static final String DELETED = "deleted";
 
-=======
-
-    public static final String EVENT_NAME = "eventName";
-    public static final String EVENT_DATE = "eventDate";
-    public static final String VOTES = "votes";
-    public static final String DELETED = "deleted";
-    public static final String HAS_VOTED = "hasVoted";
-
-
->>>>>>> 39d8b8fca4500306dc2476e3c6171ba2b414df7f
     private static final String TAG = "MessageDbAdapter";
 
     public static final String DATABASE_CREATE_NOTES =
@@ -104,14 +94,11 @@ public class MessageDbAdapter {
                 "create table contacts (_id text primary key, "
                         + "name text not null, chatID text);";
 
-<<<<<<< HEAD
         private static final String DATABASE_CREATE_EVENTS =
                 "create table events (_id text primary key, "
                         + "eventName text not null, event_datetime text not null, chatID text," +
                         " votes text);";
 
-=======
->>>>>>> 39d8b8fca4500306dc2476e3c6171ba2b414df7f
         private static final String DATABASE_NAME = "data";
 
         private static final int DATABASE_VERSION = 2;
@@ -727,16 +714,6 @@ public class MessageDbAdapter {
         }
         return tags;
     }
-
-<<<<<<< HEAD
-=======
-    public Cursor getUserIDsUsernamesForChat(String chatID){
-        return mDb.rawQuery(String.format("SELECT contacts._id, contacts.name FROM " +
-                "contacts INNER JOIN chats ON chats.users LIKE '%' + contacts._id  + '%' " +
-                "WHERE chats._id ='%s'",chatID),null);
-    }
-
->>>>>>> 39d8b8fca4500306dc2476e3c6171ba2b414df7f
     public void importEvents(Map message){
         mDb.execSQL("DROP TABLE IF EXISTS events");
         mDb.execSQL(DATABASE_CREATE_EVENTS);
@@ -773,10 +750,9 @@ public class MessageDbAdapter {
         return mDb.rawQuery(String.format("SELECT _id, eventName, " +
                 "eventDate FROM events WHERE chatID='%s'",  chatID),null);
     }*/
-<<<<<<< HEAD
-=======
+
     public String getEventName(String eventID){
-        Cursor result = mDb.rawQuery(String.format("SELECT event name FROM " +
+        Cursor result = mDb.rawQuery(String.format("SELECT event_name FROM " +
                 "events WHERE _id ='%s'",eventID), null);
         if(result == null)
             return null;
@@ -789,5 +765,4 @@ public class MessageDbAdapter {
         result.close();
         return eventName;
     }
->>>>>>> 39d8b8fca4500306dc2476e3c6171ba2b414df7f
 }
