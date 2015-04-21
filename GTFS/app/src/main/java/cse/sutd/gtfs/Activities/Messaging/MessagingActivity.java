@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import cse.sutd.gtfs.Activities.Group.EventInfoActivity;
 import cse.sutd.gtfs.Activities.Group.EventsActivity;
 import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Activities.Notes.NoteListActivity;
@@ -97,6 +98,7 @@ public class MessagingActivity extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
+<<<<<<< HEAD
             isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
             if (isGroup == 0) {
                 toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
@@ -115,6 +117,21 @@ public class MessagingActivity extends ActionBarActivity {
                 if (chatroomID != null)
                     chatroomName = dbMessages.getChatroomName(chatroomID);
                 else
+=======
+            chatroomID = extras.getString(MessageDbAdapter.CHATID);
+            Log.d("ChatroomID", chatroomID);
+            if (chatroomID != null) {
+                isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
+                Log.d("isGroup", String.valueOf(isGroup));
+                if(isGroup == 0)
+                    chatroomName = dbMessages.getUsername(chatroomID);
+                else if(isGroup == 1)
+                    chatroomName = dbMessages.getChatroomName(chatroomID);
+
+            }else{
+                isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
+                if(isGroup==1){
+>>>>>>> 157e3bf5e09332fa268a9597f112dcd945afd01e
                     chatroomName = extras.getString(MessageDbAdapter.CHATNAME);
 
                 if (chatroomName != null)
@@ -301,9 +318,6 @@ public class MessagingActivity extends ActionBarActivity {
         if (searchResults.size() > 0 && searchResults.get(searchPosition) > 0) {
             listview.setSelection(searchResults.get(searchPosition));
             listview.requestFocus();
-            listview.getChildAt(searchResults.get(searchPosition)).getBackground().setColorFilter(
-                    Color.parseColor("#00f00"), PorterDuff.Mode.DARKEN
-            );
         }
         Log.d(String.valueOf(searchResults.size()), String.valueOf(searchPosition));
     }
@@ -372,6 +386,11 @@ public class MessagingActivity extends ActionBarActivity {
                     }
                 }
                 popup.show();
+                return true;
+            case R.id.view_events:
+                Intent eventinfo = new Intent(this, EventInfoActivity.class);
+                eventinfo.putExtra(GroupInfoActivity.CHAT_ID_KEY, chatroomID);
+                startActivity(eventinfo);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -520,7 +539,6 @@ public class MessagingActivity extends ActionBarActivity {
         ((GTFSClient) getApplicationContext()).resetNotificationMap();
         adapter.notifyDataSetChanged();
 
-        //TODO: work your magic on this man
         unvotedEvents = new ArrayList<>();
     }
 

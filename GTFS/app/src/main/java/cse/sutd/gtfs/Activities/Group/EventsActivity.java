@@ -174,6 +174,7 @@ public class EventsActivity extends ActionBarActivity {
             Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
             i.putExtra(MessageDbAdapter.CHATID, chatID);
             i.putExtra(MessageDbAdapter.ISGROUP, 1);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
             finish();
 

@@ -26,5 +26,6 @@
     <string name="title_activity_note_list">NoteListActivity</string>
     <string name="title_activity_create_note">CreateNoteActivity</string>
     <string name="title_activity_group_info">GroupInfoActivity</string>
+    <string name="title_activity_event_info">EventInfoActivity</string>
 
 </resources>
