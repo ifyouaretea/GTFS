@@ -368,7 +368,6 @@ public class MessagingActivity extends ActionBarActivity {
             for (Object user : (Object[]) message.get(MessageBundle.USERS)) {
                 if (user.equals(toPhoneNumber)) {
                     chatroomID = (String) message.get(MessageBundle.CHATROOMID);
-                    Log.d("Room id updated", chatroomID);
                     break;
                 }
             }
@@ -398,6 +397,7 @@ public class MessagingActivity extends ActionBarActivity {
                 msgBundles.close();
             }
         }
+        ((GTFSClient) getApplicationContext()).resetNotificationMap();
         adapter.notifyDataSetChanged();
     }
 

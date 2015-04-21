@@ -1,5 +1,6 @@
 package cse.sutd.gtfs.messageManagement;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
@@ -153,12 +154,13 @@ public class MessageDbAdapter {
             return -1;
         }
 
-        Cursor groupExists = mDb.rawQuery(String.format("SELECT _id FROM messages " +
-                "WHERE chatID='%s';", chatID), null);
+        Cursor groupExists = mDb.rawQuery(String.format("SELECT _id FROM chats " +
+                "WHERE _id='%s';", chatID), null);
 
         //check if a copy of the message is already in the database
         if (groupExists.getCount() < 1) {
             groupExists.close();
+            Log.d("INSERTATION", "FAIL FAIL");
             return -1;
         }
 
@@ -338,14 +340,15 @@ public class MessageDbAdapter {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mContext)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("Chats have expired")
-                        .setContentText(body)
-                        .setContentIntent(PendingIntent.getActivity(mContext.getApplicationContext()
-                                , 0, new Intent(client, MainActivity.class),
-                                PendingIntent.FLAG_ONE_SHOT))
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(body));
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Chats have expired")
+                .setContentText(body)
+                .setContentIntent(PendingIntent.getActivity(mContext.getApplicationContext()
+                        , 0, new Intent(client, MainActivity.class),
+                        PendingIntent.FLAG_ONE_SHOT))
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(body))
+                .setPriority(Notification.PRIORITY_HIGH);
 
         NotificationManager mNotificationManager =
                 (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -684,5 +687,11 @@ public class MessageDbAdapter {
                 tags.add(t);
         }
         return tags;
+    }
+
+    public Cursor getUserIDsUsernamesForChat(String chatID){
+        return mDb.rawQuery(String.format("SELECT contacts._id, contacts.name FROM " +
+                "contacts INNER JOIN chats ON chats.users LIKE '%' + contacts._id  + '%' " +
+                "WHERE chats._id ='%s'",chatID),null);
     }
 }

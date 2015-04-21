@@ -247,6 +247,7 @@ public class MainActivity extends ActionBarActivity {
 
                 chatrooms.close();
             }
+            ((GTFSClient) getApplicationContext()).resetNotificationMap();
         }
 
         ChatAdapter adapter = new ChatAdapter(this, chatroom);

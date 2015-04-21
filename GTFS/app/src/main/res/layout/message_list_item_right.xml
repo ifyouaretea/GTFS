@@ -14,14 +14,24 @@
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/box_right" >
-        <TextView
-            android:id="@+id/textMessage"
-            android:text="nooooo hello doo"
-            android:maxWidth="800px"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@android:style/TextAppearance.Holo.Medium"
-            android:textColor="#ff000000" />
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/circle"
+                android:src="@drawable/ic_tag_circle" />
+            <TextView
+                android:id="@+id/textMessage"
+                android:text="nooooo hello doo"
+                android:maxWidth="800px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@android:style/TextAppearance.Holo.Medium"
+                android:textColor="#ff000000" />
+
+        </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

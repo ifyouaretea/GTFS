@@ -1,5 +1,6 @@
 package cse.sutd.gtfs.messageManagement;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -72,10 +73,10 @@ public class ManagerService extends Service{
         String messageType = (String) message.get(MessageBundle.TYPE);
 
         if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)){
-            dbAdapter.storeMessage(message);
+            boolean successful = dbAdapter.storeMessage(message) > 0;
             if(userID == null)
                 userID = ((GTFSClient)getApplication()).getID();
-            if(!message.get(MessageBundle.FROM_PHONE_NUMBER).equals(userID)) {
+            if(!message.get(MessageBundle.FROM_PHONE_NUMBER).equals(userID) && successful) {
                 addToNotification(message);
             }
         }else if(
@@ -112,7 +113,9 @@ public class ManagerService extends Service{
             notificationMap.put(chatroomID,
                     new ArrayList<String>());
 
-        notificationMap.get(chatroomID).add((String)message.get(MessageBundle.MESSAGE));
+        notificationMap.get(chatroomID).add(dbAdapter.getUsernameFromNumber((String)
+                message.get(MessageBundle.FROM_PHONE_NUMBER))+": " +
+                message.get(MessageBundle.MESSAGE));
 
         String title, body;
         Intent openMessagingIntent;
@@ -142,16 +145,21 @@ public class ManagerService extends Service{
             body = bodyBuilder.toString();
             openMessagingIntent = new Intent(getApplicationContext(), MainActivity.class);
         }
+        String tag = ((String)message.get(MessageBundle.TAGS)).trim().toLowerCase();
+        int priority = tag.equals("important") ? Notification.PRIORITY_HIGH :
+                Notification.PRIORITY_DEFAULT;
+        Log.d("Message tags", tag);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(title)
-                        .setContentText(body)
-                        .setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0,
-                                openMessagingIntent, PendingIntent.FLAG_ONE_SHOT))
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(body));
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0,
+                        openMessagingIntent, PendingIntent.FLAG_ONE_SHOT))
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(body))
+                .setPriority(priority);
 
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
