@@ -131,12 +131,9 @@ public class MessagingActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_action_profile); //user's pic
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-<<<<<<< HEAD
-        getSupportActionBar().setTitle(chatroomName);
-=======
-        getSupportActionBar().setTitle(title);
 
->>>>>>> 10d386922f0e6b98db5cd6f98a6beac8f9ab46ab
+        getSupportActionBar().setTitle(chatroomName);
+
         setContentView(R.layout.activity_messaging);
 
         client = (GTFSClient) getApplicationContext();
@@ -287,7 +284,7 @@ public class MessagingActivity extends ActionBarActivity {
         List<Integer> searchResults = adapter.getSearchResult();
         if(searchResults.size() > 0 && searchResults.get(searchPosition) > 0) {
             listview.setSelection(searchResults.get(searchPosition));
-            listview.requestFocus();
+            listview.smoothScrollToPosition(searchPosition);
             listview.getChildAt(searchResults.get(searchPosition)).getBackground().setColorFilter(
                     Color.parseColor("#00f00"), PorterDuff.Mode.DARKEN
             );

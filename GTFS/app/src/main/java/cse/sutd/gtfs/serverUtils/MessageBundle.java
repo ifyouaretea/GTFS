@@ -1,10 +1,9 @@
 package cse.sutd.gtfs.serverUtils;
 
-<<<<<<< HEAD
-=======
+import java.util.Map;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
->>>>>>> 10d386922f0e6b98db5cd6f98a6beac8f9ab46ab
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
