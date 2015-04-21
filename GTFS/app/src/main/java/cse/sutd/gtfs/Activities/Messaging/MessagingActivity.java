@@ -425,7 +425,7 @@ public class MessagingActivity extends ActionBarActivity {
             try {
                 dbMessages.insertEvent(message);
             }catch(SQLiteConstraintException e){
-                
+
             }
             final LinearLayout newEvent = (LinearLayout) findViewById(R.id.eventLayout); //TODO: check eventLayout's id
             TextView eventDescription = (TextView) newEvent.findViewById(R.id.eventDesc);
