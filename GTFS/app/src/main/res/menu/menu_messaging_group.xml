@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context="cse.sutd.gtfs.Activities.Messaging.MessagingActivity">
+    <item android:id="@+id/message_tags"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_message_tag"
+        android:orderInCategory="0"
+        android:title="Tags"/>
+    <item android:id="@+id/message_search_icon"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_search_icon"
+        android:orderInCategory="0"
+        android:title="Search"/>
+    <item android:id="@+id/message_events" app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_calendar" android:orderInCategory="1"
+        android:title="New Event"/>
+    <item android:id="@+id/open_notes" android:title="Notes"
+        android:orderInCategory="2" app:showAsAction="never" />
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="3" app:showAsAction="never" />
+</menu>
