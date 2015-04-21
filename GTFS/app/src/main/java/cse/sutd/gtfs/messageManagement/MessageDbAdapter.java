@@ -57,12 +57,20 @@ public class MessageDbAdapter {
     public static final String TITLE = "title";
     public static final String NOTES = "notes";
     public static final String TAGS = "tags";
+<<<<<<< HEAD
     public static final String EVENT_NAME = "event_name";
     public static final String EVENT_ID = "event_id";
     public static final String EVENT_DATETIME = "event_datetime";
     public static final String VOTES = "votes";
     public static final String DELETED = "deleted";
 
+=======
+    public static final String EVENT_NAME = "eventName";
+    public static final String EVENT_DATE = "eventDate";
+    public static final String VOTES = "votes";
+    public static final String DELETED = "deleted";
+    public static final String HAS_VOTED = "hasVoted";
+>>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
 
     private static final String TAG = "MessageDbAdapter";
 
@@ -84,7 +92,10 @@ public class MessageDbAdapter {
                         + "isGroup integer not null, chatName text, " +
                         "lastMessage integer not null, "+
                         "users text, expiry integer, deleted integer not null);";
+<<<<<<< HEAD
 
+=======
+>>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
 
         private static final String DATABASE_CREATE_CONTACTS =
                 "create table contacts (_id text primary key, "
@@ -92,7 +103,8 @@ public class MessageDbAdapter {
 
         private static final String DATABASE_CREATE_EVENTS =
                 "create table events (_id text primary key, "
-                        + "eventname text not null, eventdate text not null, chatID text, voters text);";
+                        + "eventName text not null, eventDate text not null, chatID text," +
+                        " votes text);";
 
         private static final String DATABASE_NAME = "data";
 
@@ -171,7 +183,6 @@ public class MessageDbAdapter {
         //check if a copy of the message is already in the database
         if (groupExists.getCount() < 1) {
             groupExists.close();
-            Log.d("INSERTATION", "FAIL FAIL");
             return -1;
         }
 
@@ -296,19 +307,7 @@ public class MessageDbAdapter {
         return mDb.insert(CHATS, null, chatValues);
     }
 
-    public long createGroupEvent(Map message){
-        String chatID = (String) message.get(MessageBundle.CHATROOMID);
-        String eventID = (String) message.get(MessageBundle.EVENT_ID);
-        String eventName = (String) message.get(MessageBundle.EVENT_NAME);
-        String eventDateTime = (String) message.get(MessageBundle.EVENT_DATE);
 
-        ContentValues chatValues = new ContentValues();
-        chatValues.put(ROWID, eventID);
-        chatValues.put(CHATID, chatID);
-        chatValues.put(EVENT_NAME, eventName);
-        chatValues.put(EVENT_DATETIME, eventDateTime);
-        return mDb.insert(EVENTS, null, chatValues);
-    }
 
     public long putContact(String phoneNum, String contactName){
         Cursor searchChats = mDb.rawQuery("SELECT _id from chats WHERE users LIKE " +
@@ -723,4 +722,47 @@ public class MessageDbAdapter {
         return tags;
     }
 
+<<<<<<< HEAD
+=======
+    public Cursor getUserIDsUsernamesForChat(String chatID){
+        return mDb.rawQuery(String.format("SELECT contacts._id, contacts.name FROM " +
+                "contacts INNER JOIN chats ON chats.users LIKE '%' + contacts._id  + '%' " +
+                "WHERE chats._id ='%s'",chatID),null);
+    }
+
+    public void importEvents(Map message){
+        Object[] events = (Object[])message.get(MessageBundle.EVENTS);
+        for(Object event : events){
+            Map eventMap = (Map) event;
+            insertEvent(eventMap);
+        }
+    }
+
+    public void insertEvent(Map event){
+        String id = (String) event.get(MessageBundle.EVENT_ID);
+        String eventName = (String) event.get(MessageBundle.EVENT_DATETIME);
+        String chatID = (String) event.get(MessageBundle.CHATROOMID);
+        String eventDate = (String) event.get(MessageBundle.EVENT_DATETIME);
+        String[] votes = (String[]) event.get(MessageBundle.VOTES);
+
+        ContentValues eventValues = new ContentValues();
+        eventValues.put(ROWID, id);
+        eventValues.put(CHATID, chatID);
+        eventValues.put(EVENT_NAME, eventName);
+        eventValues.put(VOTES, Arrays.toString(votes));
+        eventValues.put(EVENT_DATE, eventDate);
+//        eventValues.put(HAS_VOTED, 0);
+        mDb.insert(EVENTS, null, eventValues);
+    }
+
+/*    public void castVote (String eventID){
+        mDb.execSQL(String.format("UPDATE events SET hasVoted=1 WHERE _id='%s'",
+                eventID));
+    }*/
+
+    /*public Cursor getUnvotedEventIDNameDate (String chatID){
+        return mDb.rawQuery(String.format("SELECT _id, eventName, " +
+                "eventDate FROM events WHERE chatID='%s'",  chatID),null);
+    }*/
+>>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
 }

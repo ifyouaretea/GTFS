@@ -169,6 +169,10 @@ public class MainActivity extends ActionBarActivity {
         NotificationManager notificationManager = (NotificationManager)getSystemService
                 (Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
+<<<<<<< HEAD
+=======
+
+>>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
         dbMessages.deleteExpiredChats();
     }
 

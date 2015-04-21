@@ -42,6 +42,7 @@ import cse.sutd.gtfs.Adapters.MessageAdapter;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Activities.Group.GroupInfoActivity;
 import cse.sutd.gtfs.Objects.ChatRoom;
+import cse.sutd.gtfs.Objects.Event;
 import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.ManagerService;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
@@ -71,19 +72,23 @@ public class MessagingActivity extends ActionBarActivity {
     private String sessionToken;    //get from client.getSESSIONID();
     private String chatroomID;      //get from previous intent
     private String chatroomName;
+    private String userID;
     private int isGroup;
 
     private MessageDbAdapter dbMessages;
     private ChatRoom chat;
     private String[] userList;
+<<<<<<< HEAD
     private String[] eventsList;
+=======
+    private List<Event> unvotedEvents;
+>>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
 
     /**
      * Required extras
      * isGroup:
      * Chatname
      * chatID
-     *
      * @param savedInstanceState
      */
     @Override
@@ -93,6 +98,7 @@ public class MessagingActivity extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
+<<<<<<< HEAD
             chatroomID = extras.getString(MessageDbAdapter.CHATID);
             if (chatroomID != null) {
                 chatroomName = dbMessages.getUsername(chatroomID);
@@ -100,6 +106,25 @@ public class MessagingActivity extends ActionBarActivity {
             }else{
                 isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
                 if(isGroup==1){
+=======
+            isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
+            if (isGroup == 0) {
+                toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
+                if (toPhoneNumber != null)
+                    chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
+                else
+                    chatroomID = extras.getString(MessageDbAdapter.CHATID);
+                if (chatroomID != null)
+                    chatroomName = dbMessages.getUsername(chatroomID);
+                else
+                    chatroomName = dbMessages.getUsernameFromNumber(toPhoneNumber);
+                chat = new ChatRoom(chatroomID, chatroomName, toPhoneNumber, isGroup);
+            } else {
+                chatroomID = extras.getString(MessageDbAdapter.CHATID);
+                if (chatroomID != null)
+                    chatroomName = dbMessages.getChatroomName(chatroomID);
+                else
+>>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
                     chatroomName = extras.getString(MessageDbAdapter.CHATNAME);
                 }else{
                     chatroomName = dbMessages.getUsernameFromNumber(toPhoneNumber);
@@ -121,6 +146,7 @@ public class MessagingActivity extends ActionBarActivity {
         setContentView(R.layout.activity_messaging);
 
         client = (GTFSClient) getApplicationContext();
+        userID = client.getID();
         if (client.getID() == null) {
             Intent intent = new Intent(this, LoginActivityCog.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -369,7 +395,7 @@ public class MessagingActivity extends ActionBarActivity {
         String messageType = (String) message.get(MessageBundle.TYPE);
         if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)) {
             updateUI();
-        } else if (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString().equals(messageType)) {
+        } else if (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString().equals(messageType)){
             for (Object user : (Object[]) message.get(MessageBundle.USERS)) {
                 if (user.equals(toPhoneNumber)) {
                     chatroomID = (String) message.get(MessageBundle.CHATROOMID);
@@ -382,13 +408,46 @@ public class MessagingActivity extends ActionBarActivity {
                 Log.d("Room id updated", chatroomID);
             }
         }else if (MessageBundle.messageType.EVENT_CREATED.toString().equals(messageType)) {
-            LinearLayout newEvent = (LinearLayout) findViewById(R.id.eventLayout);
-            newEvent.setVisibility(View.VISIBLE);
+            final LinearLayout newEvent = (LinearLayout) findViewById(R.id.eventLayout); //TODO: check eventLayout's id
+            TextView eventDescription = (TextView) newEvent.findViewById(R.id.eventDesc);
+            eventDescription.setText((String) message.get(MessageBundle.EVENT_NAME));
+            final String eventID = (String) message.get(MessageBundle.EVENT_ID);
 
-            if (chatroomName.equals(message.get(MessageBundle.CHATROOM_NAME))) {
-                chatroomID = (String) message.get(MessageBundle.CHATROOMID);
-                Log.d("Room id updated", chatroomID);
-            }
+            ImageView voteAction = (ImageView)newEvent.findViewById(R.id.vote);
+            voteAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final MessageBundle voteBundle = new MessageBundle(userID, sessionToken,
+                            MessageBundle.messageType.EVENT_VOTE);
+                    voteBundle.getMessage().put(MessageBundle.EVENT_ID, eventID);
+                    voteBundle.putChatroomID(chatroomID);
+
+                    Intent intent = new Intent(client, NetworkService.class);
+                    intent.putExtra(NetworkService.MESSAGE_KEY,
+                            JsonWriter.objectToJson(voteBundle.getMessage()));
+                    client.startService(intent);
+                    newEvent.setVisibility(View.GONE);
+                }
+            });
+
+            ImageView unvoteAction = (ImageView)newEvent.findViewById(R.id.unvote);
+            unvoteAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final MessageBundle voteBundle = new MessageBundle(userID, sessionToken,
+                            MessageBundle.messageType.EVENT_UNVOTE);
+                    voteBundle.getMessage().put(MessageBundle.EVENT_ID, eventID);
+                    voteBundle.putChatroomID(chatroomID);
+
+                    Intent intent = new Intent(client, NetworkService.class);
+                    intent.putExtra(NetworkService.MESSAGE_KEY,
+                            JsonWriter.objectToJson(voteBundle.getMessage()));
+                    client.startService(intent);
+                    newEvent.setVisibility(View.GONE);
+                }
+            });
+            newEvent.setVisibility(View.VISIBLE);
+            updateUI();
         }
     }
 
@@ -412,6 +471,9 @@ public class MessagingActivity extends ActionBarActivity {
         }
         ((GTFSClient) getApplicationContext()).resetNotificationMap();
         adapter.notifyDataSetChanged();
+
+        //TODO: work your magic on this man
+        unvotedEvents = new ArrayList<>();
     }
 
     private class MessageBroadcastReceiver extends BroadcastReceiver {
