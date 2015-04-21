@@ -128,12 +128,13 @@ public class NetworkService extends IntentService {
                 ((GTFSClient) getApplication()).setAuthenticated(false);
                 authenticate();
             }
-
-            JsonWriter serverOut = new JsonWriter(((GTFSClient)getApplication()).
-                    getClient().getOutputStream());
-            serverOut.write(message);
-            serverOut.flush();
-            Thread.sleep(50);
+            synchronized (((GTFSClient)getApplication()).getClient()) {
+                JsonWriter serverOut = new JsonWriter(((GTFSClient) getApplication()).
+                        getClient().getOutputStream());
+                serverOut.write(message);
+                serverOut.flush();
+                Thread.sleep(200);
+            }
             Log.d("Message sent out", message.toString());
 
         }catch (Exception e){

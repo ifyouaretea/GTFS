@@ -18,6 +18,7 @@ import com.cedarsoftware.util.io.JsonWriter;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 import cse.sutd.gtfs.Activities.Messaging.MainActivity;
@@ -83,8 +84,10 @@ public class ManagerService extends Service{
                 messageType.equals(MessageBundle.messageType.ROOM_INVITATION.toString()) )
             dbAdapter.createGroupChat(message);
 
-        else if(messageType.equals(MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString()))
+        else if(messageType.equals(MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString())) {
             dbAdapter.createSingleChat(message);
+            Log.d("Chat users", Arrays.toString((Object[])message.get(MessageBundle.USERS)));
+        }
 
         else if(messageType.equals(MessageBundle.messageType.GET_ROOMS.toString()))
             dbAdapter.importChatrooms(message);

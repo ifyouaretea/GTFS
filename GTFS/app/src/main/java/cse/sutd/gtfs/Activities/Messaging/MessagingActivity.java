@@ -254,11 +254,13 @@ public class MessagingActivity extends ActionBarActivity {
         downSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (searchPosition <= 0)
-                    searchPosition = adapter.getSearchResult().size() - 1;
-                else
-                    searchPosition--;
-                moveToSearch();
+                synchronized (adapter) {
+                    if (searchPosition <= 0)
+                        searchPosition = adapter.getSearchResult().size() - 1;
+                    else
+                        searchPosition--;
+                    moveToSearch();
+                }
             }
         });
 
@@ -266,11 +268,13 @@ public class MessagingActivity extends ActionBarActivity {
         upSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (searchPosition >= adapter.getSearchResult().size() - 1)
-                    searchPosition = 0;
-                else
-                    searchPosition++;
-                moveToSearch();
+                synchronized (adapter) {
+                    if (searchPosition >= adapter.getSearchResult().size() - 1)
+                        searchPosition = 0;
+                    else
+                        searchPosition++;
+                    moveToSearch();
+                }
             }
         });
 

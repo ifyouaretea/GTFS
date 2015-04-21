@@ -47,7 +47,6 @@ public class MessageDbAdapter {
     public static final String CHATNAME = "chatName";
     public static final String LAST_MESSAGE = "lastMessage";
     public static final String READ = "read";
-    public static final String ROOM_USERS = "room_users";
     public static final String USERS = "users";
     public static final String NAME = "name";
     public static final String EXPIRY = "expiry";
@@ -197,36 +196,35 @@ public class MessageDbAdapter {
         boolean isChatExists = chatExists.getCount() > 0;
         chatExists.close();
 
-        if(isChatExists)
-            return false;
+        Object[] users = (Object[]) message.get(USERS);
+        if(!isChatExists) {
+            ContentValues chatValues = new ContentValues();
+            chatValues.put(ROWID, chatID);
+            chatValues.put(USERS, Arrays.toString(users));
+            chatValues.put(CHATNAME, from_phone_number);
+            chatValues.put(LAST_MESSAGE, chatID);
+            chatValues.put(ISGROUP, 0);
+            chatValues.put(DELETED, 0);
 
-        ContentValues chatValues= new ContentValues();
+            if (mDb.insert(CHATS, null, chatValues) <= 0)
+                return false;
+        }
 
-        chatValues.put(ROWID, chatID);
-        chatValues.put(CHATNAME, from_phone_number);
-        chatValues.put(LAST_MESSAGE, chatID);
-        chatValues.put(ISGROUP, 0);
-        chatValues.put(DELETED, 0);
-        if (mDb.insert(CHATS, null, chatValues) <= 0)
-            return false;
-
-        Object[] users = (Object[]) message.get(ROOM_USERS);
         String ownID = ((GTFSClient) mContext).getID();
         String otherUser = null;
 
-        if(users == null)
-            return false;
         for(Object user: users)
             if (!ownID.equals(user)) {
                 otherUser = (String) user;
                 break;
             }
-
         try {
+
             mDb.execSQL(String.format("UPDATE contacts SET chat='%s' WHERE _id='%s'",
                     chatID, otherUser));
             return true;
         }catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -259,7 +257,12 @@ public class MessageDbAdapter {
     public long createGroupChat(Map message){
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
         String chatName = (String) message.get(MessageBundle.CHATROOM_NAME);
-        String users = Arrays.toString((Object[])message.get(ROOM_USERS));
+        String users = Arrays.toString((Object[])message.get(USERS));
+        if(users == null)
+            return -1;
+        if(users.length() < 1)
+            return -1;
+
         Integer isGroup = null;
 
         isGroup = 1;
@@ -549,7 +552,7 @@ public class MessageDbAdapter {
             Log.d("Importing chatroom", chatroom.toString());
             String chatID = (String) chatroom.get(MessageBundle.CHATROOMID);
             String chatName = (String) chatroom.get(MessageBundle.CHATROOM_NAME);
-            String users = Arrays.toString((Object[])chatroom.get(ROOM_USERS));
+            String users = Arrays.toString((Object[])chatroom.get(USERS));
             int isGroup = (Boolean) chatroom.get("group") ? 1 : 0;
             long expiry = Long.parseLong((String) chatroom.get(MessageBundle.EXPIRY));
 

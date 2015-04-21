@@ -135,13 +135,13 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
 
         ImageView tagCircle = (ImageView) rowView.findViewById(R.id.circle);
 
-        String tag = (String) message.getMessage().get(MessageBundle.TAGS);
+        String tag = ((String) message.getMessage().get(MessageBundle.TAGS)).toLowerCase();
         if(tag.trim().equals("important"))
             tagCircle.setColorFilter(Color.rgb(85,0,0));
         else if(tag.trim().equals("normal"))
-            tagCircle.setColorFilter(Color.rgb(17, 102, 17));
+            tagCircle.setVisibility(View.GONE);
         else if(tag.trim().equals("nonsense"))
-            tagCircle.setColorFilter(Color.rgb(170, 147, 57));
+            tagCircle.setColorFilter(Color.rgb(255, 224, 18));
 
 
         TextView time = (TextView) rowView.findViewById(R.id.textTime);
