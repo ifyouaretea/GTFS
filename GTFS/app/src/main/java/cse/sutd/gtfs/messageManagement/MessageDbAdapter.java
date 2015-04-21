@@ -94,14 +94,11 @@ public class MessageDbAdapter {
                 "create table contacts (_id text primary key, "
                         + "name text not null, chatID text);";
 
-<<<<<<< HEAD
         private static final String DATABASE_CREATE_EVENTS =
                 "create table events (_id text primary key, "
                         + "event_name text not null, event_datetime text not null, chatID text," +
                         " votes text);";
 
-=======
->>>>>>> 157e3bf5e09332fa268a9597f112dcd945afd01e
         private static final String DATABASE_NAME = "data";
 
         private static final int DATABASE_VERSION = 2;

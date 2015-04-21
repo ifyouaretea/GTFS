@@ -233,6 +233,7 @@
     <string name="title_activity_chat">ChatActivity</string>
     <string name="title_activity_contacts">ContactsActivity</string>
     <string name="title_activity_create_note">CreateNoteActivity</string>
+    <string name="title_activity_event_info">EventInfoActivity</string>
     <string name="title_activity_events">EventsActivity</string>
     <string name="title_activity_group_info">GroupInfoActivity</string>
     <string name="title_activity_login_activity_cog">LoginActivityCog</string>
