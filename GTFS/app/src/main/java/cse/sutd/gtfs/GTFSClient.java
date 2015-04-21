@@ -22,9 +22,6 @@ import cse.sutd.gtfs.serverUtils.NetworkService;
 
 public class GTFSClient extends Application{
 
-    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private final String TWITTER_KEY = "6Rs5gyo7xHoEYYkls0ajWP9PO";
-    private final String TWITTER_SECRET = "8nvcBPCoqhkt1Lvzjv6Pb5GmBB4uBmreV3KSgVxfcgCJrMQT8E";
     public final String PREFS_NAME = "MyPrefsFile";
 
     private String PROFILE_ID = null;
@@ -75,8 +72,6 @@ public class GTFSClient extends Application{
         notificationMap = new HashMap<>();
         startService(new Intent(getApplicationContext(), ManagerService.class));
         startService(new Intent(getApplicationContext(), NetworkService.class));
-//        final TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-//        Fabric.with(this, new TwitterCore(authConfig), new Digits());
     }
 
     @Override

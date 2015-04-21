@@ -49,7 +49,9 @@ public class ProfileActivity extends ActionBarActivity {
 
         Cursor c = getApplication().getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
         c.moveToFirst();
-        String username = c.getString(c.getColumnIndex("display_name"));
+        String username=null;
+        if (c!=null)
+            username = c.getString(c.getColumnIndex("display_name"));
         c.close();
 
         final EditText prof_name = (EditText) findViewById(R.id.prof_name);

@@ -1,6 +1,5 @@
 package cse.sutd.gtfs.Activities.Messaging;
 
-import android.app.ActionBar;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,7 +33,6 @@ import java.util.Map;
 import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Activities.Notes.NoteListActivity;
 import cse.sutd.gtfs.Adapters.MessageAdapter;
-
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.ChatRoom;
 import cse.sutd.gtfs.R;
@@ -120,12 +118,8 @@ public class MessagingActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_action_profile); //user's pic
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-<<<<<<< HEAD
         getSupportActionBar().setTitle(chatroomName);
-=======
-        getSupportActionBar().setTitle(title);
 
->>>>>>> 10d386922f0e6b98db5cd6f98a6beac8f9ab46ab
         setContentView(R.layout.activity_messaging);
         messageSearchBar = (EditText) findViewById(R.id.message_search_bar);
 
@@ -265,7 +259,15 @@ public class MessagingActivity extends ActionBarActivity {
             for(Object user: (Object[]) message.get(MessageBundle.USERS)){
                 if(user.equals(toPhoneNumber)){
                     chatroomID = (String) message.get(MessageBundle.CHATROOMID);
-                    Log.d("Messaging id updated", chatroomID);
+                    Log.d("Room id updated", chatroomID);
+                    break;
+                }
+            }
+        }else if (MessageBundle.messageType.ROOM_INVITATION.toString().equals(messageType)){
+            for(Object user: (Object[]) message.get(MessageBundle.CHATROOM_NAME)){
+                if(chatroomName.equals(user)){
+                    chatroomID = (String) message.get(MessageBundle.CHATROOMID);
+                    Log.d("Room id updated", chatroomID);
                     break;
                 }
             }

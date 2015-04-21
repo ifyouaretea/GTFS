@@ -1,10 +1,6 @@
 package cse.sutd.gtfs.serverUtils;
 
-<<<<<<< HEAD
-=======
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
->>>>>>> 10d386922f0e6b98db5cd6f98a6beac8f9ab46ab
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -21,7 +17,8 @@ public class MessageBundle {
     public static enum messageType{
         AUTH, TEXT,TEXT_RECEIVED, TYPING, CREATE_SINGLE_ROOM, CREATE_ROOM,ROOM_INVITATION,
         SINGLE_ROOM_INVITATION,ACCEPT_INVITATION, LEAVE, GROUP_EXPIRED, GET_USERS,
-        FETCH_NOTE, EDIT_NOTE, GET_ROOMS, CREATE_NOTE, GET_NOTES;
+        FETCH_NOTE, EDIT_NOTE, GET_ROOMS, CREATE_NOTE, GET_NOTES,
+        CREATE_EVENT,GET_EVENTS,EVENT_VOTE,EVENT_UNVOTE;
     }
 
     private Map<String, String> messageMap;
@@ -48,6 +45,9 @@ public class MessageBundle {
     public static final String CHATROOMS = "chatrooms";
     public static final String TAGS = "tags";
     public static final String VALID_STATUS = "1";
+    public static final String EVENT_ID = "event_id";
+    public static final String EVENT_NAME = "event_name";
+    public static final String EVENT_DATE = "event_date";
 
 //    private String time;
 
@@ -114,6 +114,14 @@ public class MessageBundle {
 
     public String putNoteTitle(String noteTitle){
         return messageMap.put(NOTE_TITLE, noteTitle);
+    }
+
+    public String putEventName(String eventName){
+        return messageMap.put(EVENT_NAME, eventName);
+    }
+
+    public String putEventDate(String eventDate){
+        return messageMap.put(EVENT_DATE, eventDate);
     }
 
     public String putTag(String tag){
