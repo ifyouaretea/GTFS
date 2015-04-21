@@ -30,6 +30,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import cse.sutd.gtfs.Activities.ContactsActivity;
+import cse.sutd.gtfs.Activities.Group.NewGroupActivity;
 import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Activities.ProfileActivity;
 import cse.sutd.gtfs.Activities.SettingsActivity;
@@ -168,7 +169,10 @@ public class MainActivity extends ActionBarActivity {
         NotificationManager notificationManager = (NotificationManager)getSystemService
                 (Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
+<<<<<<< HEAD
+=======
 
+>>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
         dbMessages.deleteExpiredChats();
     }
 

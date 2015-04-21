@@ -1,4 +1,4 @@
-package cse.sutd.gtfs.Activities.Messaging;
+package cse.sutd.gtfs.Activities.Group;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import java.util.Arrays;
 
-import cse.sutd.gtfs.Activities.AddContactToGroup;
 import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.R;

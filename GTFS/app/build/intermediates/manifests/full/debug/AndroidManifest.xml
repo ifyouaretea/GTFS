@@ -71,7 +71,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="cse.sutd.gtfs.Activities.Messaging.NewGroupActivity"
+            android:name="cse.sutd.gtfs.Activities.Group.NewGroupActivity"
             android:label="@string/title_activity_new_group"
             android:parentActivityName="cse.sutd.gtfs.Activities.Messaging.MainActivity" >
         </activity>
@@ -81,13 +81,13 @@
             android:parentActivityName="cse.sutd.gtfs.Activities.Messaging.MainActivity" >
         </activity>
         <activity
-            android:name="cse.sutd.gtfs.Activities.EventsActivity"
+            android:name="cse.sutd.gtfs.Activities.Group.EventsActivity"
             android:label="@string/title_activity_events" >
         </activity>
         <activity
-            android:name="cse.sutd.gtfs.Activities.AddContactToGroup"
+            android:name="cse.sutd.gtfs.Activities.Group.AddContactToGroup"
             android:label="@string/title_activity_add_contact_to_group"
-            android:parentActivityName="cse.sutd.gtfs.Activities.Messaging.NewGroupActivity" >
+            android:parentActivityName="cse.sutd.gtfs.Activities.Group.NewGroupActivity" >
         </activity>
         <activity
             android:name="cse.sutd.gtfs.Activities.Notes.EditNoteActivity"
@@ -105,8 +105,9 @@
             android:parentActivityName="cse.sutd.gtfs.Activities.Notes.NoteListActivity" >
         </activity>
         <activity
-            android:name="cse.sutd.gtfs.GroupInfoActivity"
-            android:label="@string/title_activity_group_info" >
+            android:name="cse.sutd.gtfs.Activities.Group.GroupInfoActivity"
+            android:label="@string/title_activity_group_info"
+            android:parentActivityName="cse.sutd.gtfs.Activities.Messaging.MessagingActivity" >
         </activity>
     </application>
 

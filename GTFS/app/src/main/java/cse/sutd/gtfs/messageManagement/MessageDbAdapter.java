@@ -57,11 +57,20 @@ public class MessageDbAdapter {
     public static final String TITLE = "title";
     public static final String NOTES = "notes";
     public static final String TAGS = "tags";
+<<<<<<< HEAD
+    public static final String EVENT_NAME = "event_name";
+    public static final String EVENT_ID = "event_id";
+    public static final String EVENT_DATETIME = "event_datetime";
+    public static final String VOTES = "votes";
+    public static final String DELETED = "deleted";
+
+=======
     public static final String EVENT_NAME = "eventName";
     public static final String EVENT_DATE = "eventDate";
     public static final String VOTES = "votes";
     public static final String DELETED = "deleted";
     public static final String HAS_VOTED = "hasVoted";
+>>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
 
     private static final String TAG = "MessageDbAdapter";
 
@@ -88,6 +97,10 @@ public class MessageDbAdapter {
                         + "isGroup integer not null, chatName text, " +
                         "lastMessage integer not null, "+
                         "users text, expiry integer, deleted integer not null);";
+<<<<<<< HEAD
+
+=======
+>>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
 
         private static final String DATABASE_CREATE_CONTACTS =
                 "create table contacts (_id text primary key, "
@@ -230,7 +243,7 @@ public class MessageDbAdapter {
             }
         try {
 
-            mDb.execSQL(String.format("UPDATE contacts SET chat='%s' WHERE _id='%s'",
+            mDb.execSQL(String.format("UPDATE contacts SET chatID='%s' WHERE _id='%s'",
                     chatID, otherUser));
             return true;
         }catch (Exception e){
@@ -245,7 +258,7 @@ public class MessageDbAdapter {
     }
 
     public Cursor getUserForGroup(String chatID){
-        return mDb.rawQuery(String.format("SELECT _id, users FROM chats WHERE _id ='%s'", chatID), null);
+        return mDb.rawQuery(String.format("SELECT users FROM chats WHERE _id ='%s'", chatID), null);
     }
 
     public Cursor getChats(){
@@ -281,7 +294,7 @@ public class MessageDbAdapter {
 
         isGroup = 1;
 
-        long expiry = Long.parseLong((String) message.get(MessageBundle.EXPIRY));
+        Long expiry = (Long) message.get(MessageBundle.EXPIRY);
 
         ContentValues chatValues = new ContentValues();
         chatValues.put(ISGROUP, isGroup);
@@ -709,6 +722,8 @@ public class MessageDbAdapter {
         return tags;
     }
 
+<<<<<<< HEAD
+=======
     public Cursor getUserIDsUsernamesForChat(String chatID){
         return mDb.rawQuery(String.format("SELECT contacts._id, contacts.name FROM " +
                 "contacts INNER JOIN chats ON chats.users LIKE '%' + contacts._id  + '%' " +
@@ -751,4 +766,5 @@ public class MessageDbAdapter {
         return mDb.rawQuery(String.format("SELECT _id, eventName, " +
                 "eventDate FROM events WHERE chatID='%s'",  chatID),null);
     }*/
+>>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
 }

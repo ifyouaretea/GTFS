@@ -1,4 +1,4 @@
-package cse.sutd.gtfs.Activities;
+package cse.sutd.gtfs.Activities.Group;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.Contact;

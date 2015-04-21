@@ -15,6 +15,10 @@ import android.widget.Filterable;
 
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+<<<<<<< HEAD
+
+=======
+>>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
 import android.widget.ListView;
 import android.widget.TextView;
 

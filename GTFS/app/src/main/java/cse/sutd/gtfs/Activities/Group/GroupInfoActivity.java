@@ -1,7 +1,8 @@
-package cse.sutd.gtfs;
+package cse.sutd.gtfs.Activities.Group;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -17,7 +18,9 @@ import java.util.ArrayList;
 import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
 import cse.sutd.gtfs.Adapters.ContactAdapter;
+import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.Contact;
+import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
@@ -31,12 +34,13 @@ public class GroupInfoActivity extends ActionBarActivity {
     ContactAdapter contactAdapter;
     public static final String CHAT_ID_KEY = "chatID";
     private String chatID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         client = (GTFSClient) getApplicationContext();
-        if(client.getID() == null){
+        if (client.getID() == null) {
             Intent intent = new Intent(this, LoginActivityCog.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -63,7 +67,7 @@ public class GroupInfoActivity extends ActionBarActivity {
 
         listview = (ListView) findViewById(R.id.contactList);
         contacts = new ArrayList<>();
-//        getGroupUsers();
+        getGroupUsers();
         contactAdapter = new ContactAdapter(this, contacts);
         listview.setAdapter(contactAdapter);
 
@@ -88,9 +92,10 @@ public class GroupInfoActivity extends ActionBarActivity {
                             JsonWriter.objectToJson(createBundle.getMessage()));
                     GroupInfoActivity.this.startService(intent);
                 }
-                try{
+                try {
                     Thread.sleep(1000);
-                }catch(Exception e){}
+                } catch (Exception e) {
+                }
                 //TODO: check if chatroom exist
                 chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
                 Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
@@ -102,20 +107,32 @@ public class GroupInfoActivity extends ActionBarActivity {
             }
         });
     }
-//TODO:
-//    private void getGroupUsers(){
-//        Cursor contactBundles = dbMessages.getGroupUsers(chatID);
-//        if (contactBundles != null) {
-//            if (contactBundles.getCount() > 0) {
-//                contactBundles.moveToFirst();
-//                do {
-//                    Contact a = new Contact(contactBundles.getString(0), contactBundles.getString(1));
-//                    contacts.add(a);
-//                } while (contactBundles.moveToNext());
-//            }
-//            contactBundles.close();
-//        }
-//    }
+
+    private void getGroupUsers() {
+        String[] userList = new String[0];
+        Cursor userBundles = dbMessages.getUserForGroup(chatID);
+        if (userBundles != null) {
+            if (userBundles.getCount() > 0) {
+                userBundles.moveToFirst();
+                String users = userBundles.getString(0).replaceAll("\\[", "").replaceAll("\\]", "");
+                userList = users.split(",");
+            }
+            userBundles.close();
+        }
+
+        for (String s : userList) {
+            Cursor contactBundles = dbMessages.getContact(s);
+            if (contactBundles != null) {
+                if (contactBundles.getCount() > 0) {
+                    contactBundles.moveToFirst();
+                    Contact a = new Contact(contactBundles.getString(0), contactBundles.getString(1));
+                    contacts.add(a);
+                }
+                contactBundles.close();
+            }
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

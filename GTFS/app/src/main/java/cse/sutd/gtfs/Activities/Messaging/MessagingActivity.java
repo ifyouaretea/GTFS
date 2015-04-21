@@ -35,12 +35,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import cse.sutd.gtfs.Activities.EventsActivity;
+import cse.sutd.gtfs.Activities.Group.EventsActivity;
 import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Activities.Notes.NoteListActivity;
 import cse.sutd.gtfs.Adapters.MessageAdapter;
 import cse.sutd.gtfs.GTFSClient;
-import cse.sutd.gtfs.GroupInfoActivity;
+import cse.sutd.gtfs.Activities.Group.GroupInfoActivity;
 import cse.sutd.gtfs.Objects.ChatRoom;
 import cse.sutd.gtfs.Objects.Event;
 import cse.sutd.gtfs.R;
@@ -78,7 +78,11 @@ public class MessagingActivity extends ActionBarActivity {
     private MessageDbAdapter dbMessages;
     private ChatRoom chat;
     private String[] userList;
+<<<<<<< HEAD
+    private String[] eventsList;
+=======
     private List<Event> unvotedEvents;
+>>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
 
     /**
      * Required extras
@@ -94,6 +98,15 @@ public class MessagingActivity extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
+<<<<<<< HEAD
+            chatroomID = extras.getString(MessageDbAdapter.CHATID);
+            if (chatroomID != null) {
+                chatroomName = dbMessages.getUsername(chatroomID);
+                isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
+            }else{
+                isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
+                if(isGroup==1){
+=======
             isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
             if (isGroup == 0) {
                 toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
@@ -111,14 +124,11 @@ public class MessagingActivity extends ActionBarActivity {
                 if (chatroomID != null)
                     chatroomName = dbMessages.getChatroomName(chatroomID);
                 else
+>>>>>>> f9acf742ca57fc66d322c12b45a703ae556579ed
                     chatroomName = extras.getString(MessageDbAdapter.CHATNAME);
-
-                if (chatroomName != null)
-                    chatroomID = dbMessages.getChatroomID(chatroomName);
-                else
+                }else{
                     chatroomName = dbMessages.getUsernameFromNumber(toPhoneNumber);
-
-                chat = new ChatRoom(chatroomID, chatroomName, isGroup);
+                }
             }
             dbMessages.clearRead(chatroomID);
         }

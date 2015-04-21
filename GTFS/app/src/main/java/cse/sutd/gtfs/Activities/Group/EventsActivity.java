@@ -1,4 +1,4 @@
-package cse.sutd.gtfs.Activities;
+package cse.sutd.gtfs.Activities.Group;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
 
+import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.R;
