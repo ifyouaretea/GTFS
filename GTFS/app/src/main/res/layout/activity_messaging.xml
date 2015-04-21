@@ -83,7 +83,9 @@
             android:id="@+id/vote"
             android:src="@drawable/ic_action_vote"
             android:tint="#ff008513"
-            android:layout_weight="0.1" />
+            android:layout_weight="0.1"
+            android:clickable="true"
+            />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -91,7 +93,9 @@
             android:id="@+id/unvote"
             android:src="@drawable/ic_action_wrong"
             android:tint="#ffa90000"
-            android:layout_weight="0.1" />
+            android:layout_weight="0.1"
+            android:clickable="true"/>
+
     </LinearLayout>
 
     <LinearLayout
