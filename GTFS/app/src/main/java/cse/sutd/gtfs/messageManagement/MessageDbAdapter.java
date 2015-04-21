@@ -73,7 +73,7 @@ public class MessageDbAdapter {
 
     private static final String DATABASE_CREATE_EVENTS =
             "create table events (_id text primary key, "
-                    + "eventName text not null, eventDate text not null, chatID text," +
+                    + "event_name text not null, event_datatime text not null, chatID text," +
                     " votes text);";
 
     private static MessageDbAdapter instance;
@@ -93,6 +93,11 @@ public class MessageDbAdapter {
         private static final String DATABASE_CREATE_CONTACTS =
                 "create table contacts (_id text primary key, "
                         + "name text not null, chatID text);";
+
+        private static final String DATABASE_CREATE_EVENTS =
+                "create table events (_id text primary key, "
+                        + "event_name text not null, event_datetime text not null, chatID text," +
+                        " votes text);";
 
         private static final String DATABASE_NAME = "data";
 
@@ -735,6 +740,7 @@ public class MessageDbAdapter {
         eventValues.put(VOTES, Arrays.toString(votes));
         eventValues.put(EVENT_DATE, eventDate);
 //        eventValues.put(HAS_VOTED, 0);
+        Log.d("Insert Event",event.get(MessageBundle.TYPE).toString());
         mDb.insert(EVENTS, null, eventValues);
     }
 

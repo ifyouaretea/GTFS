@@ -86,9 +86,19 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         final View rowView;
-        if(MessageBundle.messageType.ADMIN.toString().equals(message.getMessage().get(MessageBundle.TYPE))){
+        if(message.getTags().equals("Admin")){
             rowView = inflater.inflate(R.layout.message_list_item_center, parent, false);
+            TextView admin = (TextView) rowView.findViewById(R.id.adminMsg);
+            String eventDesc = (String)values.get(position).getMessage().get(MessageBundle.MESSAGE);
 
+//            Long dateTime = (Long)(message.getMessage().get(MessageBundle.MESSAGE_ID));
+//            Date date = new Date(dateTime);
+//            DateFormat formatter = new SimpleDateFormat("dd-MM HH:mm", Locale.getDefault());
+//            String dateFormatted = formatter.format(date);
+
+//            eventDesc = eventDesc.concat(" @ "+dateFormatted);
+            admin.setText(eventDesc);
+            return rowView;
         }else if(user.equalsIgnoreCase((String)message.getMessage().get("from_phone_number"))) {
             rowView = inflater.inflate(R.layout.message_list_item_right, parent, false);
         } else {
@@ -114,8 +124,7 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
         }
 
         TextView msg = (TextView) rowView.findViewById(R.id.textMessage);
-        String nonFormatedText = (String)values.get(position).
-                getMessage().get(MessageBundle.MESSAGE);
+        String nonFormatedText = (String)values.get(position).getMessage().get(MessageBundle.MESSAGE);
 
         int searchPosition;
 
