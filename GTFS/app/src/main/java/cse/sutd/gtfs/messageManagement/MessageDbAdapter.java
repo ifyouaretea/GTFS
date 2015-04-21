@@ -752,7 +752,7 @@ public class MessageDbAdapter {
     }*/
 
     public String getEventName(String eventID){
-        Cursor result = mDb.rawQuery(String.format("SELECT event_name FROM " +
+        Cursor result = mDb.rawQuery(String.format("SELECT eventName FROM " +
                 "events WHERE _id ='%s'",eventID), null);
         if(result == null)
             return null;

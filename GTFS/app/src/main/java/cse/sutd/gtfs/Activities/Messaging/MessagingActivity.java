@@ -98,9 +98,15 @@ public class MessagingActivity extends ActionBarActivity {
 
         if (extras != null) {
             chatroomID = extras.getString(MessageDbAdapter.CHATID);
+            Log.d("ChatroomID", chatroomID);
             if (chatroomID != null) {
-                chatroomName = dbMessages.getUsername(chatroomID);
                 isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
+                Log.d("isGroup", String.valueOf(isGroup));
+                if(isGroup == 0)
+                    chatroomName = dbMessages.getUsername(chatroomID);
+                else if(isGroup == 1)
+                    chatroomName = dbMessages.getChatroomName(chatroomID);
+
             }else{
                 isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
                 if(isGroup==1){
@@ -286,9 +292,6 @@ public class MessagingActivity extends ActionBarActivity {
         if (searchResults.size() > 0 && searchResults.get(searchPosition) > 0) {
             listview.setSelection(searchResults.get(searchPosition));
             listview.requestFocus();
-            listview.getChildAt(searchResults.get(searchPosition)).getBackground().setColorFilter(
-                    Color.parseColor("#00f00"), PorterDuff.Mode.DARKEN
-            );
         }
         Log.d(String.valueOf(searchResults.size()), String.valueOf(searchPosition));
     }
@@ -482,7 +485,6 @@ public class MessagingActivity extends ActionBarActivity {
         ((GTFSClient) getApplicationContext()).resetNotificationMap();
         adapter.notifyDataSetChanged();
 
-        //TODO: work your magic on this man
         unvotedEvents = new ArrayList<>();
     }
 
