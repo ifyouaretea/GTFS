@@ -132,9 +132,10 @@ public class AddContactToGroup extends ActionBarActivity {
                             selected.add(cc);
                         }
                     }
-                    String[] groupct = new String[selected.size()];
-                    for(int i=0;i<selected.size();i++){
-                        groupct[i]=selected.get(i).getNumber();
+                    String[] groupct = new String[selected.size()+1];
+                    groupct[0] = client.getID();
+                    for(int i=1;i<=selected.size();i++){
+                        groupct[i]=selected.get(i-1).getNumber();
                     }
 //                    String[] myArray = selected.toArray(new String[selected.size()]);
                     Log.d("users",Arrays.toString(groupct));

@@ -1,6 +1,5 @@
 package cse.sutd.gtfs.serverUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -58,9 +57,10 @@ public class MessageBundle {
         messageMap.put(SESSION_TOKEN, sessionToken);
         messageMap.put(TYPE, type.toString());
         if(type == messageType.CREATE_ROOM || type == messageType.CREATE_SINGLE_ROOM )
-            messageMap.put(EXPIRY, "0"  );
-        if(type == messageType.TEXT)
-            tags = new ArrayList<>();
+            messageMap.put(EXPIRY, "0" );
+        if(type == messageType.TEXT) {
+            messageMap.put(TAGS, "Normal");
+        }
         putTimestamp();
     }
 
@@ -125,8 +125,7 @@ public class MessageBundle {
     }
 
     public String putTag(String tag){
-        tags.add(tag);
-        return messageMap.put(TAGS, tags.toString());
+        return messageMap.put(TAGS, tag);
     }
 
     public String putParsedTags(String tags){
