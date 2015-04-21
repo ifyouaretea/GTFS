@@ -66,6 +66,8 @@ public class MessageBundle {
         putTimestamp();
     }
 
+    public String putMessageID(String messageID){return messageMap.put(MESSAGE_ID, messageID);}
+
     public String putUsername(String username){
         return messageMap.put(USERNAME, username);
     }
@@ -73,6 +75,15 @@ public class MessageBundle {
     public String getFromPhoneNumber(){
         return messageMap.get(FROM_PHONE_NUMBER);
     }
+
+    public String getTags(){
+        return messageMap.get(TAGS);
+    }
+
+    public String putFromPhoneNumber(String fromPhoneNumber){
+        return messageMap.put(FROM_PHONE_NUMBER, fromPhoneNumber);
+    }
+
 
     public String putChatroomID(String chatRoomID){
         return messageMap.put(CHATROOMID, chatRoomID);

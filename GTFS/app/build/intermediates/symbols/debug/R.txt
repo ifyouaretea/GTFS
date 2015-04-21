@@ -389,7 +389,7 @@ int id action_chat 0x7f0b0085
 int id action_contacts 0x7f0b0087
 int id action_context_bar 0x7f0b0032
 int id action_create_event 0x7f0b0084
-int id action_create_group 0x7f0b008f
+int id action_create_group 0x7f0b0090
 int id action_done 0x7f0b007e
 int id action_group 0x7f0b0086
 int id action_logout 0x7f0b0089
@@ -419,7 +419,7 @@ int id contacts 0x7f0b0041
 int id countTextView 0x7f0b0064
 int id country_code_tv 0x7f0b004d
 int id create_body 0x7f0b0044
-int id create_note 0x7f0b0090
+int id create_note 0x7f0b0091
 int id create_title 0x7f0b0043
 int id decor_content_parent 0x7f0b002f
 int id default_activity_button 0x7f0b0024
@@ -438,7 +438,7 @@ int id expanded_menu 0x7f0b0028
 int id firstLine 0x7f0b0073
 int id fromDate 0x7f0b0049
 int id fromTime 0x7f0b004a
-int id group_info 0x7f0b008e
+int id group_info 0x7f0b008f
 int id group_name 0x7f0b0062
 int id home 0x7f0b0004
 int id homeAsUp 0x7f0b000d
@@ -456,6 +456,7 @@ int id main 0x7f0b0053
 int id message 0x7f0b0060
 int id messageList 0x7f0b005b
 int id message_events 0x7f0b008d
+int id message_events_list 0x7f0b008e
 int id message_search_bar 0x7f0b0058
 int id message_search_bar_layout 0x7f0b0055
 int id message_search_icon 0x7f0b008b

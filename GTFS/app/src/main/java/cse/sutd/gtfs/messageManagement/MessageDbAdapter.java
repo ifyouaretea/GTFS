@@ -73,7 +73,7 @@ public class MessageDbAdapter {
 
     private static final String DATABASE_CREATE_EVENTS =
             "create table events (_id text primary key, "
-                    + "eventName text not null, eventDate text not null, chatID text," +
+                    + "event_name text not null, event_datatime text not null, chatID text," +
                     " votes text);";
 
     private static MessageDbAdapter instance;
@@ -96,7 +96,7 @@ public class MessageDbAdapter {
 
         private static final String DATABASE_CREATE_EVENTS =
                 "create table events (_id text primary key, "
-                        + "eventName text not null, event_datetime text not null, chatID text," +
+                        + "event_name text not null, event_datetime text not null, chatID text," +
                         " votes text);";
 
         private static final String DATABASE_NAME = "data";
@@ -726,7 +726,7 @@ public class MessageDbAdapter {
 
     public void insertEvent(Map event){
         String id = (String) event.get(MessageBundle.EVENT_ID);
-        String eventName = (String) event.get(MessageBundle.EVENT_DATETIME);
+        String eventName = (String) event.get(MessageBundle.EVENT_NAME);
         String chatID = (String) event.get(MessageBundle.CHATROOMID);
         String eventDate = (String) event.get(MessageBundle.EVENT_DATETIME);
         String[] votes = (String[]) event.get(MessageBundle.VOTES);
@@ -738,6 +738,7 @@ public class MessageDbAdapter {
         eventValues.put(VOTES, Arrays.toString(votes));
         eventValues.put(EVENT_DATE, eventDate);
 //        eventValues.put(HAS_VOTED, 0);
+        Log.d("Insert Event",event.get(MessageBundle.TYPE).toString());
         mDb.insert(EVENTS, null, eventValues);
     }
 

@@ -97,17 +97,32 @@ public class MessagingActivity extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            chatroomID = extras.getString(MessageDbAdapter.CHATID);
-            if (chatroomID != null) {
-                chatroomName = dbMessages.getUsername(chatroomID);
-                isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
-            }else{
-                isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
-                if(isGroup==1){
-                    chatroomName = extras.getString(MessageDbAdapter.CHATNAME);
-                }else{
+            isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
+            if (isGroup == 0) {
+                toPhoneNumber = extras.getString(MessageBundle.TO_PHONE_NUMBER);
+                if (toPhoneNumber != null)
+                    chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
+                else
+                    chatroomID = extras.getString(MessageDbAdapter.CHATID);
+                if (chatroomID != null)
+                    chatroomName = dbMessages.getUsername(chatroomID);
+                else
                     chatroomName = dbMessages.getUsernameFromNumber(toPhoneNumber);
-                }
+
+                chat = new ChatRoom(chatroomID, chatroomName, toPhoneNumber, isGroup);
+            } else {
+                chatroomID = extras.getString(MessageDbAdapter.CHATID);
+                if (chatroomID != null)
+                    chatroomName = dbMessages.getChatroomName(chatroomID);
+                else
+                    chatroomName = extras.getString(MessageDbAdapter.CHATNAME);
+
+                if (chatroomName != null)
+                    chatroomID = dbMessages.getChatroomID(chatroomName);
+                else
+                    chatroomName = dbMessages.getUsernameFromNumber(toPhoneNumber);
+
+                chat = new ChatRoom(chatroomID, chatroomName, isGroup);
             }
             dbMessages.clearRead(chatroomID);
         }
@@ -382,16 +397,17 @@ public class MessagingActivity extends ActionBarActivity {
                 }
             }
         } else if (MessageBundle.messageType.ROOM_INVITATION.toString().equals(messageType)) {
+            chatroomName = dbMessages.getUsername(chatroomID);
             if (chatroomName.equals(message.get(MessageBundle.CHATROOM_NAME))) {
                 chatroomID = (String) message.get(MessageBundle.CHATROOMID);
                 Log.d("Room id updated", chatroomID);
             }
         }else if (MessageBundle.messageType.EVENT_CREATED.toString().equals(messageType)) {
+//            dbMessages.insertEvent(message);
             final LinearLayout newEvent = (LinearLayout) findViewById(R.id.eventLayout); //TODO: check eventLayout's id
             TextView eventDescription = (TextView) newEvent.findViewById(R.id.eventDesc);
             eventDescription.setText((String) message.get(MessageBundle.EVENT_NAME));
             final String eventID = (String) message.get(MessageBundle.EVENT_ID);
-
             ImageView voteAction = (ImageView)newEvent.findViewById(R.id.vote);
             voteAction.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -431,14 +447,25 @@ public class MessagingActivity extends ActionBarActivity {
             String fromPhoneNumber = (String) message.get(MessageBundle.FROM_PHONE_NUMBER);
             if(fromPhoneNumber.equals(client.getID())){
                 MessageBundle a = new MessageBundle(client.getID(),
-                        sessionToken, MessageBundle.messageType.ADMIN);
+                        sessionToken, MessageBundle.messageType.TEXT);
+                String name = dbMessages.getUsername(fromPhoneNumber);
                 a.putMessage("You are attending "+(String)dbMessages.getEventName(MessageBundle.EVENT_ID));
+                a.putMessageID(message.get("vote_timestamp").toString());
+                a.putChatroomID(message.get(MessageBundle.CHATROOMID).toString());
+                a.putFromPhoneNumber(message.get(MessageBundle.FROM_PHONE_NUMBER).toString());
+                a.putTag("Admin");
+                dbMessages.storeMessage(a.getMessage());
                 messageList.add(a);
             }else{
                 MessageBundle a = new MessageBundle(client.getID(),
-                        sessionToken, MessageBundle.messageType.ADMIN);
+                        sessionToken, MessageBundle.messageType.TEXT);
                 String name = dbMessages.getUsername(fromPhoneNumber);
                 a.putMessage(name+" is attending "+(String)dbMessages.getEventName(MessageBundle.EVENT_ID));
+                a.putMessageID(message.get("vote_timestamp").toString());
+                a.putChatroomID(message.get(MessageBundle.CHATROOMID).toString());
+                a.putFromPhoneNumber(message.get(MessageBundle.FROM_PHONE_NUMBER).toString());
+                a.putTag("Admin");
+                dbMessages.storeMessage(a.getMessage());
                 messageList.add(a);
             }
             updateUI();
@@ -447,14 +474,25 @@ public class MessagingActivity extends ActionBarActivity {
             String fromPhoneNumber = (String) message.get(MessageBundle.FROM_PHONE_NUMBER);
             if(fromPhoneNumber.equals(client.getID())){
                 MessageBundle a = new MessageBundle(client.getID(),
-                        sessionToken, MessageBundle.messageType.ADMIN);
+                        sessionToken, MessageBundle.messageType.TEXT);
+                String name = dbMessages.getUsername(fromPhoneNumber);
                 a.putMessage("You are not attending "+(String)dbMessages.getEventName(MessageBundle.EVENT_ID));
+                a.putMessageID(message.get("vote_timestamp").toString());
+                a.putChatroomID(message.get(MessageBundle.CHATROOMID).toString());
+                a.putFromPhoneNumber(message.get(MessageBundle.FROM_PHONE_NUMBER).toString());
+                a.putTag("Admin");
+                dbMessages.storeMessage(a.getMessage());
                 messageList.add(a);
             }else{
                 MessageBundle a = new MessageBundle(client.getID(),
-                        sessionToken, MessageBundle.messageType.ADMIN);
+                        sessionToken, MessageBundle.messageType.TEXT);
                 String name = dbMessages.getUsername(fromPhoneNumber);
                 a.putMessage(name+" is not attending "+(String)dbMessages.getEventName(MessageBundle.EVENT_ID));
+                a.putMessageID(message.get("vote_timestamp").toString());
+                a.putChatroomID(message.get(MessageBundle.CHATROOMID).toString());
+                a.putFromPhoneNumber(message.get(MessageBundle.FROM_PHONE_NUMBER).toString());
+                a.putTag("Admin");
+                dbMessages.storeMessage(a.getMessage());
                 messageList.add(a);
             }
             updateUI();
