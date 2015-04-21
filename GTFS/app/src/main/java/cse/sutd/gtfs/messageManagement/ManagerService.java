@@ -19,6 +19,7 @@ import com.cedarsoftware.util.io.JsonWriter;
 import java.util.ArrayList;
 import java.util.Map;
 
+import cse.sutd.gtfs.Activities.Messaging.MainActivity;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
 import cse.sutd.gtfs.R;
@@ -72,9 +73,6 @@ public class ManagerService extends Service{
 
         if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)){
             dbAdapter.storeMessage(message);
-
-            //TODO: fix possible synchronisation problems
-            Log.d("DB message insertion", message.toString());
             if(userID == null)
                 userID = ((GTFSClient)getApplication()).getID();
             if(!message.get(MessageBundle.FROM_PHONE_NUMBER).equals(userID)) {
@@ -117,12 +115,23 @@ public class ManagerService extends Service{
         notificationMap.get(chatroomID).add((String)message.get(MessageBundle.MESSAGE));
 
         String title, body;
+        Intent openMessagingIntent;
+
         if(notificationMap.keySet().size() == 1) {
             title = dbAdapter.getChatroomName(chatroomID);
+            if(title == null)
+                Log.d("Null title", chatroomID);
             StringBuilder bodyBuilder = new StringBuilder();
             for (String s: notificationMap.get(chatroomID))
                 bodyBuilder.append(s + "\n");
             body = bodyBuilder.toString();
+
+            openMessagingIntent = new Intent(getApplicationContext(), MessagingActivity.class);
+            openMessagingIntent.putExtra("ID", chatroomID);
+            openMessagingIntent.putExtra(MessageBundle.TO_PHONE_NUMBER,
+                    (String) message.get(MessageBundle.FROM_PHONE_NUMBER));
+            openMessagingIntent.putExtra(MessageDbAdapter.ISGROUP,
+                    dbAdapter.isGroup(chatroomID) ? 1 : 0);
         }
         else{
             title = String.format("Messages from %d chats", notificationMap.keySet().size());
@@ -131,12 +140,8 @@ public class ManagerService extends Service{
                 for(String s2 : notificationMap.get(s1))
                     bodyBuilder.append(s2 + "\n");
             body = bodyBuilder.toString();
+            openMessagingIntent = new Intent(getApplicationContext(), MainActivity.class);
         }
-
-        Intent openMessagingIntent = new Intent(getApplicationContext(), MessagingActivity.class);
-        openMessagingIntent.putExtra("ID", chatroomID);
-        openMessagingIntent.putExtra(MessageBundle.TO_PHONE_NUMBER,
-                (String) message.get(MessageBundle.FROM_PHONE_NUMBER));
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -150,7 +155,7 @@ public class ManagerService extends Service{
 
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
+        Log.d("Notification map", notificationMap.toString());
         mNotificationManager.notify(0, mBuilder.build());
     }
 }

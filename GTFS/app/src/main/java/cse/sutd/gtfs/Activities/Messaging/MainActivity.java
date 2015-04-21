@@ -165,10 +165,11 @@ public class MainActivity extends ActionBarActivity {
         super.onStart();
         updateUI();
         client.resetNotificationMap();
-        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager)getSystemService
+                (Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
         requestContacts();
-        dbMessages.deleteExpiredChats();
+
     }
 
     private void requestContacts(){
@@ -177,14 +178,16 @@ public class MainActivity extends ActionBarActivity {
 
         Callable<String[][]> task = new Callable<String[][]>() {
             public String[][] call() {
-                Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+                Cursor phones = getContentResolver().query(ContactsContract.
+                        CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
                 phones.moveToFirst();
                 ArrayList<ArrayList<String>> phoneNumbers = new ArrayList<>();
                 final int USER_LIMIT = 15;
                 do{
                     ArrayList<String> numberSubList = new ArrayList<>();
                     for(int i = 0; i < USER_LIMIT; i++) {
-                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
+                        String phoneNumber = phones.getString(phones.getColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER)).trim();
                         String h1 = phoneNumber.replaceAll("\\s", "");
                         String h2 = h1.replaceAll(" ", "");
                         h2 = h2.replace("+65", "");
@@ -224,7 +227,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void updateUI(){
-        Cursor chatrooms = dbMessages.getChats();
+        dbMessages.deleteExpiredChats();
+        Cursor chatrooms = dbMessages.getUndeletedChats();
         chatroom = new ArrayList<>();
 
         if (chatrooms != null) {

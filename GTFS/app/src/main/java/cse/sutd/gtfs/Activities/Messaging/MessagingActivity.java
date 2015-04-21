@@ -89,7 +89,6 @@ public class MessagingActivity extends ActionBarActivity {
         dbMessages = MessageDbAdapter.getInstance(this);
         Bundle extras = getIntent().getExtras();
 
-
         if (extras != null) {
             isGroup = extras.getInt(MessageDbAdapter.ISGROUP);
             if (isGroup == 0) {
@@ -98,7 +97,6 @@ public class MessagingActivity extends ActionBarActivity {
                     chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
                 else
                     chatroomID = extras.getString(MessageDbAdapter.CHATID);
-
                 if (chatroomID != null)
                     chatroomName = dbMessages.getUsername(chatroomID);
                 else
@@ -164,6 +162,12 @@ public class MessagingActivity extends ActionBarActivity {
 
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                dbMessages.deleteExpiredChats();
+                if(dbMessages.isChatDeleted(chatroomID)) {
+                    Toast.makeText(MessagingActivity.this,
+                            "Chat has been deleted", Toast.LENGTH_SHORT);
+                    return;
+                }
                 if (msg.getText().toString().trim().length() > 0) {
                     if (sessionToken == null)
                         sessionToken = client.getSESSION_ID();

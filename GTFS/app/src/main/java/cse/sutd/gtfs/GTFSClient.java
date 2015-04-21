@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cse.sutd.gtfs.messageManagement.ManagerService;
@@ -26,12 +27,19 @@ public class GTFSClient extends Application{
 
     private String PROFILE_ID = null;
     private String PROFILE_NAME = null;;
-    private String SESSION_ID = null;;
+    private String SESSION_ID = null;
 
     private Socket client;
     private MessageDbAdapter messageDbAdapter;
     private static GTFSClient instance;
     private Map<String, ArrayList<String>> notificationMap;
+
+    public List<String> getExpiredChatList() {
+        return expiredChatList;
+    }
+
+    private List<String> expiredChatList;
+
     private boolean authenticated = false;
     private boolean listening = false;
 
@@ -70,6 +78,8 @@ public class GTFSClient extends Application{
             e.printStackTrace();
         }
         notificationMap = new HashMap<>();
+        expiredChatList = new ArrayList<>();
+
         startService(new Intent(getApplicationContext(), ManagerService.class));
         startService(new Intent(getApplicationContext(), NetworkService.class));
     }
@@ -123,6 +133,7 @@ public class GTFSClient extends Application{
     }
 
     public void resetNotificationMap() {
-        this.notificationMap = new HashMap<String, ArrayList<String>>();
+        this.notificationMap = new HashMap<>();
+        this.expiredChatList = new ArrayList<>();
     }
 }

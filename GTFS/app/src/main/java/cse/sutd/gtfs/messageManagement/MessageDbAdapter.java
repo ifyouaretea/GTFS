@@ -1,11 +1,15 @@
 package cse.sutd.gtfs.messageManagement;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.sql.SQLException;
@@ -17,7 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import cse.sutd.gtfs.Activities.Messaging.MainActivity;
 import cse.sutd.gtfs.GTFSClient;
+import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 
 
@@ -51,6 +57,7 @@ public class MessageDbAdapter {
     public static final String TITLE = "title";
     public static final String NOTES = "notes";
     public static final String TAGS = "tags";
+    public static final String DELETED = "deleted";
 
     private static final String TAG = "MessageDbAdapter";
 
@@ -71,7 +78,7 @@ public class MessageDbAdapter {
                 "create table chats (_id text primary key, "
                         + "isGroup integer not null, chatName text, " +
                         "lastMessage integer not null, "+
-                        "users string, expiry integer);";
+                        "users string, expiry integer, deleted integer not null);";
 
         private static final String DATABASE_CREATE_CONTACTS =
                 "create table contacts (_id text primary key, "
@@ -123,8 +130,7 @@ public class MessageDbAdapter {
     /**
      *
      * @param message
-     * @return -1 if not inserted, 1 if inserted correctly,
-     * 2 if the chat been inserted has not existed previously
+     * @return -1 if not inserted, 1 if inserted correctly
      */
     public int storeMessage(Map message){
 
@@ -138,9 +144,8 @@ public class MessageDbAdapter {
         body = body.replaceAll("'", "''");
         Log.d("Database store", message.toString());
 
-        Cursor messageExists = mDb.rawQuery(String.format("SELECT _id FROM messages WHERE " +
-                "chatID='%s' AND timestamp='%s' AND from_phone_number='%s' AND body='%s';"
-                ,chatID, timestamp, from_phone_number, body), null);
+        Cursor messageExists = mDb.rawQuery(String.format("SELECT _id FROM messages " +
+                "WHERE _id='%s';", messageID), null);
 
         //check if a copy of the message is already in the database
         if (messageExists.getCount() != 0) {
@@ -148,15 +153,18 @@ public class MessageDbAdapter {
             return -1;
         }
 
-        boolean chatCreated = createSingleChat(message);
-        if(!chatCreated) {
-            String updateSQL =
-                    "UPDATE chats SET " + LAST_MESSAGE + " = '" +
-                            messageID +
-                            "' WHERE _id = '" + chatID + "'";
+        Cursor groupExists = mDb.rawQuery(String.format("SELECT _id FROM messages " +
+                "WHERE chatID='%s';", chatID), null);
 
-            mDb.execSQL(updateSQL);
+        //check if a copy of the message is already in the database
+        if (groupExists.getCount() < 1) {
+            groupExists.close();
+            return -1;
         }
+
+        String updateSQL = "UPDATE chats SET " + LAST_MESSAGE + " = '" + messageID +
+                "' WHERE _id = '" + chatID + "'";
+        mDb.execSQL(updateSQL);
 
         ContentValues messageValues = new ContentValues();
         messageValues.put(CHATID, chatID);
@@ -174,8 +182,7 @@ public class MessageDbAdapter {
         if (mDb.insert(MESSAGES, null, messageValues) < 0)
             return -1;
 
-        //if inserting succeeds, return 2 if the chat is new, 1 if it's not new
-        return chatCreated ? 2 : 1;
+        return 1;
     }
 
     public boolean createSingleChat(Map message){
@@ -197,6 +204,7 @@ public class MessageDbAdapter {
         chatValues.put(CHATNAME, from_phone_number);
         chatValues.put(LAST_MESSAGE, chatID);
         chatValues.put(ISGROUP, 0);
+        chatValues.put(DELETED, 0);
         if (mDb.insert(CHATS, null, chatValues) <= 0)
             return false;
 
@@ -231,6 +239,11 @@ public class MessageDbAdapter {
                 "chats ORDER BY lastMessage DESC", null);
     }
 
+    public Cursor getUndeletedChats(){
+        return mDb.rawQuery("SELECT _id, chatName, isGroup FROM " +
+                "chats WHERE deleted= 0 ORDER BY lastMessage DESC ", null);
+    }
+
     public Cursor getContacts(){
         return mDb.rawQuery("SELECT _id, name FROM " +
                 "contacts", null);
@@ -240,7 +253,6 @@ public class MessageDbAdapter {
         return mDb.rawQuery("SELECT _id, name FROM " +
                 "contacts WHERE _id = '"+phoneNumber+"'", null);
     }
-
 
     public long createGroupChat(Map message){
         String chatID = (String) message.get(MessageBundle.CHATROOMID);
@@ -259,6 +271,7 @@ public class MessageDbAdapter {
         chatValues.put(USERS, users);
         chatValues.put(LAST_MESSAGE, chatID);
         chatValues.put(EXPIRY, expiry);
+        chatValues.put(DELETED, 0);
         return mDb.insert(CHATS, null, chatValues);
     }
 
@@ -285,23 +298,22 @@ public class MessageDbAdapter {
         }
     }
 
-    public long deleteGroupChat(String chatID){
-        return mDb.delete(CHATS, ROWID + "=" + chatID, null);
+    public void deleteGroupChat(String chatID){
+        mDb.execSQL(String.format("UPDATE chats SET deleted=1 WHERE _id='%s'", chatID));
     }
 
     /**
-     *
      * @return an array of the IDs removed
      */
     public String[] deleteExpiredChats(){
         long currentTime = System.currentTimeMillis();
-        Cursor expiredChats = mDb.rawQuery("SELECT _id FROM chats WHERE expiry <= "
-                + currentTime, null);
+        Cursor expiredChats = mDb.rawQuery("SELECT _id FROM chats WHERE deleted = 0 AND expiry <> 0"
+                +" AND expiry <= "+ currentTime, null);
         if(expiredChats == null)
             return null;
         if (expiredChats.getCount() == 0) {
             expiredChats.close();
-            return null;
+            return new String[]{};
         }
         expiredChats.moveToFirst();
 
@@ -312,6 +324,33 @@ public class MessageDbAdapter {
             deleteGroupChat(expiredChats.getString(0));
         }while(expiredChats.moveToNext());
         expiredChats.close();
+
+        GTFSClient client = ((GTFSClient) mContext.getApplicationContext());
+        List<String> applicationExpiredList = client.getExpiredChatList();
+
+        for(String expiredChat : expiredArray)
+            applicationExpiredList.add(getChatroomName(expiredChat));
+        String body = "";
+
+        for(String expiredChat: applicationExpiredList)
+            body += expiredChat + "\n";
+        body = body.substring(0, body.length()-1);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(mContext)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("Chats have expired")
+                        .setContentText(body)
+                        .setContentIntent(PendingIntent.getActivity(mContext.getApplicationContext()
+                                , 0, new Intent(client, MainActivity.class),
+                                PendingIntent.FLAG_ONE_SHOT))
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(body));
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(1, mBuilder.build());
+
         return expiredArray;
     }
 
@@ -329,7 +368,7 @@ public class MessageDbAdapter {
 
         result.moveToFirst();
         String returnValue = result.getString(0);
-        boolean isGroup = result.getInt(1) == 1 ? true : false;
+        boolean isGroup = result.getInt(1) == 1;
         result.close();
         if (isGroup)
             return returnValue;
@@ -349,6 +388,41 @@ public class MessageDbAdapter {
             usernameResult.close();
             return returnValue;
         }
+    }
+
+    public boolean isGroup(String chatID){
+        Cursor result = mDb.rawQuery(String.format("SELECT isGroup FROM chats " +
+                "WHERE _id = '%s'", chatID),null);
+        if (result == null)
+            return false;
+        if (result.getCount() < 1) {
+            result.close();
+            return false;
+        }
+
+        result.moveToFirst();
+        int isGroup = result.getInt(0);
+        result.close();
+        return isGroup == 1;
+    }
+
+    public boolean isChatDeleted(String chatID){
+        Cursor result = mDb.rawQuery("SELECT _id FROM chats WHERE deleted = 1",null);
+        if(result.getCount() < 1) {
+            result.close();
+            return false;
+        }
+
+        boolean isDeleted = false;
+        result.moveToFirst();
+        do {
+            if (result.getString(0).equals(chatID)){
+                isDeleted = true;
+                break;
+            }
+        }while(result.moveToNext());
+        result.close();
+        return isDeleted;
     }
 
     public String getChatroomID(String chatName){
@@ -401,6 +475,7 @@ public class MessageDbAdapter {
         unreadMessages.close();
         return returnValue;
     }
+
 /*
     public String getUsername(String chatID){
         Cursor userCursor = mDb.rawQuery(String.format("SELECT users FROM chats WHERE" +
@@ -473,13 +548,15 @@ public class MessageDbAdapter {
             String chatName = (String) chatroom.get(MessageBundle.CHATROOM_NAME);
             String users = Arrays.toString((Object[])chatroom.get(ROOM_USERS));
             int isGroup = (Boolean) chatroom.get("group") ? 1 : 0;
+            long expiry = Long.parseLong((String) chatroom.get(MessageBundle.EXPIRY));
 
             ContentValues chatValues = new ContentValues();
             chatValues.put(ROWID, chatID);
             chatValues.put(CHATNAME, chatName);
             chatValues.put(USERS, users);
             chatValues.put(LAST_MESSAGE, chatID);
-
+            chatValues.put(DELETED, 0);
+            chatValues.put(EXPIRY, expiry);
             chatValues.put(ISGROUP, isGroup);
             mDb.insert(CHATS, null, chatValues);
         }
