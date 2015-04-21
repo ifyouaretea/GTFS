@@ -10,10 +10,11 @@
         android:id="@+id/userAndMessage"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/box_left" >
+
         <TextView
             android:id="@+id/textUser"
             android:text="Nikhil"
@@ -21,14 +22,28 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             style="@android:style/TextAppearance.Holo.Large"/>
-        <TextView
-            android:id="@+id/textMessage"
-            android:text="nooooo hello doo"
-            android:maxWidth="800px"
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@android:style/TextAppearance.Holo.Medium"
-            android:textColor="#ff000000" />
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/textMessage"
+                android:text="nooooo hello doo"
+                android:maxWidth="800px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@android:style/TextAppearance.Holo.Medium"
+                android:textColor="#ff000000" />
+
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                android:id="@+id/circle"
+                android:src="@drawable/ic_tag_circle"
+                android:visibility="visible"/>
+
+        </LinearLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

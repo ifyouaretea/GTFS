@@ -12,6 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+<<<<<<< HEAD
+=======
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+>>>>>>> 6f3870bdd681a9dc1be0455353bce7e1b73348d3
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -126,6 +131,17 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
             msg.setText(formattedText);
         }else
                 msg.setText(nonFormatedText);
+
+        ImageView tagCircle = (ImageView) rowView.findViewById(R.id.circle);
+
+        String tag = ((String) message.getMessage().get(MessageBundle.TAGS)).toLowerCase();
+        if(tag.trim().equals("important"))
+            tagCircle.setColorFilter(Color.rgb(85,0,0));
+        else if(tag.trim().equals("normal"))
+            tagCircle.setVisibility(View.GONE);
+        else if(tag.trim().equals("nonsense"))
+            tagCircle.setColorFilter(Color.rgb(255, 224, 18));
+
 
         TextView time = (TextView) rowView.findViewById(R.id.textTime);
         time.setText((String)values.get(position).getMessage().get(MessageBundle.TIMESTAMP));

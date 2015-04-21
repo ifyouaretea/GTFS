@@ -1,5 +1,6 @@
 package cse.sutd.gtfs.messageManagement;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -17,8 +18,10 @@ import com.cedarsoftware.util.io.JsonWriter;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
+import cse.sutd.gtfs.Activities.Messaging.MainActivity;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
 import cse.sutd.gtfs.R;
@@ -71,20 +74,19 @@ public class ManagerService extends Service{
         String messageType = (String) message.get(MessageBundle.TYPE);
 
         if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)){
-            dbAdapter.storeMessage(message);
-
-            //TODO: fix possible synchronisation problems
-            Log.d("DB message insertion", message.toString());
+            boolean successful = dbAdapter.storeMessage(message) > 0;
             if(userID == null)
                 userID = ((GTFSClient)getApplication()).getID();
-            if(!message.get(MessageBundle.FROM_PHONE_NUMBER).equals(userID)) {
+            if(!message.get(MessageBundle.FROM_PHONE_NUMBER).equals(userID) && successful) {
                 addToNotification(message);
             }
         }else if(messageType.equals(MessageBundle.messageType.ROOM_INVITATION.toString()) )
             dbAdapter.createGroupChat(message);
 
-        else if(messageType.equals(MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString()))
+        else if(messageType.equals(MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString())) {
             dbAdapter.createSingleChat(message);
+            Log.d("Chat users", Arrays.toString((Object[])message.get(MessageBundle.USERS)));
+        }
 
         else if(messageType.equals(MessageBundle.messageType.GET_ROOMS.toString()))
             dbAdapter.importChatrooms(message);
@@ -116,15 +118,28 @@ public class ManagerService extends Service{
             notificationMap.put(chatroomID,
                     new ArrayList<String>());
 
-        notificationMap.get(chatroomID).add((String)message.get(MessageBundle.MESSAGE));
+        notificationMap.get(chatroomID).add(dbAdapter.getUsernameFromNumber((String)
+                message.get(MessageBundle.FROM_PHONE_NUMBER))+": " +
+                message.get(MessageBundle.MESSAGE));
 
         String title, body;
+        Intent openMessagingIntent;
+
         if(notificationMap.keySet().size() == 1) {
             title = dbAdapter.getChatroomName(chatroomID);
+            if(title == null)
+                Log.d("Null title", chatroomID);
             StringBuilder bodyBuilder = new StringBuilder();
             for (String s: notificationMap.get(chatroomID))
                 bodyBuilder.append(s + "\n");
             body = bodyBuilder.toString();
+
+            openMessagingIntent = new Intent(getApplicationContext(), MessagingActivity.class);
+            openMessagingIntent.putExtra("ID", chatroomID);
+            openMessagingIntent.putExtra(MessageBundle.TO_PHONE_NUMBER,
+                    (String) message.get(MessageBundle.FROM_PHONE_NUMBER));
+            openMessagingIntent.putExtra(MessageDbAdapter.ISGROUP,
+                    dbAdapter.isGroup(chatroomID) ? 1 : 0);
         }
         else{
             title = String.format("Messages from %d chats", notificationMap.keySet().size());
@@ -133,26 +148,27 @@ public class ManagerService extends Service{
                 for(String s2 : notificationMap.get(s1))
                     bodyBuilder.append(s2 + "\n");
             body = bodyBuilder.toString();
+            openMessagingIntent = new Intent(getApplicationContext(), MainActivity.class);
         }
-
-        Intent openMessagingIntent = new Intent(getApplicationContext(), MessagingActivity.class);
-        openMessagingIntent.putExtra("ID", chatroomID);
-        openMessagingIntent.putExtra(MessageBundle.TO_PHONE_NUMBER,
-                (String) message.get(MessageBundle.FROM_PHONE_NUMBER));
+        String tag = ((String)message.get(MessageBundle.TAGS)).trim().toLowerCase();
+        int priority = tag.equals("important") ? Notification.PRIORITY_HIGH :
+                Notification.PRIORITY_DEFAULT;
+        Log.d("Message tags", tag);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(title)
-                        .setContentText(body)
-                        .setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0,
-                                openMessagingIntent, PendingIntent.FLAG_ONE_SHOT))
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(body));
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0,
+                        openMessagingIntent, PendingIntent.FLAG_ONE_SHOT))
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(body))
+                .setPriority(priority);
 
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
+        Log.d("Notification map", notificationMap.toString());
         mNotificationManager.notify(0, mBuilder.build());
     }
 }

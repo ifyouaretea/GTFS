@@ -49,6 +49,12 @@ public class ContactsActivity extends ActionBarActivity {
     ContactAdapter contactAdapter;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        requestContacts();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

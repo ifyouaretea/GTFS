@@ -99,7 +99,6 @@ public class MessagingActivity extends ActionBarActivity {
                     chatroomID = dbMessages.getChatIDForUser(toPhoneNumber);
                 else
                     chatroomID = extras.getString(MessageDbAdapter.CHATID);
-
                 if (chatroomID != null)
                     chatroomName = dbMessages.getUsername(chatroomID);
                 else
@@ -166,6 +165,12 @@ public class MessagingActivity extends ActionBarActivity {
 
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                dbMessages.deleteExpiredChats();
+                if(dbMessages.isChatDeleted(chatroomID)) {
+                    Toast.makeText(MessagingActivity.this,
+                            "Chat has been deleted", Toast.LENGTH_SHORT);
+                    return;
+                }
                 if (msg.getText().toString().trim().length() > 0) {
                     if (sessionToken == null)
                         sessionToken = client.getSESSION_ID();
@@ -251,11 +256,13 @@ public class MessagingActivity extends ActionBarActivity {
         downSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (searchPosition <= 0)
-                    searchPosition = adapter.getSearchResult().size() - 1;
-                else
-                    searchPosition--;
-                moveToSearch();
+                synchronized (adapter) {
+                    if (searchPosition <= 0)
+                        searchPosition = adapter.getSearchResult().size() - 1;
+                    else
+                        searchPosition--;
+                    moveToSearch();
+                }
             }
         });
 
@@ -263,11 +270,13 @@ public class MessagingActivity extends ActionBarActivity {
         upSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (searchPosition >= adapter.getSearchResult().size() - 1)
-                    searchPosition = 0;
-                else
-                    searchPosition++;
-                moveToSearch();
+                synchronized (adapter) {
+                    if (searchPosition >= adapter.getSearchResult().size() - 1)
+                        searchPosition = 0;
+                    else
+                        searchPosition++;
+                    moveToSearch();
+                }
             }
         });
 
@@ -378,7 +387,6 @@ public class MessagingActivity extends ActionBarActivity {
             for (Object user : (Object[]) message.get(MessageBundle.USERS)) {
                 if (user.equals(toPhoneNumber)) {
                     chatroomID = (String) message.get(MessageBundle.CHATROOMID);
-                    Log.d("Room id updated", chatroomID);
                     break;
                 }
             }
@@ -416,6 +424,7 @@ public class MessagingActivity extends ActionBarActivity {
                 msgBundles.close();
             }
         }
+        ((GTFSClient) getApplicationContext()).resetNotificationMap();
         adapter.notifyDataSetChanged();
     }
 
