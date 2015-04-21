@@ -70,6 +70,11 @@ public class MessageDbAdapter {
                     + "title text not null, " +
                     "body text not null, chatID text not null, noteCreator text);";
 
+    private static final String DATABASE_CREATE_EVENTS =
+            "create table events (_id text primary key, "
+                    + "eventName text not null, eventDate text not null, chatID text," +
+                    " votes text);";
+
     private static MessageDbAdapter instance;
     private static class DatabaseHelper extends SQLiteOpenHelper {
         private static final String DATABASE_CREATE_MESSAGES =
@@ -87,11 +92,6 @@ public class MessageDbAdapter {
         private static final String DATABASE_CREATE_CONTACTS =
                 "create table contacts (_id text primary key, "
                         + "name text not null, chatID text);";
-
-        private static final String DATABASE_CREATE_EVENTS =
-                "create table events (_id text primary key, "
-                        + "eventName text not null, eventDate text not null, chatID text," +
-                        " votes text);";
 
         private static final String DATABASE_NAME = "data";
 
@@ -716,6 +716,8 @@ public class MessageDbAdapter {
     }
 
     public void importEvents(Map message){
+        mDb.execSQL("DROP TABLE IF EXISTS events");
+        mDb.execSQL(DATABASE_CREATE_EVENTS);
         Object[] events = (Object[])message.get(MessageBundle.EVENTS);
         for(Object event : events){
             Map eventMap = (Map) event;
