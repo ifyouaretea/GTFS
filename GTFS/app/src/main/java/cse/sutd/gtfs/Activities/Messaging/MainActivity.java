@@ -227,7 +227,9 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void updateUI(){
-        dbMessages.deleteExpiredChats();
+        try {
+            dbMessages.deleteExpiredChats();
+        }catch (NullPointerException e){}
         Cursor chatrooms = dbMessages.getUndeletedChats();
         chatroom = new ArrayList<>();
 

@@ -58,9 +58,9 @@ public class MessageDbAdapter {
     public static final String NOTES = "notes";
     public static final String TAGS = "tags";
 
-    public static final String EVENT_NAME = "eventName";
+    public static final String EVENT_NAME = "event_name";
     public static final String EVENT_ID = "event_id";
-    public static final String EVENT_DATE = "eventDate";
+    public static final String EVENT_DATE = "event_datetime";
     public static final String VOTES = "votes";
     public static final String DELETED = "deleted";
 
@@ -740,7 +740,7 @@ public class MessageDbAdapter {
         eventValues.put(VOTES, Arrays.toString(votes));
         eventValues.put(EVENT_DATE, eventDate);
 //        eventValues.put(HAS_VOTED, 0);
-        Log.d("Insert Event",event.get(MessageBundle.TYPE).toString());
+//        Log.d("Insert Event",event.get(MessageBundle.TYPE).toString());
         mDb.insert(EVENTS, null, eventValues);
     }
 
@@ -755,7 +755,7 @@ public class MessageDbAdapter {
     }*/
 
     public String getEventName(String eventID){
-        Cursor result = mDb.rawQuery(String.format("SELECT eventName FROM " +
+        Cursor result = mDb.rawQuery(String.format("SELECT event_name FROM " +
                 "events WHERE _id ='%s'",eventID), null);
         if(result == null)
             return null;
@@ -770,7 +770,7 @@ public class MessageDbAdapter {
     }
 
     public Cursor getEventsForChat(String chatID){
-        return mDb.rawQuery(String.format("SELECT _id, eventName, eventDate, votes FROM " +
+        return mDb.rawQuery(String.format("SELECT _id, event_name, event_datetime, votes FROM " +
                 "events WHERE chatID ='%s'",chatID), null);
 
     }
