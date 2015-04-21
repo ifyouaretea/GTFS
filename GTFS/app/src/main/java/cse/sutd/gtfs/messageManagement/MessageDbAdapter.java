@@ -58,9 +58,9 @@ public class MessageDbAdapter {
     public static final String NOTES = "notes";
     public static final String TAGS = "tags";
 
-    public static final String EVENT_NAME = "event_name";
+    public static final String EVENT_NAME = "eventName";
     public static final String EVENT_ID = "event_id";
-    public static final String EVENT_DATE = "event_datetime";
+    public static final String EVENT_DATE = "eventDate";
     public static final String VOTES = "votes";
     public static final String DELETED = "deleted";
 
@@ -93,11 +93,6 @@ public class MessageDbAdapter {
         private static final String DATABASE_CREATE_CONTACTS =
                 "create table contacts (_id text primary key, "
                         + "name text not null, chatID text);";
-
-        private static final String DATABASE_CREATE_EVENTS =
-                "create table events (_id text primary key, "
-                        + "eventName text not null, event_datetime text not null, chatID text," +
-                        " votes text);";
 
         private static final String DATABASE_NAME = "data";
 
@@ -718,18 +713,20 @@ public class MessageDbAdapter {
         mDb.execSQL("DROP TABLE IF EXISTS events");
         mDb.execSQL(DATABASE_CREATE_EVENTS);
         Object[] events = (Object[])message.get(MessageBundle.EVENTS);
+
         for(Object event : events){
             Map eventMap = (Map) event;
             insertEvent(eventMap);
+
         }
     }
 
     public void insertEvent(Map event){
         String id = (String) event.get(MessageBundle.EVENT_ID);
-        String eventName = (String) event.get(MessageBundle.EVENT_DATETIME);
+        String eventName = (String) event.get(MessageBundle.EVENT_NAME);
         String chatID = (String) event.get(MessageBundle.CHATROOMID);
         String eventDate = (String) event.get(MessageBundle.EVENT_DATETIME);
-        String[] votes = (String[]) event.get(MessageBundle.VOTES);
+        Object[] votes = (Object[]) event.get(MessageBundle.VOTES);
 
         ContentValues eventValues = new ContentValues();
         eventValues.put(ROWID, id);
@@ -764,5 +761,11 @@ public class MessageDbAdapter {
         String eventName = result.getString(0);
         result.close();
         return eventName;
+    }
+
+    public Cursor getEventsForChat(String chatID){
+        return mDb.rawQuery(String.format("SELECT _id, eventName, eventDate, votes FROM " +
+                "events WHERE chatID ='%s'",chatID), null);
+
     }
 }

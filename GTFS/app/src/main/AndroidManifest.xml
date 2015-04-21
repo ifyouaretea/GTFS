@@ -103,6 +103,10 @@
             android:label="@string/title_activity_group_info"
             android:parentActivityName=".Activities.Messaging.MessagingActivity" >
         </activity>
+        <activity
+            android:name=".Activities.Group.EventInfoActivity"
+            android:label="@string/title_activity_event_info" >
+        </activity>
     </application>
 
 </manifest>

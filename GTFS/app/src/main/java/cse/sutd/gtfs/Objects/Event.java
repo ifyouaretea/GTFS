@@ -42,8 +42,8 @@ public class Event {
         this.EVENT_DATE = EVENT_DATE;
     }
 
-    public String getVoters() {
-        return voters.toArray(new String[voters.size()]).toString();
+    public ArrayList<String> getVoters() {
+        return voters;
     }
 
     public void setVoters(ArrayList<String> voters) {

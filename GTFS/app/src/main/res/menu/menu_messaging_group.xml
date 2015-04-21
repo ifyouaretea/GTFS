@@ -12,6 +12,9 @@
         android:orderInCategory="0"
         android:title="Search"/>
 
+    <item android:id="@+id/view_events" android:title="Events"
+         app:showAsAction="never" />
+
     <item android:id="@+id/message_events" app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_calendar" android:orderInCategory="1"
         android:title="New Event"/>

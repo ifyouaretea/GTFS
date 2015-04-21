@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import cse.sutd.gtfs.Activities.Group.EventInfoActivity;
 import cse.sutd.gtfs.Activities.Group.EventsActivity;
 import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Activities.Notes.NoteListActivity;
@@ -360,6 +361,11 @@ public class MessagingActivity extends ActionBarActivity {
                     }
                 }
                 popup.show();
+                return true;
+            case R.id.view_events:
+                Intent eventinfo = new Intent(this, EventInfoActivity.class);
+                eventinfo.putExtra(GroupInfoActivity.CHAT_ID_KEY, chatroomID);
+                startActivity(eventinfo);
                 return true;
         }
         return super.onOptionsItemSelected(item);
