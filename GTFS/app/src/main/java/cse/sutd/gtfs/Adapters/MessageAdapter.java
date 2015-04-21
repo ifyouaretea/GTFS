@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,14 +39,13 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
     private ArrayList<MessageBundle> values;
     private ArrayList<MessageBundle> originalValues;
     private String searchTerm = "";
-    private List<String> tags;
     private ListView target;
+    private List<Integer> searchResult;
+    private Set<String> filterTags;
 
     public List<Integer> getSearchResult() {
         return searchResult;
     }
-
-    private List<Integer> searchResult;
 
 
     private final String user;
@@ -64,10 +64,11 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
         this.isGroup = isGroup;
         this.target = target;
         this.searchResult = new ArrayList<>();
-        extractTags();
+        this.filterTags = new HashSet<>();
+//        extractTags();
     }
 
-    private void extractTags(){
+/*    private void extractTags(){
         tags = new LinkedList<>();
         Set<String> rawTags = new HashSet<>();
         String tag;
@@ -82,7 +83,7 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
             for (String t: tagArray.replaceAll("\\[", "").replaceAll("\\]", "").split(","))
                 tags.add(t);
         }
-    }
+    }*/
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         MessageBundle message = this.getItem(position);
@@ -170,6 +171,15 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
         return searchFilter;
     }
 
+    public void applyTag(String tag){
+        filterTags.add(tag.toLowerCase());
+        getFilter().filter(filterTags.toString());
+    }
+
+    public void removeTag(String tag){
+        filterTags.remove(tag.toLowerCase());
+        getFilter().filter(filterTags.toString());
+    }
     @Override
     public void notifyDataSetChanged() {
         searchResult.clear();
@@ -179,39 +189,36 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
             searchResult.add(i);
         }
         super.notifyDataSetChanged();
-        getTags();
         if(originalValues.size() < values.size())
             originalValues = new ArrayList<>(values);
-    }
-
-    public List<String> getTags(){
-        return tags;
     }
 
     private class SearchFilter extends Filter {
 
         @Override
-        protected FilterResults performFiltering(CharSequence searchedTag) {
+        protected FilterResults performFiltering(CharSequence searchedTags) {
 
             FilterResults results = new FilterResults();
-            if (searchedTag == null || searchedTag.length() == 0) {
+            String[] searchedTagArray = searchedTags.toString().replaceAll("\\[", "")
+                    .replaceAll("\\]", "").split(",");
+
+            if (searchedTagArray == null || searchedTagArray.length == 0 ||
+                    "[]".equals(searchedTags.toString())) {
 //                ArrayList<MessageBundle> list = new ArrayList<>(originalValues);
                 results.values = originalValues;
                 results.count = originalValues.size();
             } else {
                 final ArrayList<MessageBundle> newValues = new ArrayList<>();
-
-                for (MessageBundle messageBundle : values) {
-                    final String[] messageTags = ((String)messageBundle.getMessage().
-                            get(MessageBundle.TAGS)).replaceAll("\\[", "").replaceAll("\\[", "")
-                            .split(",");
-                    for(String messageTag : messageTags){
-                        if(messageTag.trim().equals(searchedTag)) {
-                            newValues.add(messageBundle);
-                            break;
+                for (MessageBundle messageBundle : originalValues) {
+                    String messageTag = (String)messageBundle.getMessage().
+                            get(MessageBundle.TAGS);
+                        for(String searchedTag : searchedTagArray) {
+                            if (messageTag.toLowerCase().trim().equals(searchedTag.trim())) {
+                                newValues.add(messageBundle);
+                                break;
+                            }
                         }
                     }
-                }
                 results.values = newValues;
                 results.count = newValues.size();
             }
@@ -226,7 +233,6 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
             } else {
                 notifyDataSetInvalidated();
             }
-
         }
     };
 }

@@ -250,7 +250,7 @@ public class MessageDbAdapter {
 
         isGroup = 1;
 
-        int expiry = Integer.parseInt((String) message.get(MessageBundle.EXPIRY));
+        long expiry = Long.parseLong((String) message.get(MessageBundle.EXPIRY));
 
         ContentValues chatValues = new ContentValues();
         chatValues.put(ISGROUP, isGroup);
@@ -583,8 +583,9 @@ public class MessageDbAdapter {
     }
 
     public List<String> getTagsForChat(String chatID){
-        Cursor allChatTags = mDb.rawQuery("SELECT tags FROM messages WHERE chatID = '%s' AND" +
-                "tags IS NOT NULL", null);
+        Cursor allChatTags = mDb.rawQuery(String.format("SELECT tags FROM messages WHERE chatID = " +
+                "'%s' AND" + " tags IS NOT NULL", chatID), null);
+
         if(allChatTags == null)
             return null;
         if(allChatTags.getCount() < 1) {
