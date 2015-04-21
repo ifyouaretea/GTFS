@@ -407,7 +407,8 @@ public class MessagingActivity extends ActionBarActivity {
         String messageType = (String) message.get(MessageBundle.TYPE);
         if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)) {
             updateUI();
-        } else if (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString().equals(messageType)){
+        } else if (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString().equals(messageType)
+                && chatroomID == null && isGroup == 0){
             for (Object user : (Object[]) message.get(MessageBundle.USERS)) {
                 if (user.equals(toPhoneNumber)) {
                     chatroomID = (String) message.get(MessageBundle.CHATROOMID);
@@ -415,19 +416,28 @@ public class MessagingActivity extends ActionBarActivity {
                     return;
                 }
             }
+<<<<<<< HEAD
+        } else if (MessageBundle.messageType.ROOM_INVITATION.toString().equals(messageType)
+                && chatroomID == null && isGroup == 1) {
+=======
         } else if (MessageBundle.messageType.ROOM_INVITATION.toString().equals(messageType)) {
             chatroomName = dbMessages.getUsername((String) message.get(MessageBundle.CHATROOMID));
+>>>>>>> bac04b466601064c74f878d075d96c0fa34a0e09
             if (chatroomName.equals(message.get(MessageBundle.CHATROOM_NAME))) {
                 chatroomID = (String) message.get(MessageBundle.CHATROOMID);
                 Log.d("Room id updated", chatroomID);
             }
         }else if (MessageBundle.messageType.EVENT_CREATED.toString().equals(messageType)) {
+<<<<<<< HEAD
+            final LinearLayout newEvent = (LinearLayout) findViewById(R.id.eventLayout);
+=======
             try {
                 dbMessages.insertEvent(message);
             }catch(SQLiteConstraintException e){
 
             }
             final LinearLayout newEvent = (LinearLayout) findViewById(R.id.eventLayout); //TODO: check eventLayout's id
+>>>>>>> bac04b466601064c74f878d075d96c0fa34a0e09
             TextView eventDescription = (TextView) newEvent.findViewById(R.id.eventDesc);
             eventDescription.setText((String) message.get(MessageBundle.EVENT_NAME));
             final String eventID = (String) message.get(MessageBundle.EVENT_ID);
