@@ -37,6 +37,7 @@ public class EditNoteActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        client = (GTFSClient) getApplicationContext();
         if(client.getID() == null){
             Intent intent = new Intent(this, LoginActivityCog.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
