@@ -101,7 +101,7 @@ public class MessageDbAdapter {
 
         private static final String DATABASE_NAME = "data";
 
-        private static final int DATABASE_VERSION = 3;
+        private static final int DATABASE_VERSION = 2;
 
         DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
