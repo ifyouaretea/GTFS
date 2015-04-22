@@ -476,7 +476,7 @@ public class MessagingActivity extends ActionBarActivity {
                 MessageBundle a = new MessageBundle(client.getID(),
                         sessionToken, MessageBundle.messageType.TEXT);
                 String name = dbMessages.getUsername(fromPhoneNumber);
-                a.putMessage("You are attending "+(String)dbMessages.getEventName(MessageBundle.EVENT_ID));
+                a.putMessage("You are attending "+(String)dbMessages.getEventNameByID((String) message.get(MessageBundle.EVENT_ID)));
                 a.putMessageID(message.get("vote_timestamp").toString());
                 a.putChatroomID(message.get(MessageBundle.CHATROOMID).toString());
                 a.putFromPhoneNumber(message.get(MessageBundle.FROM_PHONE_NUMBER).toString());
@@ -487,7 +487,7 @@ public class MessagingActivity extends ActionBarActivity {
                 MessageBundle a = new MessageBundle(client.getID(),
                         sessionToken, MessageBundle.messageType.TEXT);
                 String name = dbMessages.getUsername(fromPhoneNumber);
-                a.putMessage(name+" is attending "+(String)dbMessages.getEventName(MessageBundle.EVENT_ID));
+                a.putMessage(name+" is attending "+(String)dbMessages.getEventNameByID(MessageBundle.EVENT_ID));
                 a.putMessageID(message.get("vote_timestamp").toString());
                 a.putChatroomID(message.get(MessageBundle.CHATROOMID).toString());
                 a.putFromPhoneNumber(message.get(MessageBundle.FROM_PHONE_NUMBER).toString());
@@ -502,7 +502,7 @@ public class MessagingActivity extends ActionBarActivity {
                 MessageBundle a = new MessageBundle(client.getID(),
                         sessionToken, MessageBundle.messageType.TEXT);
                 String name = dbMessages.getUsername(fromPhoneNumber);
-                a.putMessage("You are not attending "+(String)dbMessages.getEventName(MessageBundle.EVENT_ID));
+                a.putMessage("You are not attending "+(String)dbMessages.getEventNameByID(MessageBundle.EVENT_ID));
                 a.putMessageID(message.get("vote_timestamp").toString());
                 a.putChatroomID(message.get(MessageBundle.CHATROOMID).toString());
                 a.putFromPhoneNumber(message.get(MessageBundle.FROM_PHONE_NUMBER).toString());
@@ -513,7 +513,7 @@ public class MessagingActivity extends ActionBarActivity {
                 MessageBundle a = new MessageBundle(client.getID(),
                         sessionToken, MessageBundle.messageType.TEXT);
                 String name = dbMessages.getUsername(fromPhoneNumber);
-                a.putMessage(name+" is not attending "+(String)dbMessages.getEventName(MessageBundle.EVENT_ID));
+                a.putMessage(name+" is not attending "+(String)dbMessages.getEventNameByID(MessageBundle.EVENT_ID));
                 a.putMessageID(message.get("vote_timestamp").toString());
                 a.putChatroomID(message.get(MessageBundle.CHATROOMID).toString());
                 a.putFromPhoneNumber(message.get(MessageBundle.FROM_PHONE_NUMBER).toString());

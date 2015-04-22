@@ -101,7 +101,7 @@ public class MessageDbAdapter {
 
         private static final String DATABASE_NAME = "data";
 
-        private static final int DATABASE_VERSION = 2;
+        private static final int DATABASE_VERSION = 3;
 
         DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -754,7 +754,7 @@ public class MessageDbAdapter {
                 "eventDate FROM events WHERE chatID='%s'",  chatID),null);
     }*/
 
-    public String getEventName(String eventID){
+    public String getEventNameByID(String eventID){
         Cursor result = mDb.rawQuery(String.format("SELECT event_name FROM " +
                 "events WHERE _id ='%s'",eventID), null);
         if(result == null)
@@ -767,6 +767,21 @@ public class MessageDbAdapter {
         String eventName = result.getString(0);
         result.close();
         return eventName;
+    }
+
+    public String getEventIDByName(String eventName){
+        Cursor result = mDb.rawQuery(String.format("SELECT _id FROM " +
+                "events WHERE event_name ='%s'",eventName), null);
+        if(result == null)
+            return null;
+        if(result.getCount() < 1){
+            result.close();
+            return null;
+        }
+        result.moveToFirst();
+        String eventID = result.getString(0);
+        result.close();
+        return eventID;
     }
 
     public Cursor getEventsForChat(String chatID){

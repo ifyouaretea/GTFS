@@ -64,15 +64,18 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        client = (GTFSClient) getApplicationContext();
+        SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
+        editor = prefs.edit();
+        dbMessages = MessageDbAdapter.getInstance(this);
+
         IntentFilter receivedIntentFilter = new IntentFilter(ManagerService.UPDATE_UI);
 
         MessageBroadcastReceiver broadcastReceiver = new MessageBroadcastReceiver();
         LocalBroadcastManager.getInstance(getApplicationContext())
                 .registerReceiver(broadcastReceiver, receivedIntentFilter);
 
-        client = (GTFSClient) getApplicationContext();
-        SharedPreferences prefs = getSharedPreferences(client.PREFS_NAME, MODE_PRIVATE);
-        editor = prefs.edit();
+
 
         if(client.getID() == null){
             Intent intent = new Intent(this, LoginActivityCog.class);
@@ -89,7 +92,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         Log.d("user", prefs.getString("userid", null));
 
-        dbMessages = MessageDbAdapter.getInstance(this);
+
         listview = (ListView) findViewById(R.id.chatList);
 
         updateUI();
