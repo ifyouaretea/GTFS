@@ -124,7 +124,8 @@ public class MessageAdapter extends ArrayAdapter<MessageBundle> implements Filte
         }
 
         TextView msg = (TextView) rowView.findViewById(R.id.textMessage);
-        String nonFormatedText = (String)values.get(position).getMessage().get(MessageBundle.MESSAGE);
+        String nonFormatedText = ((String)values.get(position).getMessage()
+                .get(MessageBundle.MESSAGE)).replaceAll("''", "'");
 
         int searchPosition;
 
