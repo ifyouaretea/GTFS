@@ -68,11 +68,11 @@ public class MessagingActivity extends ActionBarActivity {
 
     private PopupMenu popup;
     private PopupMenu addTagPopupMenu;
-    private String toPhoneNumber=null;
+    private String toPhoneNumber = null;
     private String sessionToken;    //get from client.getSESSIONID();
-    private String chatroomID=null;      //get from previous intent
-    private String chatroomName=null;
-    private String userID=null;
+    private String chatroomID = null;      //get from previous intent
+    private String chatroomName = null;
+    private String userID = null;
     private int isGroup;
 
     private MessageDbAdapter dbMessages;
@@ -88,6 +88,7 @@ public class MessagingActivity extends ActionBarActivity {
      * isGroup:
      * Chatname
      * chatID
+     *
      * @param savedInstanceState
      */
     @Override
@@ -187,7 +188,7 @@ public class MessagingActivity extends ActionBarActivity {
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dbMessages.deleteExpiredChats();
-                if(dbMessages.isChatDeleted(chatroomID)) {
+                if (dbMessages.isChatDeleted(chatroomID)) {
                     Toast.makeText(MessagingActivity.this,
                             "Chat has been deleted", Toast.LENGTH_SHORT);
                     return;
@@ -255,22 +256,22 @@ public class MessagingActivity extends ActionBarActivity {
         searchBarLayout = (LinearLayout) findViewById(R.id.message_search_bar_layout);
         messageSearchBar = (EditText) findViewById(R.id.message_search_bar);
         messageSearchBar.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                                    @Override
+                                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                }
+                                                    }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    adapter.setSearchTerm(messageSearchBar.getText().toString());
-                    adapter.notifyDataSetChanged();
-                }
+                                                    @Override
+                                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                                        adapter.setSearchTerm(messageSearchBar.getText().toString());
+                                                        adapter.notifyDataSetChanged();
+                                                    }
 
-                @Override
-                public void afterTextChanged(Editable s) {
+                                                    @Override
+                                                    public void afterTextChanged(Editable s) {
 
-                }
-            }
+                                                    }
+                                                }
         );
 
         ImageView downSearch = (ImageView) findViewById(R.id.search_down_arrow);
@@ -323,7 +324,7 @@ public class MessagingActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if(isGroup ==0)
+        if (isGroup == 0)
             getMenuInflater().inflate(R.menu.menu_messaging, menu);
         else
             getMenuInflater().inflate(R.menu.menu_messaging_group, menu);
@@ -368,7 +369,7 @@ public class MessagingActivity extends ActionBarActivity {
                                     if (!item.isChecked()) {
                                         item.setChecked(true);
                                         adapter.applyTag(item.getTitle().toString());
-                                    }else if(item.isChecked()){
+                                    } else if (item.isChecked()) {
                                         item.setChecked(false);
                                         adapter.removeTag(item.getTitle().toString());
                                     }
@@ -415,7 +416,7 @@ public class MessagingActivity extends ActionBarActivity {
         if (MessageBundle.messageType.TEXT_RECEIVED.toString().equals(messageType)) {
             updateUI();
         } else if (MessageBundle.messageType.SINGLE_ROOM_INVITATION.toString().equals(messageType)
-                && chatroomID == null && isGroup == 0){
+                && chatroomID == null && isGroup == 0) {
             for (Object user : (Object[]) message.get(MessageBundle.USERS)) {
                 if (user.equals(toPhoneNumber)) {
                     chatroomID = (String) message.get(MessageBundle.CHATROOMID);
@@ -431,18 +432,18 @@ public class MessagingActivity extends ActionBarActivity {
                 chatroomID = (String) message.get(MessageBundle.CHATROOMID);
                 Log.d("Room id updated", chatroomID);
             }
-        }else if (MessageBundle.messageType.EVENT_CREATED.toString().equals(messageType)) {
+        } else if (MessageBundle.messageType.EVENT_CREATED.toString().equals(messageType)) {
 
             try {
                 dbMessages.insertEvent(message);
-            }catch(SQLiteConstraintException e){
+            } catch (SQLiteConstraintException e) {
 
             }
             final LinearLayout newEvent = (LinearLayout) findViewById(R.id.eventLayout); //TODO: check eventLayout's id
             TextView eventDescription = (TextView) newEvent.findViewById(R.id.eventDesc);
             eventDescription.setText((String) message.get(MessageBundle.EVENT_NAME));
             final String eventID = (String) message.get(MessageBundle.EVENT_ID);
-            ImageView voteAction = (ImageView)newEvent.findViewById(R.id.vote);
+            ImageView voteAction = (ImageView) newEvent.findViewById(R.id.vote);
             voteAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -459,7 +460,7 @@ public class MessagingActivity extends ActionBarActivity {
                 }
             });
 
-            ImageView unvoteAction = (ImageView)newEvent.findViewById(R.id.unvote);
+            ImageView unvoteAction = (ImageView) newEvent.findViewById(R.id.unvote);
             unvoteAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -477,24 +478,24 @@ public class MessagingActivity extends ActionBarActivity {
             });
             newEvent.setVisibility(View.VISIBLE);
             updateUI();
-        }else if (MessageBundle.messageType.EVENT_VOTE_RECEIVED.toString().equals(messageType)) {
+        } else if (MessageBundle.messageType.EVENT_VOTE_RECEIVED.toString().equals(messageType)) {
             String fromPhoneNumber = (String) message.get(MessageBundle.FROM_PHONE_NUMBER);
-            if(fromPhoneNumber.equals(client.getID())){
+            if (fromPhoneNumber.equals(client.getID())) {
                 MessageBundle a = new MessageBundle(client.getID(),
                         sessionToken, MessageBundle.messageType.TEXT);
                 String name = dbMessages.getUsername(fromPhoneNumber);
-                a.putMessage("You are attending "+(String)dbMessages.getEventNameByID((String) message.get(MessageBundle.EVENT_ID)));
+                a.putMessage("You are attending " + (String) dbMessages.getEventNameByID((String) message.get(MessageBundle.EVENT_ID)));
                 a.putMessageID(message.get("vote_timestamp").toString());
                 a.putChatroomID(message.get(MessageBundle.CHATROOMID).toString());
                 a.putFromPhoneNumber(message.get(MessageBundle.FROM_PHONE_NUMBER).toString());
                 a.putTag("Admin");
                 dbMessages.storeMessage(a.getMessage());
                 messageList.add(a);
-            }else{
+            } else {
                 MessageBundle a = new MessageBundle(client.getID(),
                         sessionToken, MessageBundle.messageType.TEXT);
-                String name = dbMessages.getUsername(fromPhoneNumber);
-                a.putMessage(name+" is attending "+(String)dbMessages.getEventNameByID(MessageBundle.EVENT_ID));
+                String name = dbMessages.getUsernameFromNumber(fromPhoneNumber);
+                a.putMessage(name + " is attending " + (String) dbMessages.getEventNameByID((String) message.get(MessageBundle.EVENT_ID)));
                 a.putMessageID(message.get("vote_timestamp").toString());
                 a.putChatroomID(message.get(MessageBundle.CHATROOMID).toString());
                 a.putFromPhoneNumber(message.get(MessageBundle.FROM_PHONE_NUMBER).toString());
@@ -503,24 +504,24 @@ public class MessagingActivity extends ActionBarActivity {
                 messageList.add(a);
             }
             updateUI();
-        }else if (MessageBundle.messageType.EVENT_UNVOTE_RECEIVED.toString().equals(messageType)) {
+        } else if (MessageBundle.messageType.EVENT_UNVOTE_RECEIVED.toString().equals(messageType)) {
             String fromPhoneNumber = (String) message.get(MessageBundle.FROM_PHONE_NUMBER);
-            if(fromPhoneNumber.equals(client.getID())){
+            if (fromPhoneNumber.equals(client.getID())) {
                 MessageBundle a = new MessageBundle(client.getID(),
                         sessionToken, MessageBundle.messageType.TEXT);
                 String name = dbMessages.getUsername(fromPhoneNumber);
-                a.putMessage("You are not attending "+(String)dbMessages.getEventNameByID(MessageBundle.EVENT_ID));
+                a.putMessage("You are not attending " + (String) dbMessages.getEventNameByID((String) message.get(MessageBundle.EVENT_ID)));
                 a.putMessageID(message.get("vote_timestamp").toString());
                 a.putChatroomID(message.get(MessageBundle.CHATROOMID).toString());
                 a.putFromPhoneNumber(message.get(MessageBundle.FROM_PHONE_NUMBER).toString());
                 a.putTag("Admin");
                 dbMessages.storeMessage(a.getMessage());
                 messageList.add(a);
-            }else{
+            } else {
                 MessageBundle a = new MessageBundle(client.getID(),
                         sessionToken, MessageBundle.messageType.TEXT);
-                String name = dbMessages.getUsername(fromPhoneNumber);
-                a.putMessage(name+" is not attending "+(String)dbMessages.getEventNameByID(MessageBundle.EVENT_ID));
+                String name = dbMessages.getUsernameFromNumber(fromPhoneNumber);
+                a.putMessage(name + " is not attending " + (String) dbMessages.getEventNameByID((String) message.get(MessageBundle.EVENT_ID)));
                 a.putMessageID(message.get("vote_timestamp").toString());
                 a.putChatroomID(message.get(MessageBundle.CHATROOMID).toString());
                 a.putFromPhoneNumber(message.get(MessageBundle.FROM_PHONE_NUMBER).toString());
