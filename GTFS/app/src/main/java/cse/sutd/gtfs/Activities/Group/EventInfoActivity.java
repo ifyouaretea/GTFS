@@ -6,10 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,18 +16,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 
-import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import cse.sutd.gtfs.Activities.LoginActivityCog;
-import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
-import cse.sutd.gtfs.Adapters.ContactAdapter;
 import cse.sutd.gtfs.Adapters.EventAdapter;
 import cse.sutd.gtfs.GTFSClient;
-import cse.sutd.gtfs.Objects.Contact;
 import cse.sutd.gtfs.Objects.Event;
 import cse.sutd.gtfs.R;
 import cse.sutd.gtfs.messageManagement.ManagerService;
@@ -118,14 +112,10 @@ public class EventInfoActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -75,6 +75,7 @@ public class EventsActivity extends ActionBarActivity {
             chatID = extras.getString(CHAT_ID_KEY);
         }
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
@@ -150,35 +151,35 @@ public class EventsActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.action_create_event:
+                EVENT_NAME = name.getText().toString();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_create_event) {
-            EVENT_NAME = name.getText().toString();
+                Calendar getter = Calendar.getInstance();
+                getter.set(year, month, day, hour, minute);
+                DATE_TIME = getter.getTimeInMillis();
+                final MessageBundle eventBundle = new MessageBundle(client.getID(),
+                        client.getSESSION_ID(),MessageBundle.messageType.CREATE_EVENT);
 
-            Calendar getter = Calendar.getInstance();
-            getter.set(year, month, day, hour, minute);
-            DATE_TIME = getter.getTimeInMillis();
-            final MessageBundle eventBundle = new MessageBundle(client.getID(),
-                    client.getSESSION_ID(),MessageBundle.messageType.CREATE_EVENT);
+                eventBundle.putChatroomID(chatID);
+                eventBundle.putEventName(name.getText().toString());
+                eventBundle.putEventDate(String.valueOf(DATE_TIME));
 
-            eventBundle.putChatroomID(chatID);
-            eventBundle.putEventName(name.getText().toString());
-            eventBundle.putEventDate(String.valueOf(DATE_TIME));
+                Intent intent = new Intent(client, NetworkService.class);
+                intent.putExtra(NetworkService.MESSAGE_KEY,
+                        JsonWriter.objectToJson(eventBundle.getMessage()));
+                client.startService(intent);
 
-            Intent intent = new Intent(client, NetworkService.class);
-            intent.putExtra(NetworkService.MESSAGE_KEY,
-                    JsonWriter.objectToJson(eventBundle.getMessage()));
-            client.startService(intent);
-
-            Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
-            i.putExtra(MessageDbAdapter.CHATID, chatID);
-            i.putExtra(MessageDbAdapter.ISGROUP, 1);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(i);
-            finish();
-
-            return true;
+                Intent i = new Intent(getApplicationContext(), MessagingActivity.class);
+                i.putExtra(MessageDbAdapter.CHATID, chatID);
+                i.putExtra(MessageDbAdapter.ISGROUP, 1);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                finish();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

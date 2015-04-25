@@ -66,15 +66,15 @@ public class MessageDbAdapter {
 
     private static final String TAG = "MessageDbAdapter";
 
+    private static final String DATABASE_CREATE_EVENTS =
+            "create table events (_id text primary key, "
+                    + "event_name text not null, event_datetime text not null, chatID text," +
+                    " votes text);";
+
     public static final String DATABASE_CREATE_NOTES =
             "create table notes (_id text primary key, "
                     + "title text not null, " +
                     "body text not null, chatID text not null, noteCreator text);";
-
-    private static final String DATABASE_CREATE_EVENTS =
-            "create table events (_id text primary key, "
-                    + "event_name text not null, event_datatime text not null, chatID text," +
-                    " votes text);";
 
     private static MessageDbAdapter instance;
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -94,10 +94,6 @@ public class MessageDbAdapter {
                 "create table contacts (_id text primary key, "
                         + "name text not null, chatID text);";
 
-        private static final String DATABASE_CREATE_EVENTS =
-                "create table events (_id text primary key, "
-                        + "event_name text not null, event_datetime text not null, chatID text," +
-                        " votes text);";
 
         private static final String DATABASE_NAME = "data";
 

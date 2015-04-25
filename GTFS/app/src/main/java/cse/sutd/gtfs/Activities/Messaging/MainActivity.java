@@ -53,7 +53,6 @@ public class MainActivity extends ActionBarActivity {
     private static final ExecutorService exec = new ScheduledThreadPoolExecutor(100);
 
     private class MessageBroadcastReceiver extends BroadcastReceiver {
-        private MessageBroadcastReceiver(){}
         @Override
         public void onReceive(Context context, Intent intent){
            updateUI();

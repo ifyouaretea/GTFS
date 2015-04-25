@@ -31,6 +31,7 @@ import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -378,6 +379,13 @@ public class MessagingActivity extends ActionBarActivity {
                             }
                     );
                     List<String> tagList = dbMessages.getTagsForChat(chatroomID);
+                    Iterator<String> iter = tagList.iterator();
+                    while(iter.hasNext()) {
+                        String s = iter.next();
+                        if(s.equals("Admin")) {
+                            iter.remove(); // Removes the 'current' item
+                        }
+                    }
                     if (tagList.size() > 0) {
                         for (int i = 0; i < tagList.size(); i++) {
                             popup.getMenu().add(i, i, i, tagList.get(i));
