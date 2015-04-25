@@ -388,7 +388,11 @@ int id action_bar_title 0x7f0b001e
 int id action_chat 0x7f0b0084
 int id action_contacts 0x7f0b0086
 int id action_context_bar 0x7f0b0032
+<<<<<<< HEAD
 int id action_create_event 0x7f0b0083
+=======
+int id action_create_event 0x7f0b0084
+>>>>>>> 542a3a6a3a1f20ce9d0d685a841be0ce29844db2
 int id action_create_group 0x7f0b0090
 int id action_done 0x7f0b007e
 int id action_group 0x7f0b0085

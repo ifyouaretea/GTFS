@@ -136,7 +136,7 @@ public class ManagerService extends Service{
             body = bodyBuilder.toString();
 
             openMessagingIntent = new Intent(getApplicationContext(), MessagingActivity.class);
-            openMessagingIntent.putExtra("ID", chatroomID);
+            openMessagingIntent.putExtra(MessageDbAdapter.CHATID, chatroomID);
             openMessagingIntent.putExtra(MessageBundle.TO_PHONE_NUMBER,
                     (String) message.get(MessageBundle.FROM_PHONE_NUMBER));
             openMessagingIntent.putExtra(MessageDbAdapter.ISGROUP,
