@@ -4,8 +4,5 @@
     tools:context="cse.sutd.gtfs.Activities.Notes.NoteListActivity">
 
     <item android:id="@+id/create_note" android:title="New Note"
-        android:orderInCategory="100" app:showAsAction="never" />
-
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:orderInCategory="100" app:showAsAction="ifRoom" />
 </menu>

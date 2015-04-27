@@ -137,7 +137,8 @@ public class NoteListActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-            case R.id.action_settings:
+            case android.R.id.home:
+                onBackPressed();
                 return true;
             case R.id.create_note:
                 Intent intent = new Intent(this, CreateNoteActivity.class);
