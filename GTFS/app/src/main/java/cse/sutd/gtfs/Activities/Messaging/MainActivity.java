@@ -38,8 +38,8 @@ import cse.sutd.gtfs.Adapters.ChatAdapter;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.ChatRoom;
 import cse.sutd.gtfs.R;
-import cse.sutd.gtfs.messageManagement.ManagerService;
-import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.MessageManagement.ManagerService;
+import cse.sutd.gtfs.MessageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
 
@@ -138,22 +138,18 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_contacts:
                 intent = new Intent(this, ContactsActivity.class);
                 startActivity(intent);
-                finish();
                 return true;
             case R.id.action_group:
                 intent = new Intent(this, NewGroupActivity.class);
                 startActivity(intent);
-                finish();
                 return true;
             case R.id.action_profile:
                 intent = new Intent(this, ProfileActivity.class);
                 startActivity(intent);
-                finish();
                 return true;
             case R.id.action_settings:
                 intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
-                finish();
                 return true;
             case R.id.action_logout:
 //                Digits.getSessionManager().clearActiveSession();
@@ -272,7 +268,6 @@ public class MainActivity extends ActionBarActivity {
                 i.putExtra(MessageDbAdapter.ISGROUP, chatroom.get(position).getIsGroup());
                 i.putExtra(MessageDbAdapter.CHATNAME, chatroom.get(position).getName());
                 startActivity(i);
-                finish();
             }
         });
 

@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,22 +16,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 
-import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import cse.sutd.gtfs.Activities.LoginActivityCog;
-import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
-import cse.sutd.gtfs.Adapters.ContactAdapter;
 import cse.sutd.gtfs.Adapters.EventAdapter;
 import cse.sutd.gtfs.GTFSClient;
-import cse.sutd.gtfs.Objects.Contact;
 import cse.sutd.gtfs.Objects.Event;
 import cse.sutd.gtfs.R;
-import cse.sutd.gtfs.messageManagement.ManagerService;
-import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.MessageManagement.ManagerService;
+import cse.sutd.gtfs.MessageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
 

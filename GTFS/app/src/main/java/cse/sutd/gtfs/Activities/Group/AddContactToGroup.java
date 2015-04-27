@@ -34,7 +34,7 @@ import cse.sutd.gtfs.Activities.Messaging.MessagingActivity;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.Contact;
 import cse.sutd.gtfs.R;
-import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.MessageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
 

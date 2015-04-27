@@ -5,12 +5,10 @@ package cse.sutd.gtfs.Adapters;
  */
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -18,10 +16,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import cse.sutd.gtfs.GTFSClient;
-import cse.sutd.gtfs.Objects.ChatRoom;
 import cse.sutd.gtfs.Objects.Event;
 import cse.sutd.gtfs.R;
-import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.MessageManagement.MessageDbAdapter;
 
 public class EventAdapter extends ArrayAdapter<Event> {
 

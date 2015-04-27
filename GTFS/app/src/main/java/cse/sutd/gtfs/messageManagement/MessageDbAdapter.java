@@ -1,4 +1,4 @@
-package cse.sutd.gtfs.messageManagement;
+package cse.sutd.gtfs.MessageManagement;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -73,7 +73,7 @@ public class MessageDbAdapter {
 
     private static final String DATABASE_CREATE_EVENTS =
             "create table events (_id text primary key, "
-                    + "event_name text not null, event_datatime text not null, chatID text," +
+                    + "event_name text not null, event_datetime text not null, chatID text," +
                     " votes text);";
 
     private static MessageDbAdapter instance;

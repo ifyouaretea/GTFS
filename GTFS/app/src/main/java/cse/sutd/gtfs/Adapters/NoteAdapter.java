@@ -1,12 +1,10 @@
 package cse.sutd.gtfs.Adapters;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -14,7 +12,7 @@ import java.util.ArrayList;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.Note;
 import cse.sutd.gtfs.R;
-import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.MessageManagement.MessageDbAdapter;
 
 /**
  * Created by tes on 19/04/2015.

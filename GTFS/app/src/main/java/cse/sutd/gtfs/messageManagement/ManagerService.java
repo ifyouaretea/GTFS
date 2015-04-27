@@ -1,4 +1,4 @@
-package cse.sutd.gtfs.messageManagement;
+package cse.sutd.gtfs.MessageManagement;
 
 import android.app.Notification;
 import android.app.NotificationManager;
