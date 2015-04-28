@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +31,7 @@ public class GroupInfoActivity extends ActionBarActivity {
     private GTFSClient client;
     private MessageDbAdapter dbMessages;
     ListView listview;
-    ArrayList<Contact> contacts;
+    ArrayList<Contact> contacts = new ArrayList<>();;
     ContactAdapter contactAdapter;
     public static final String CHAT_ID_KEY = "chatID";
     private String chatID;
@@ -65,8 +66,7 @@ public class GroupInfoActivity extends ActionBarActivity {
         final String sessionToken = client.getSESSION_ID();
         dbMessages = MessageDbAdapter.getInstance(this);
 
-        listview = (ListView) findViewById(R.id.contactList);
-        contacts = new ArrayList<>();
+        listview = (ListView) findViewById(R.id.groupList);
         getGroupUsers();
         contactAdapter = new ContactAdapter(this, contacts);
         listview.setAdapter(contactAdapter);
@@ -121,11 +121,21 @@ public class GroupInfoActivity extends ActionBarActivity {
         }
 
         for (String s : userList) {
+            Log.d("group user",s);
+            s=s.trim();
             Cursor contactBundles = dbMessages.getContact(s);
+            Contact a;
             if (contactBundles != null) {
                 if (contactBundles.getCount() > 0) {
                     contactBundles.moveToFirst();
-                    Contact a = new Contact(contactBundles.getString(0), contactBundles.getString(1));
+                    a = new Contact(contactBundles.getString(0), contactBundles.getString(1));
+                    Log.d("name",a.getName());
+                    contacts.add(a);
+                }else{
+                    if (s.equals(client.getID()))
+                      a = new Contact(s,"Me");
+                    else
+                        a = new Contact(s, s);
                     contacts.add(a);
                 }
                 contactBundles.close();

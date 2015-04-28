@@ -16,7 +16,7 @@ import cse.sutd.gtfs.R;
 /**
  * Created by Francisco Furtado on 16/04/2015.
  */
-public class ContactAdapter extends ArrayAdapter<Contact>{
+public class ContactAdapter extends ArrayAdapter<Contact> {
     private final Context context;
     private final ArrayList<Contact> values;
 
@@ -30,6 +30,7 @@ public class ContactAdapter extends ArrayAdapter<Contact>{
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         View rowView = inflater.inflate(R.layout.contact_list_item, parent, false);
         TextView contactName = (TextView) rowView.findViewById(R.id.firstLine);
         TextView latestmsg = (TextView) rowView.findViewById(R.id.secondLine);
@@ -38,7 +39,10 @@ public class ContactAdapter extends ArrayAdapter<Contact>{
         avatar.setImageResource(R.drawable.ic_action_dark_profile);
 
         return rowView;
+
+
     }
+
     @Override
     public long getItemId(int position) {
         return values.indexOf(position);

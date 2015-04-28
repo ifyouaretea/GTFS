@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -64,7 +63,8 @@ public class LoginActivityCog extends Activity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (!TextUtils.isEmpty(phoneNumbTv.getText().toString().trim())) {
+                            String phoneNumber = phoneNumbTv.getText().toString().trim().replaceAll("[^0-9]", "");
+                            if (phoneNumber.length()==8 && (phoneNumber.startsWith("8")||phoneNumber.startsWith("9"))) {
                                 InputMethodManager imm = (InputMethodManager)
                                         getSystemService(INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -92,7 +92,7 @@ public class LoginActivityCog extends Activity {
 
                             } else {
                                 Toast.makeText(getApplicationContext(),
-                                        "Please enter your phone number to verify", Toast.LENGTH_LONG).show();
+                                        "Please enter a valid Singapore phone number", Toast.LENGTH_LONG).show();
                             }
                         }
                     });

@@ -7,9 +7,8 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/contactList"
+        android:id="@+id/groupList"
         android:layout_gravity="center_horizontal"
-        android:background="#ffffffff"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="0dp"
         android:layout_alignParentTop="true"

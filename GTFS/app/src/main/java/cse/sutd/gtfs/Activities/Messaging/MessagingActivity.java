@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -339,8 +338,8 @@ public class MessagingActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                finish();
+                Intent mainActivity = new Intent(this, MainActivity.class);
+                startActivity(mainActivity);
                 return true;
             case R.id.message_events:
                 Intent createEvent = new Intent(this, EventsActivity.class);

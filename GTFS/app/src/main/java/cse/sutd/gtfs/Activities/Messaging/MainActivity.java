@@ -33,7 +33,6 @@ import cse.sutd.gtfs.Activities.ContactsActivity;
 import cse.sutd.gtfs.Activities.Group.NewGroupActivity;
 import cse.sutd.gtfs.Activities.LoginActivityCog;
 import cse.sutd.gtfs.Activities.ProfileActivity;
-import cse.sutd.gtfs.Activities.SettingsActivity;
 import cse.sutd.gtfs.Adapters.ChatAdapter;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.ChatRoom;
@@ -137,25 +136,16 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_contacts:
                 intent = new Intent(this, ContactsActivity.class);
                 startActivity(intent);
-                finish();
                 return true;
             case R.id.action_group:
                 intent = new Intent(this, NewGroupActivity.class);
                 startActivity(intent);
-                finish();
                 return true;
             case R.id.action_profile:
                 intent = new Intent(this, ProfileActivity.class);
                 startActivity(intent);
-                finish();
-                return true;
-            case R.id.action_settings:
-                intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                finish();
                 return true;
             case R.id.action_logout:
-//                Digits.getSessionManager().clearActiveSession();
                 editor.putString("userid", null);
                 editor.commit();
                 client.setID(null);
