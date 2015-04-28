@@ -165,6 +165,11 @@ public class AddContactToGroup extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(), "Please add contacts!", Toast.LENGTH_SHORT).show();
                 }
                 return true;
+
+                case android.R.id.home:
+                    onBackPressed();
+                    return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

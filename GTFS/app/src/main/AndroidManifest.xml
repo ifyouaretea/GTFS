@@ -24,7 +24,7 @@
             android:name=".serverUtils.NetworkService"
             android:exported="false" />
         <service
-            android:name=".messageManagement.ManagerService"
+            android:name=".MessageManagement.ManagerService"
             android:exported="false" />
 
         <!-- <activity -->

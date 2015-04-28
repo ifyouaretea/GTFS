@@ -786,7 +786,7 @@ public class MessageDbAdapter {
 
     public Cursor getEventsForChat(String chatID){
         return mDb.rawQuery(String.format("SELECT _id, event_name, event_datetime, votes FROM " +
-                "events WHERE chatID ='%s'",chatID), null);
+                "events WHERE chatID ='%s' ORDER BY event_datetime DESC",chatID), null);
 
     }
 }

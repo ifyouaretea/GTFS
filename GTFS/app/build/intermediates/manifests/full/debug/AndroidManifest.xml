@@ -30,7 +30,7 @@
             android:name="cse.sutd.gtfs.serverUtils.NetworkService"
             android:exported="false" />
         <service
-            android:name="cse.sutd.gtfs.messageManagement.ManagerService"
+            android:name="cse.sutd.gtfs.MessageManagement.ManagerService"
             android:exported="false" />
 
         <!-- <activity -->
