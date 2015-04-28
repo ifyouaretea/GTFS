@@ -17,8 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cse.sutd.gtfs.messageManagement.ManagerService;
-import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.MessageManagement.ManagerService;
+import cse.sutd.gtfs.MessageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.NetworkService;
 
 public class GTFSClient extends Application{

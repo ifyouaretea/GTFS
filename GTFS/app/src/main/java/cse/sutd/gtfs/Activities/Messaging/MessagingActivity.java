@@ -44,8 +44,8 @@ import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.ChatRoom;
 import cse.sutd.gtfs.Objects.Event;
 import cse.sutd.gtfs.R;
-import cse.sutd.gtfs.messageManagement.ManagerService;
-import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.MessageManagement.ManagerService;
+import cse.sutd.gtfs.MessageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
 

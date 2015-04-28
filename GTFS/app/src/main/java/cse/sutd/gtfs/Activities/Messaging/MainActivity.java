@@ -37,8 +37,8 @@ import cse.sutd.gtfs.Adapters.ChatAdapter;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.ChatRoom;
 import cse.sutd.gtfs.R;
-import cse.sutd.gtfs.messageManagement.ManagerService;
-import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.MessageManagement.ManagerService;
+import cse.sutd.gtfs.MessageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
 
@@ -151,6 +151,7 @@ public class MainActivity extends ActionBarActivity {
                 client.setID(null);
                 MainActivity.this.finish();
                 System.exit(0);
+		finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -261,7 +262,6 @@ public class MainActivity extends ActionBarActivity {
                 i.putExtra(MessageDbAdapter.ISGROUP, chatroom.get(position).getIsGroup());
                 i.putExtra(MessageDbAdapter.CHATNAME, chatroom.get(position).getName());
                 startActivity(i);
-                finish();
             }
         });
 

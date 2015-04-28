@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import cse.sutd.gtfs.R;
-import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.MessageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 
 /**

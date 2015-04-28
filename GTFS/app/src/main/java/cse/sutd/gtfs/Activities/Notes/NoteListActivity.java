@@ -23,8 +23,8 @@ import cse.sutd.gtfs.Adapters.NoteAdapter;
 import cse.sutd.gtfs.GTFSClient;
 import cse.sutd.gtfs.Objects.Note;
 import cse.sutd.gtfs.R;
-import cse.sutd.gtfs.messageManagement.ManagerService;
-import cse.sutd.gtfs.messageManagement.MessageDbAdapter;
+import cse.sutd.gtfs.MessageManagement.ManagerService;
+import cse.sutd.gtfs.MessageManagement.MessageDbAdapter;
 import cse.sutd.gtfs.serverUtils.MessageBundle;
 import cse.sutd.gtfs.serverUtils.NetworkService;
 
